@@ -97,9 +97,64 @@ estimate appears only as the correction, never as the cost.
 6. Final pass: the audit scripts, the brief-item coverage check against this table, and a Turnitin-aware
    read of the wording.
 
-## 8. What is still open with the supervisor
+## 8. Rulings recorded (U017, 2026-11-19) — framework approved
 
-* Approval of this framework (sections, budgets, figure list).
-* Whether the report's §6 link block also names the repository, or only the Pages URL.
-* Word-count ceiling: the template does not state one and the brief gives none, so the budgets above are
-  my proposal — ~4,700 words plus tables and figures. If he wants it shorter, §1 and §3 shrink first.
+* **Framework passes** as written.
+* **§6 link block follows A2's form — both addresses**, in A2's own wording pattern:
+  "The source page is `https://github.com/0weixiong0/CISC3024-AI-Assignment-3`" and
+  "The live page is `https://0weixiong0.github.io/CISC3024-AI-Assignment-3/`".
+* **~4,700 words accepted.** If it runs long, compress §1 and §3 first; **§4 and §5 are not touched.**
+* **A2's four lessons are execution rules, not advice** — see §2 and §5 above, and §7 below:
+  `audit_docx.py` and `audit_layout.py` run after *every* editing pass; layout is judged by reading the
+  exported PDF; every number points back to an artefact; anything cited by paper page number carries that
+  page's rendered image.
+* **The front end is linked, not copied** — the report points at the live instrument and does not
+  reproduce its tables or read-outs as report content.
+* **No Acknowledgements section** (and neither A1 nor A2 has one, so this matches the precedent as well as
+  the ruling). The AI-use and responsibility statement goes in **§1**.
+
+## 9. The A1/A2 baseline this report is built to
+
+Measured from the two delivered documents, not from memory:
+
+| Item | A1 | A2 | A3 follows |
+| --- | --- | --- | --- |
+| File at project root | `CISC3024_AI_Assignment_1_Report.docx` + same-name PDF (25 pp) | `CISC3024_AI_Assignment_2_Report.docx` + PDF (54 pp) | `CISC3024_AI_Assignment_3_Report.docx` + PDF |
+| Structure | cover → TOC (Heading 1) → 7 unnumbered H1 → References | same skeleton | same, mapped in §1 |
+| Body words | ~2,906 | ~8,011 | ~4,700 |
+| AI-use statement | disclaimer sentence inside the workflow section | §1.2 "Human Supervision and AI Responsibilities", opening "The student acted as supervisor and the agent as researcher, implementer and experimenter." | §1, A2's placement with A3's own evidence |
+| Link block | "Source code:" + "Live demo:" lines | "The source page is …" + "The live page is …" | A2's wording |
+| References | APA 7, `EndNote Bibliography` style, plain paragraphs (no fields), 6 entries | same, 14 entries | APA 7 plain paragraphs, `EndNote Bibliography` |
+| Exhibit labels | two typed lines above the object: `Figure N` then the italic description | same (17 figures, 11 tables) | same two-line form — `audit_docx.py`'s caption regex depends on it |
+| Equations | — | `wordify_equations.py` abandoned: Word's LaTeX-to-math fires on typing, not on programmatic `BuildUp()`, so command names stayed literal | real Unicode symbols in plain text (μ, Σ, ‖·‖), as accepted for A2 |
+| Report in the public repo | no | no | **no** — the docx/pdf are UMMoodle submissions, so they are gitignored |
+
+## 10. Shell status (step 1 of §7, done 2026-11-19)
+
+`src/build_report.py` builds the shell from `Report Template.docx` by cloning the template's own example
+paragraphs as formatting prototypes, so the headings carry the direct Times New Roman 12 pt run properties
+that the style definitions alone would not give — the trap in §2. The cover and the TOC content control are
+untouched; everything after the TOC control is deleted and re-emitted.
+
+* Shell: 7 H1 + 21 H2 + References = 29 headings; 6 pages, 353 words after `src/export_pdf.py` resolved the
+  TOC field through a private Word instance.
+* `src/audit_docx.py`: **29 headings matched by 29 contents entries** (the stale-entry flags are gone),
+  font census `'Times New Roman' 12.0pt: 27`, no Chinese, no jargon, no exhibit-integrity findings.
+  Two findings remain and both are expected at this step: the cover's own template placeholders
+  (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`) and "no URL anywhere" — the URL arrives with §6.
+* `src/audit_layout.py`: passes (no exhibits yet).
+* **Open with the supervisor:** the cover placeholders are his to fill — the ruling says the cover is not
+  to be changed, so the name and student number need either to be entered by him in Word or explicitly
+  released to this builder. A2 left the same item open.
+
+## 11. What is still open
+
+The three questions this file used to ask are answered in §8 (framework approved, both addresses in the
+link block, ~4,700 words with §1/§3 compressing first). What remains:
+
+* **The cover placeholders** (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`, the date) — the ruling
+  says the cover is not to be changed, so these are either filled by him in Word or explicitly released to
+  this builder. A2 closed the same item by hand.
+* **Figure assets** — the page images listed in §5 still have to be rendered from the paper and the C4
+  README, and each one needs a `report_assets/` file plus the two-line label the audit expects.
+* **The prose itself** — §2 and §4 first, per §7 step 2.
