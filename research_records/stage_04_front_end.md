@@ -101,11 +101,33 @@ appeared in WP7 §7 and in U010's ruling was my estimate and it was wrong: it as
 could be reused, but M2 stored accuracies rather than bases, so both pairs' pencils had to be re-solved.
 The estimate may be mentioned only as that correction, never as the cost.
 
-## 5. What Stage 5 draws from this stage
+## 5. Repository and Pages (U014 order change, U015 exclusions)
+
+Brief item (6) is delivered: **https://0weixiong0.github.io/CISC3024-AI-Assignment-3/** — the same four
+tabs, served from the `gh-pages` branch.
+
+| What | Value |
+| --- | --- |
+| Repository | `0weixiong0/CISC3024-AI-Assignment-3`, **public** (U015) |
+| Source branch | `main`, HEAD `23e52160fefaf9b88d57f9bcf683914f9f6e35f6` (initial `e43edfa` + the README) |
+| Site branch | `gh-pages`, HEAD `a48a97bf324bc9416240587d65405b7733377f5f` — `index.html`, `data.js`, `demo.js`, `demo_meta.json` at the root |
+| Tracked | `src/` 24 files, `tests/` 2, `webapp/` 4, `research_records/` 16, `runs/` small artefacts, README, `.gitignore`, `.gitattributes` (LF pinned) — 132 files, largest blob 4.5 MB |
+| Not tracked (U015) | course files (`AIassign3.pdf`, `Agent_coding.pptx`, `Report Template.docx`), `_rev.py`, `research_records/conversation_log.md`, `runs/conversation_log_backup_before_dedup.md`, `data/` (986 MB) |
+| Also excluded, with the reason on disk | the three pre-fix parity logs and a third-party accepted manuscript — see `runs/parity/README.md` and the README's closing section |
+
+Live-site verification, not a local render: Playwright against the URL reports both globals present, five
+demo blocks, `static = ood,ladder`, the ORL read-out "13 / 40", the noise / ladder / tables tabs non-empty,
+and zero `pageerror`.
+
+The dialogue record stays a **report deliverable** submitted with the Word file rather than repository
+content, so Stage 5 must attach it and the report must not link to it inside the public repository.
+
+## 6. What Stage 5 draws from this stage
 
 Brief item (4) experiment settings and results → `stage_03b` §3–§5 and §8.1, `wp7` §3–§7. Brief item (5)
-what we learnt → `wp7` §8's three sentences plus §6's withdrawal, which is the strongest single lesson in
-the project: a constant that "only affects the pictures" was also feeding a measurement. Brief item (3) how
-the AI implemented it → this file §1–§3 and the command list in `webapp/data.js` `commands`. Brief item (6)
-the webpage link → the GitHub repository and Pages site, which **U014 moved ahead of the report**: the
-report will cite the live URL and the commit it points at, so this stage's output is what goes on Pages.
+what we learnt → `wp7` §8's three sentences plus `wp7` §6's withdrawal, which is the strongest single lesson
+in the project: a constant that "only affects the pictures" was also feeding a measurement. Brief item (3)
+how the AI implemented it → this file §1–§3 and the command list in `webapp/data.js` `commands`. Brief item
+(6) the webpage link → **delivered**, `https://0weixiong0.github.io/CISC3024-AI-Assignment-3/` (§5 above);
+the report cites that URL together with the `main` commit it points at, and attaches the dialogue record
+itself rather than linking to it in the public repository.

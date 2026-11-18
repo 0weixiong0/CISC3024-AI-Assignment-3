@@ -534,8 +534,9 @@ and sent five text corrections. They are recorded below as decisions rather than
 
 Nothing blocks Stage 4. The remaining work is the front end itself (`webapp/index.html` over `data.js`),
 the Word report on `Report Template.docx`, and the GitHub repository plus Pages link — whose order U014
-reversed on 2026-11-18: repository and Pages first, then the report, which will cite the live URL and the
-commit it points at. One thing to expect from option A: it can come back null — a corruption whose severity
+reversed on 2026-11-18: repository and Pages first, then the report, which cites the live URL and the
+commit it points at. Both are now delivered (`https://0weixiong0.github.io/CISC3024-AI-Assignment-3/`,
+`stage_04_front_end.md` §5), so nothing in this record still blocks Stage 5. One thing to expect from option A: it can come back null — a corruption whose severity
 does not separate the four arms is a legitimate outcome of the control, and it gets reported as one rather
 than tuned until it separates.
 
