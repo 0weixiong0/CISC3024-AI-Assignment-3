@@ -1,0 +1,26 @@
+{
+  "fold": 0,
+  "seed": 20261117,
+  "cap": 39,
+  "head": "1-NN on the 40 test images of fold 0",
+  "note": "single-fold numbers, not comparable to the ten-fold means in accuracy_summary.csv; they exist to put the delta = 0 degeneracy, the ridged pencil and scikit-learn's null-space route on identical data, since sklearn's svd solver takes no delta at all",
+  "sklearn_coef_rows": 40,
+  "delta_0": {
+    "go_lda_at_cap": 0.275,
+    "go_lda_at_cap_ncm": 0.025,
+    "classic_pencil_at_cap": 0.525,
+    "sklearn_svd_lda_at_cap": 0.975
+  },
+  "delta_1e-06": {
+    "go_lda_at_cap": 1.0,
+    "go_lda_at_cap_ncm": 1.0,
+    "classic_pencil_at_cap": 1.0,
+    "sklearn_svd_lda_at_cap": 0.975
+  },
+  "delta_0.005": {
+    "go_lda_at_cap": 1.0,
+    "go_lda_at_cap_ncm": 1.0,
+    "classic_pencil_at_cap": 1.0,
+    "sklearn_svd_lda_at_cap": 0.975
+  }
+}

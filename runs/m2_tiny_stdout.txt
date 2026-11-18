@@ -1,0 +1,22 @@
+tiny_imagenet/resnet18: train (100000, 512), test (10000, 512), C=200, cap=199, K=[20, 100, 199, 200, 256], dim=512
+  delta-independent fits on the hold-out split: 4.6 s, once for all four deltas
+  delta=0.0001: ridge + deflated pencils in 177.4 s; cumulative 582 s
+  delta=0.005: ridge + deflated pencils in 177.3 s; cumulative 1113 s
+  delta=0.01: ridge + deflated pencils in 177.9 s; cumulative 1627 s
+  delta=0.1: ridge + deflated pencils in 177.0 s; cumulative 2142 s
+  test GO-LDA: delta=0.01 K=256 dim=256 -> 0.6333
+  test PCA-then-LDA: delta=0.0001 K=256 dim=199 -> 0.6520
+  test classic-ridge-LDA: delta=0.01 K=199 dim=199 -> 0.6439
+  test classic-shrinkage-LDA: delta=0.0001 K=199 dim=199 -> 0.6498
+tiny_imagenet/dinov2_vits14: train (100000, 384), test (10000, 384), C=200, cap=199, K=[20, 100, 199, 200, 256], dim=384
+  delta-independent fits on the hold-out split: 3.6 s, once for all four deltas
+  delta=0.0001: ridge + deflated pencils in 53.2 s; cumulative 3115 s
+  delta=0.005: ridge + deflated pencils in 54.0 s; cumulative 3607 s
+  delta=0.01: ridge + deflated pencils in 55.9 s; cumulative 4075 s
+  delta=0.1: ridge + deflated pencils in 53.3 s; cumulative 4538 s
+  test GO-LDA: delta=0.005 K=200 dim=200 -> 0.7948
+  test PCA-then-LDA: delta=0.0001 K=100 dim=100 -> 0.7962
+  test classic-ridge-LDA: delta=0.0001 K=199 dim=199 -> 0.7930
+  test classic-shrinkage-LDA: delta=0.0001 K=100 dim=100 -> 0.7950
+
+130 rows, 8 selected cells in 4748 s -> D:\claude\workspace\CISC3024 AI Assignment 3\runs\m2_matrix

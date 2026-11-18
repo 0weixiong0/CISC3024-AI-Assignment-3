@@ -1,0 +1,18 @@
+cifar100/dinov2_vits14: train (50000, 384), test (10000, 384), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=384
+cifar100/dinov2_vits14: CV-only against the stored selection - ['GO-LDA', 'PCA-then-LDA', 'classic-ridge-LDA', 'classic-shrinkage-LDA'] at [(0.0001, 99), (0.0001, 256), (0.005, 99), (0.005, 128)]
+Traceback (most recent call last):
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 609, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 556, in main
+    shared_cv, _ = (fit_shared(X_f, y_f)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 123, in fit_shared
+    shrunk = classic_lda_pencil(X_tr, y_tr, shrinkage=SHRINK_ALPHA, route="dense")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\golda.py", line 242, in classic_lda_pencil
+    sc = Scatters(X, y)
+         ^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\golda.py", line 57, in __init__
+    raise ValueError("at least two classes are required")
+ValueError: at least two classes are required

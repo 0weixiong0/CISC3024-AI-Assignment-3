@@ -1,0 +1,44 @@
+ORL loaded: X (400, 10304), fold-0 training rows 360, test rows 40
+M0 assertions: 400 x 10,304 = OK; per-image 112 rows x 92 columns = OK; 40 subjects x 10 images = OK
+pixel range 0..251; 9 train / 1 test per subject
+
+[PASS] 1a first direction == leading eigenvector of the classic pencil (delta=0, full rank)
+       N=480 M=40 C=6; principal angle 0.000e+00 deg against an independent dense linalg.eig of S_B u = lambda S_W u (tolerance 0.0001 deg); that eigenvalue 122.255876
+[PASS] 1b first direction lies in scikit-learn's classic-LDA subspace
+       sklearn's coef_ rows are a different basis of the same space, so the test is span inclusion, not row equality. GO-LDA direction 1 vs that span 0.000e+00 deg; our own C-1 classic directions vs the same span 1.479e-06 deg (tolerance 1.000e-04 deg from gap 2.039e+01)
+[PASS] 1c reduced route == dense route (delta=0, same fixture)
+       first direction 0.000e+00 deg (tolerance 0.0001 deg); span over 5 directions 1.207e-06 deg (tolerance 1.000e-04 deg)
+[PASS] 1d same-delta parity against our own ridge-LDA reference
+       GO-LDA direction 1 must equal the first direction of the undeflated ridge pencil at matched delta; sklearn's unregularised solver is NOT a valid reference once delta > 0, which is why this reference is ours. delta=1e-06: 0.00e+00/1.00e-04 deg (gap 2.49e+01) | delta=0.0001: 0.00e+00/1.00e-04 deg (gap 2.49e+01) | delta=0.005: 1.21e-06/1.00e-04 deg (gap 2.49e+01) | delta=0.01: 0.00e+00/1.00e-04 deg (gap 2.49e+01) | delta=0.1: 8.54e-07/1.00e-04 deg (gap 2.49e+01) ; worst 1.21e-06 deg
+[PASS] 1e ORL fold 0, K = C-1: the two classic-arm solvers (eig, eigh) agree
+       r = 359, delta = 0.005, tolerance 2.545e-04 deg from gap 4.030e+06; classic(eig) vs classic(eigh) 1.708e-06 deg, and their eigenvalues agree to a relative 3.241e-07 over 39 of them, spanning 4.305e+08..1.570e+10
+[PASS] 5f ORL fold 0, K = C-1: GO-LDA's span against classic LDA's (measured, not asserted)
+       GO-LDA vs classic(eigh) 1.909e-06 deg, GO-LDA vs classic(eig) 2.091e-06 deg against the same tolerance 2.545e-04 deg - H1 holds in this regime; it is a property of the data, and it is reported in stage_03a section 4 rather than used as a correctness test
+[PASS] 2a binary case at delta=0: exactly one direction compared, vs Foley-Sammon
+       N=240 M=30 C=2; principal angle 1.207e-06 deg; directions compared = 1 (C-1 = 1, so there is nothing else to compare, and with no second step the deflation has to be inert here)
+[PASS] 2b binary case at matched delta > 0 vs the ridge Foley-Sammon form
+       reference is (S_W + delta I)^-1 (mu1 - mu2), one direction, never the unregularised Foley-Sammon vector; delta=1e-06: 0.00e+00/1.00e-04 deg | delta=0.0001: 0.00e+00/1.00e-04 deg | delta=0.005: 1.21e-06/1.00e-04 deg | delta=0.01: 0.00e+00/1.00e-04 deg | delta=0.1: 1.48e-06/1.00e-04 deg ; worst 1.48e-06 deg
+[PASS] 3 scatter reconstruction: within-class vs scikit-learn's public covariance_, between-class vs an independent loop, and S_T = S_W + S_B
+       max|S_W/N - covariance_| = 4.441e-16 - that is sklearn's pooling convention; the unbiased S_W/(N-C) misses it by 2.013e-02. max|S_B vectorised - S_B loop| = 9.095e-13; relative |S_T-(S_W+S_B)| = 4.708e-16; trace identity |diff| = 7.276e-12
+[PASS] 3b span-reduced directions satisfy the full M-space pencil (ORL, fold 0)
+       r = 359 of M = 10304; worst RELATIVE residual over K = 50 directions = 2.973e-06 against eps * kappa tolerance 8.885e-05 (kappa(A_r) = 4.002e+10 under the solver's own rtol = 1e-12 truncation); the same code on a well-conditioned fixture gives 7.627e-16 against 1.000e-12 (kappa = 2.887e+00). Control arm - a random span vector with its own Rayleigh eigenvalue - scores 9.973e-01, 11223.7x the tolerance, so the threshold discriminates. Worst absolute residual 3.506e+02 in pixel-squared units, which is why the relative figure is what the gate reads; eigenvalues 9.623e+00..1.570e+10; S_B and S_W' are applied matrix-free and S_W'^-1 only through the span, never the reduced pencil
+[PASS] 3c reduced vs dense on a 200-dimensional ORL surrogate
+       first direction 0.000e+00 deg, span over 8 directions 1.479e-06 deg (tolerance 1.000e-04 deg from gap 1.251e+00) - the equivalence test the rank reduction rests on, run where dense arithmetic is affordable
+[PASS] 4 measured cost of the two routes at ORL scale
+       reduced route, K=39 on one fold: 8.48 s; dense generalised eig at M=400/800/1600: 0.29/2.49/36.09 s, fitted exponent 3.48, extrapolated 21786 s for ONE dense step at M=10,304 (~236.0 h per fold per delta on the dense route) - the measurement behind the plan's rank-reduced choice and its 1-2 h MVP ceiling
+[PASS] 5a (diagnostic) the paper's orthogonality claim, measured where it is visible
+       well-conditioned fixture N=480 M=40 C=6, K=5: max |u_i^T u_j| over i!=j is 0.0769 for classic LDA (non-orthogonal, as the paper claims) and 3.741e-16 for GO-LDA (orthogonal, enforced by the deflation and not by any post-hoc projection - the code never re-orthogonalises a solved vector). Per-direction Fisher ratios: GO-LDA [122.254, 97.402, 76.102, 55.7, 35.213] vs classic [122.254, 97.341, 76.025, 55.636, 34.742], so GO-LDA is >= classic in every direction.
+[PASS] 5b (diagnostic) on ORL the deflation is nearly inert within the cap, and why
+       max |u_i^T u_j| over the first C-1 = 39 directions: classic LDA 1.282e-05, GO-LDA 2.200e-15 (tolerance 8.885e-04 = 100 eps kappa, kappa(A_r) = 4.002e+10). Classic LDA's ORL directions are already Euclidean-orthogonal to that order, so the eq (40)-(41) correction has almost nothing to remove: the spans of the first 39 directions of each differ by 2.091e-06 deg (tolerance 2.545e-04) and the orthogonality difference that H3 predicts is not a live effect on this dataset - it is reported as measured, not as the paper phrases it
+[PASS] 5c (diagnostic) Fisher ratio non-increasing across GO-LDA directions
+       first five [15703871761.4523, 10431670656.8639, 9073342823.0327, 6942689492.1608, 4787138876.0742]; K=39 430501942.4452; K=50 9.6235e+00; classic-LDA ratios on the same data [15703871761.4523, 10431670656.8594, 9073342823.0373]... - on ORL the two agree to the conditioning noise (relative differences of order 8.9e-05), which is what 5b explains, whereas 5a shows the separation is real on data that needs it
+[PASS] 5d (diagnostic) directions beyond the C-1 rank cap carry positive eigenvalues
+       eigenvalues at K=40..50: min 9.6235e+00, max 3.5034e+01; classic LDA has no such direction to offer (its 39th eigenvalue is 4.305e+08 and it has no 40th)
+[PASS] 5e (diagnostic) brute-force dense deflation == the span-reduced solver, K = 4 (at the C-1 = 4 cap)
+       N=200 M=24 C=5, K=4, delta=0.005: n=1: 1.21e-06 deg (mu 98.8322) | n=2: 0.00e+00 deg (mu 53.259) | n=3: 0.00e+00 deg (mu 43.5122) | n=4: 0.00e+00 deg (mu 26.8124) ; worst 1.207e-06 deg against tolerance 1.000e-04 deg from gap 4.566e+01; eigenvalues agree to a relative 1.582e-15; first three dense mus [98.832239, 53.258991, 43.512209] vs first three reduced-route mus [98.832239, 53.258991, 43.512209]
+[PASS] 5e (diagnostic) brute-force dense deflation == the span-reduced solver, K = 8 (beyond the C-1 = 4 cap)
+       N=200 M=24 C=5, K=8, delta=0.005: n=1: 1.21e-06 deg (mu 98.8322) | n=2: 0.00e+00 deg (mu 53.259) | n=3: 0.00e+00 deg (mu 43.5122) | n=4: 0.00e+00 deg (mu 26.8124) | n=5: 1.71e-06 deg (mu 8.48397) | n=6: 0.00e+00 deg (mu 4.27159) | n=7: 0.00e+00 deg (mu 2.62885) | n=8: 0.00e+00 deg (mu 1.90305) ; worst 1.708e-06 deg against tolerance 1.000e-04 deg from gap 4.566e+01; eigenvalues agree to a relative 6.767e-15; first three dense mus [98.832239, 53.258991, 43.512209] vs first three reduced-route mus [98.832239, 53.258991, 43.512209]
+
+11/11 gated checks passed (18/18 overall); report: D:\claude\workspace\CISC3024 AI Assignment 3\runs\parity\parity_report.json
+
+GATE OPEN: Stage-3 MVP may proceed

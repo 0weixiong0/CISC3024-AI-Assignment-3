@@ -1,0 +1,19 @@
+cifar100/dinov2_vits14: train (50000, 384), test (10000, 384), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=384
+  delta-independent fits on the hold-out split: 1.5 s, once for all four deltas
+  delta=0.0001: ridge + deflated pencils in 48.6 s; cumulative 178 s
+  delta=0.005: ridge + deflated pencils in 55.2 s; cumulative 352 s
+  delta=0.01: ridge + deflated pencils in 52.8 s; cumulative 520 s
+  delta=0.1: ridge + deflated pencils in 52.1 s; cumulative 693 s
+  test GO-LDA: delta=0.005 K=128 dim=128 -> 0.8098
+  test PCA-then-LDA: delta=0.0001 K=256 dim=99 -> 0.8195
+  test classic-ridge-LDA: delta=0.005 K=99 dim=99 -> 0.8244
+  test classic-shrinkage-LDA: delta=0.0001 K=99 dim=99 -> 0.8240
+  cv fold 1/3: 93 s cumulative
+  cv fold 2/3: 187 s cumulative
+  cv fold 3/3: 282 s cumulative
+  cv GO-LDA: 0.7949 +/- 0.0051 over 3 folds
+  cv PCA-then-LDA: 0.8040 +/- 0.0069 over 3 folds
+  cv classic-ridge-LDA: 0.8054 +/- 0.0061 over 3 folds
+  cv classic-shrinkage-LDA: 0.8064 +/- 0.0063 over 3 folds
+
+73 rows, 4 selected cells in 1113 s -> runs\m2_matrix_smoke

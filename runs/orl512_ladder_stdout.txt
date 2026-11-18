@@ -1,0 +1,110 @@
+ORL: N = 400, M_full = 10304, C = 40, cap = 39, folds = 10, delta = 0.005, head = 1-NN, seed = 20261117
+reference at full 10,304 dimensions (stage_03a section 4): both arms 0.9850 at the cap, paired difference 0.0000 on 10/10 folds, span ~2e-6 deg
+  rung M = 80 (10 x 8): cap/M = 48.8 %, M/N_train = 0.22, rows/class at fit = 9
+    fold 1/10: GO 0.8000  classic 0.9750  diff -0.1750  span 8.959e+01 deg (defect 9.93e-01; control pair 90.0 deg)  0 s
+    fold 2/10: GO 0.8500  classic 0.9500  diff -0.1000  span 8.988e+01 deg (defect 9.98e-01; control pair 89.7 deg)  0 s
+    fold 3/10: GO 0.9000  classic 0.9750  diff -0.0750  span 8.959e+01 deg (defect 9.93e-01; control pair 88.7 deg)  0 s
+    fold 4/10: GO 0.8250  classic 0.9250  diff -0.1000  span 8.795e+01 deg (defect 9.64e-01; control pair 88.0 deg)  1 s
+    fold 5/10: GO 0.9500  classic 0.9500  diff +0.0000  span 8.787e+01 deg (defect 9.63e-01; control pair 89.0 deg)  1 s
+    fold 6/10: GO 0.9000  classic 1.0000  diff -0.1000  span 8.880e+01 deg (defect 9.79e-01; control pair 88.7 deg)  1 s
+    fold 7/10: GO 0.8500  classic 0.9500  diff -0.1000  span 8.846e+01 deg (defect 9.73e-01; control pair 89.5 deg)  1 s
+    fold 8/10: GO 0.8000  classic 1.0000  diff -0.2000  span 8.977e+01 deg (defect 9.96e-01; control pair 88.6 deg)  1 s
+    fold 9/10: GO 0.7750  classic 0.9250  diff -0.1500  span 8.952e+01 deg (defect 9.92e-01; control pair 88.4 deg)  1 s
+    fold 10/10: GO 0.7750  classic 0.9500  diff -0.1750  span 8.781e+01 deg (defect 9.62e-01; control pair 88.2 deg)  1 s
+  rung M = 80: paired GO-classic -0.11750 (0 ahead / 9 behind / 1 tied), span 8.892e+01 deg, 1 s
+  rung M = 156 (13 x 12): cap/M = 25.0 %, M/N_train = 0.43, rows/class at fit = 9
+    fold 1/10: GO 0.8500  classic 0.9750  diff -0.1250  span 8.980e+01 deg (defect 9.97e-01; control pair 89.4 deg)  1 s
+    fold 2/10: GO 0.8500  classic 1.0000  diff -0.1500  span 8.919e+01 deg (defect 9.86e-01; control pair 89.9 deg)  3 s
+    fold 3/10: GO 0.9250  classic 0.9750  diff -0.0500  span 8.940e+01 deg (defect 9.90e-01; control pair 89.6 deg)  4 s
+    fold 4/10: GO 0.9000  classic 0.9000  diff +0.0000  span 8.968e+01 deg (defect 9.94e-01; control pair 89.1 deg)  5 s
+    fold 5/10: GO 0.9000  classic 0.9500  diff -0.0500  span 8.935e+01 deg (defect 9.89e-01; control pair 89.6 deg)  7 s
+    fold 6/10: GO 0.9000  classic 0.9500  diff -0.0500  span 8.973e+01 deg (defect 9.95e-01; control pair 89.7 deg)  8 s
+    fold 7/10: GO 0.8750  classic 0.9500  diff -0.0750  span 8.910e+01 deg (defect 9.84e-01; control pair 90.0 deg)  9 s
+    fold 8/10: GO 0.9000  classic 0.9750  diff -0.0750  span 8.954e+01 deg (defect 9.92e-01; control pair 89.3 deg)  11 s
+    fold 9/10: GO 0.8000  classic 0.9500  diff -0.1500  span 8.986e+01 deg (defect 9.98e-01; control pair 89.6 deg)  12 s
+    fold 10/10: GO 0.8000  classic 0.9000  diff -0.1000  span 8.936e+01 deg (defect 9.89e-01; control pair 89.5 deg)  13 s
+  rung M = 156: paired GO-classic -0.08250 (0 ahead / 9 behind / 1 tied), span 8.950e+01 deg, 13 s
+  rung M = 256 (16 x 16): cap/M = 15.2 %, M/N_train = 0.71, rows/class at fit = 9
+    fold 1/10: GO 0.9000  classic 0.9250  diff -0.0250  span 8.835e+01 deg (defect 9.71e-01; control pair 89.9 deg)  5 s
+    fold 2/10: GO 0.9250  classic 0.9750  diff -0.0500  span 8.911e+01 deg (defect 9.84e-01; control pair 89.6 deg)  9 s
+    fold 3/10: GO 0.8500  classic 0.9250  diff -0.0750  span 8.811e+01 deg (defect 9.67e-01; control pair 89.4 deg)  14 s
+    fold 4/10: GO 0.9250  classic 0.9000  diff +0.0250  span 8.956e+01 deg (defect 9.92e-01; control pair 89.4 deg)  18 s
+    fold 5/10: GO 0.9250  classic 0.9000  diff +0.0250  span 8.980e+01 deg (defect 9.96e-01; control pair 90.0 deg)  23 s
+    fold 6/10: GO 0.9000  classic 0.9500  diff -0.0500  span 8.951e+01 deg (defect 9.91e-01; control pair 89.5 deg)  28 s
+    fold 7/10: GO 0.9500  classic 0.8750  diff +0.0750  span 8.941e+01 deg (defect 9.90e-01; control pair 89.7 deg)  33 s
+    fold 8/10: GO 0.9500  classic 0.8750  diff +0.0750  span 8.845e+01 deg (defect 9.73e-01; control pair 89.4 deg)  37 s
+    fold 9/10: GO 0.9250  classic 0.8750  diff +0.0500  span 8.945e+01 deg (defect 9.90e-01; control pair 89.9 deg)  42 s
+    fold 10/10: GO 0.7750  classic 0.8750  diff -0.1000  span 8.956e+01 deg (defect 9.92e-01; control pair 89.0 deg)  47 s
+  rung M = 256: paired GO-classic -0.00500 (5 ahead / 5 behind / 0 tied), span 8.913e+01 deg, 47 s
+  rung M = 512 (32 x 16): cap/M = 7.6 %, M/N_train = 1.42, rows/class at fit = 9
+    fold 1/10: GO 0.9000  classic 0.9000  diff +0.0000  span 1.708e-06 deg (defect 4.44e-16; control pair 62.7 deg)  37 s
+    fold 2/10: GO 0.9500  classic 0.9500  diff +0.0000  span 1.479e-06 deg (defect 3.33e-16; control pair 59.3 deg)  74 s
+    fold 3/10: GO 0.9750  classic 0.9750  diff +0.0000  span 1.207e-06 deg (defect 2.22e-16; control pair 60.6 deg)  111 s
+    fold 4/10: GO 0.9500  classic 0.9500  diff +0.0000  span 1.479e-06 deg (defect 3.33e-16; control pair 61.0 deg)  147 s
+    fold 5/10: GO 0.9500  classic 0.9500  diff +0.0000  span 8.538e-07 deg (defect 1.11e-16; control pair 59.5 deg)  184 s
+    fold 6/10: GO 0.9750  classic 0.9750  diff +0.0000  span 2.259e-06 deg (defect 7.77e-16; control pair 61.8 deg)  220 s
+    fold 7/10: GO 0.9000  classic 0.9000  diff +0.0000  span 1.909e-06 deg (defect 5.55e-16; control pair 61.0 deg)  256 s
+    fold 8/10: GO 0.9500  classic 0.9500  diff +0.0000  span 1.207e-06 deg (defect 2.22e-16; control pair 62.2 deg)  293 s
+    fold 9/10: GO 0.9000  classic 0.9000  diff +0.0000  span 1.479e-06 deg (defect 3.33e-16; control pair 60.5 deg)  329 s
+    fold 10/10: GO 0.8750  classic 0.8750  diff +0.0000  span 2.091e-06 deg (defect 6.66e-16; control pair 61.2 deg)  366 s
+  rung M = 512: paired GO-classic +0.00000 (0 ahead / 0 behind / 10 tied), span 2.000e-06 deg, 366 s
+
+ladder: [
+  {
+    "M": 80,
+    "cap_over_M": 0.4875,
+    "M_over_N_train": 0.222,
+    "go": 0.8425,
+    "classic": 0.96,
+    "shrunk": 0.97,
+    "pca": 0.955,
+    "no_proj": 0.96,
+    "paired_diff": -0.1175,
+    "span_deg": 88.923979,
+    "span_defect": 0.9812229401172183,
+    "control_span_deg": 88.879154
+  },
+  {
+    "M": 156,
+    "cap_over_M": 0.25,
+    "M_over_N_train": 0.433,
+    "go": 0.87,
+    "classic": 0.9525,
+    "shrunk": 0.98,
+    "pca": 0.97,
+    "no_proj": 0.9625,
+    "paired_diff": -0.0825,
+    "span_deg": 89.501449,
+    "span_defect": 0.9912988404526084,
+    "control_span_deg": 89.571542
+  },
+  {
+    "M": 256,
+    "cap_over_M": 0.1523,
+    "M_over_N_train": 0.711,
+    "go": 0.9025,
+    "classic": 0.9075,
+    "shrunk": 0.9725,
+    "pca": 0.97,
+    "no_proj": 0.9675,
+    "paired_diff": -0.005,
+    "span_deg": 89.129897,
+    "span_defect": 0.9848152817998013,
+    "control_span_deg": 89.575711
+  },
+  {
+    "M": 512,
+    "cap_over_M": 0.0762,
+    "M_over_N_train": 1.422,
+    "go": 0.9325,
+    "classic": 0.9325,
+    "shrunk": 0.965,
+    "pca": 0.9725,
+    "no_proj": 0.97,
+    "paired_diff": 0.0,
+    "span_deg": 2e-06,
+    "span_defect": 3.9968028886505636e-16,
+    "control_span_deg": 60.984216
+  }
+]
+wrote runs\orl512\orl512_ladder.json in 427 s (all rungs completed)

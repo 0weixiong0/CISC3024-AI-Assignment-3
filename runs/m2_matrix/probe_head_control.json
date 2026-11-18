@@ -1,0 +1,155 @@
+{
+  "pair": [
+    "cifar100",
+    "resnet18"
+  ],
+  "delta": 0.005,
+  "cap": 99,
+  "dim": 512,
+  "fit": "all of train",
+  "eval": "official test split",
+  "heads": {
+    "logistic": "C4's: L2 logistic LBFGS max_iter 5000 C=1.0 + StandardScaler",
+    "knn1_raw": "paper's Table II classifier: 1-NN Euclidean on the projected space as it comes out of the basis",
+    "knn1_scaled": "same, after per-coordinate standardisation (the scaler C4's head uses)"
+  },
+  "rows": [
+    {
+      "arm": "no-projection",
+      "dim": 512,
+      "logistic": 0.6282,
+      "logistic_s": 19.7,
+      "knn1_raw": 0.5542,
+      "knn1_raw_s": 3.9,
+      "knn1_scaled": 0.5577,
+      "knn1_scaled_s": 2.1
+    },
+    {
+      "arm": "GO-LDA@50",
+      "dim": 50,
+      "logistic": 0.5184,
+      "logistic_s": 9.4,
+      "knn1_raw": 0.366,
+      "knn1_raw_s": 0.4,
+      "knn1_scaled": 0.3714,
+      "knn1_scaled_s": 0.4
+    },
+    {
+      "arm": "GO-LDA@99",
+      "dim": 99,
+      "logistic": 0.6045,
+      "logistic_s": 10.1,
+      "knn1_raw": 0.4603,
+      "knn1_raw_s": 0.6,
+      "knn1_scaled": 0.4655,
+      "knn1_scaled_s": 0.6
+    },
+    {
+      "arm": "GO-LDA@100",
+      "dim": 100,
+      "logistic": 0.6061,
+      "logistic_s": 10.7,
+      "knn1_raw": 0.4631,
+      "knn1_raw_s": 0.6,
+      "knn1_scaled": 0.4673,
+      "knn1_scaled_s": 0.6
+    },
+    {
+      "arm": "GO-LDA@198",
+      "dim": 198,
+      "logistic": 0.6458,
+      "logistic_s": 16.2,
+      "knn1_raw": 0.5179,
+      "knn1_raw_s": 1.0,
+      "knn1_scaled": 0.5194,
+      "knn1_scaled_s": 1.1
+    },
+    {
+      "arm": "GO-LDA@256",
+      "dim": 256,
+      "logistic": 0.6478,
+      "logistic_s": 15.8,
+      "knn1_raw": 0.5355,
+      "knn1_raw_s": 1.2,
+      "knn1_scaled": 0.5358,
+      "knn1_scaled_s": 1.3
+    },
+    {
+      "arm": "classic-LDA@99",
+      "dim": 99,
+      "logistic": 0.6699,
+      "logistic_s": 4.0,
+      "knn1_raw": 0.5707,
+      "knn1_raw_s": 0.6,
+      "knn1_scaled": 0.5403,
+      "knn1_scaled_s": 0.6
+    },
+    {
+      "arm": "PCA@99",
+      "dim": 99,
+      "logistic": 0.6508,
+      "logistic_s": 3.5,
+      "knn1_raw": 0.5407,
+      "knn1_raw_s": 0.5,
+      "knn1_scaled": 0.5077,
+      "knn1_scaled_s": 0.6
+    },
+    {
+      "arm": "PCA@100",
+      "dim": 100,
+      "logistic": 0.6486,
+      "logistic_s": 3.7,
+      "knn1_raw": 0.5427,
+      "knn1_raw_s": 0.5,
+      "knn1_scaled": 0.5056,
+      "knn1_scaled_s": 0.6
+    },
+    {
+      "arm": "PCA@198",
+      "dim": 198,
+      "logistic": 0.6588,
+      "logistic_s": 5.5,
+      "knn1_raw": 0.5551,
+      "knn1_raw_s": 0.9,
+      "knn1_scaled": 0.4682,
+      "knn1_scaled_s": 1.0
+    },
+    {
+      "arm": "PCA@256",
+      "dim": 256,
+      "logistic": 0.6481,
+      "logistic_s": 6.5,
+      "knn1_raw": 0.555,
+      "knn1_raw_s": 1.2,
+      "knn1_scaled": 0.4395,
+      "knn1_scaled_s": 1.2
+    }
+  ],
+  "differences": {
+    "GO-LDA@99_minus_classic-LDA@99": {
+      "logistic": -0.0654,
+      "knn1_raw": -0.1104,
+      "knn1_scaled": -0.0748
+    },
+    "GO-LDA@99_minus_PCA@99": {
+      "logistic": -0.0463,
+      "knn1_raw": -0.0804,
+      "knn1_scaled": -0.0422
+    },
+    "GO-LDA@100_minus_PCA@100": {
+      "logistic": -0.0425,
+      "knn1_raw": -0.0796,
+      "knn1_scaled": -0.0383
+    },
+    "GO-LDA@198_minus_PCA@198": {
+      "logistic": -0.013,
+      "knn1_raw": -0.0372,
+      "knn1_scaled": 0.0512
+    },
+    "GO-LDA@256_minus_PCA@256": {
+      "logistic": -0.0003,
+      "knn1_raw": -0.0195,
+      "knn1_scaled": 0.0963
+    }
+  }
+}

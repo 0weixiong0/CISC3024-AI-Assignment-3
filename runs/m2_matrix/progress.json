@@ -1,0 +1,23 @@
+{
+  "stage": "final",
+  "mode": "cv-only",
+  "elapsed_s": 2625.2,
+  "rows_in_memory": {
+    "rows": 0,
+    "sel_rows": 0,
+    "cv_rows": 8,
+    "diag": 0,
+    "timings": 0
+  },
+  "pairs_this_invocation": [
+    [
+      "tiny_imagenet",
+      "resnet18"
+    ],
+    [
+      "tiny_imagenet",
+      "dinov2_vits14"
+    ]
+  ],
+  "cv_folds": 5
+}

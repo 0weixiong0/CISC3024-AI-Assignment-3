@@ -1,0 +1,121 @@
+{
+  "total_wall_clock_s": 1112.6290242999967,
+  "per_fit": [
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.0001,
+      "mode": "holdout-scan",
+      "fit_split_rows": 47500,
+      "solve_seconds": {
+        "go_lda": 48.17546910000965,
+        "classic": 0.3913608999864664
+      },
+      "shared_solve_seconds_solved_once": {
+        "shrunk": 0.42722329997923225,
+        "pca": 1.050729600014165
+      },
+      "delta_wall_clock_s": 175.9763079000113
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.005,
+      "mode": "holdout-scan",
+      "fit_split_rows": 47500,
+      "solve_seconds": {
+        "go_lda": 54.78014139999868,
+        "classic": 0.413145300000906
+      },
+      "shared_solve_seconds_solved_once": {
+        "shrunk": 0.42722329997923225,
+        "pca": 1.050729600014165
+      },
+      "delta_wall_clock_s": 174.60405699998955
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.01,
+      "mode": "holdout-scan",
+      "fit_split_rows": 47500,
+      "solve_seconds": {
+        "go_lda": 52.40460609999718,
+        "classic": 0.4048684999870602
+      },
+      "shared_solve_seconds_solved_once": {
+        "shrunk": 0.42722329997923225,
+        "pca": 1.050729600014165
+      },
+      "delta_wall_clock_s": 168.23302049998892
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.1,
+      "mode": "holdout-scan",
+      "fit_split_rows": 47500,
+      "solve_seconds": {
+        "go_lda": 51.75555450000684,
+        "classic": 0.38566880000871606
+      },
+      "shared_solve_seconds_solved_once": {
+        "shrunk": 0.42722329997923225,
+        "pca": 1.050729600014165
+      },
+      "delta_wall_clock_s": 172.55888090000371
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "mode": "full-train-refit",
+      "method": "GO-LDA",
+      "delta": 0.005,
+      "K": 128,
+      "solve_seconds": {
+        "go_lda": 52.793974300002446,
+        "classic": 0.38995550002437085,
+        "wall_clock_s": 53.18393480000668
+      }
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "mode": "full-train-refit",
+      "method": "PCA-then-LDA",
+      "delta": 0.0001,
+      "K": 256,
+      "solve_seconds": {
+        "go_lda": 48.57412910001585,
+        "classic": 0.4164568000123836,
+        "wall_clock_s": 48.99059140001191
+      }
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "mode": "full-train-refit",
+      "method": "classic-ridge-LDA",
+      "delta": 0.005,
+      "K": 99,
+      "solve_seconds": {
+        "go_lda": 52.793974300002446,
+        "classic": 0.38995550002437085,
+        "wall_clock_s": 53.18393480000668
+      }
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "mode": "full-train-refit",
+      "method": "classic-shrinkage-LDA",
+      "delta": 0.0001,
+      "K": 99,
+      "solve_seconds": {
+        "go_lda": 48.57412910001585,
+        "classic": 0.4164568000123836,
+        "wall_clock_s": 48.99059140001191
+      }
+    }
+  ]
+}

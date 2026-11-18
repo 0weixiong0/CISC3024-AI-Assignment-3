@@ -1,0 +1,94 @@
+{
+  "total_wall_clock_s": 42.47053840002627,
+  "peak_rss_bytes": 1979891712,
+  "peak_rss_mb": 1979.891712,
+  "n_solves": 6,
+  "go_lda_s_mean": 2.2807400000019697,
+  "go_lda_s_max": 3.1546912000048906,
+  "classic_pencil_s_mean": 0.5019666333440304,
+  "shrinkage_pencil_s_mean": 0.5081658166697404,
+  "pca_dirs_s_mean": 0.255054733332751,
+  "fold_s_mean": 7.078337399992354,
+  "per_solve": [
+    {
+      "delta": 0.0,
+      "fold": 0,
+      "go_lda": 3.1546912000048906,
+      "classic_pencil": 0.5121312000264879,
+      "shrinkage_pencil": 0.516082699992694,
+      "pca_dirs": 0.2564816999947652
+    },
+    {
+      "delta": 1e-06,
+      "fold": 0,
+      "go_lda": 2.0264795999974012,
+      "classic_pencil": 0.4792758999974467,
+      "shrinkage_pencil": 0.4868782999983523,
+      "pca_dirs": 0.25418019999051467
+    },
+    {
+      "delta": 0.0001,
+      "fold": 0,
+      "go_lda": 2.0833062999881804,
+      "classic_pencil": 0.5154935999889858,
+      "shrinkage_pencil": 0.5098827999900095,
+      "pca_dirs": 0.2705538999871351
+    },
+    {
+      "delta": 0.005,
+      "fold": 0,
+      "go_lda": 2.0896265000046697,
+      "classic_pencil": 0.4728068000113126,
+      "shrinkage_pencil": 0.5329582000267692,
+      "pca_dirs": 0.2512781000114046
+    },
+    {
+      "delta": 0.01,
+      "fold": 0,
+      "go_lda": 2.1447318000136875,
+      "classic_pencil": 0.5453449000196997,
+      "shrinkage_pencil": 0.5042274000006728,
+      "pca_dirs": 0.2448597000038717
+    },
+    {
+      "delta": 0.1,
+      "fold": 0,
+      "go_lda": 2.185604600002989,
+      "classic_pencil": 0.4867474000202492,
+      "shrinkage_pencil": 0.49896550000994466,
+      "pca_dirs": 0.2529748000088148
+    }
+  ],
+  "per_fold": [
+    {
+      "delta": 0.0,
+      "fold": 0,
+      "seconds": 9.224354899983155
+    },
+    {
+      "delta": 1e-06,
+      "fold": 0,
+      "seconds": 6.839239199995063
+    },
+    {
+      "delta": 0.0001,
+      "fold": 0,
+      "seconds": 6.77385850000428
+    },
+    {
+      "delta": 0.005,
+      "fold": 0,
+      "seconds": 6.4936627999995835
+    },
+    {
+      "delta": 0.01,
+      "fold": 0,
+      "seconds": 6.573284699989017
+    },
+    {
+      "delta": 0.1,
+      "fold": 0,
+      "seconds": 6.565624299983028
+    }
+  ]
+}

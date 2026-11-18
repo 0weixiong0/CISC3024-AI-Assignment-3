@@ -1,0 +1,23 @@
+cifar100/resnet18: train (50000, 512), test (10000, 512), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=512
+  delta=0.0001: pencils solved in 276.6 s; cumulative 484 s
+  delta=0.005: pencils solved in 282.0 s; cumulative 933 s
+  delta=0.01: pencils solved in 220.5 s; cumulative 1265 s
+  delta=0.1: pencils solved in 193.5 s; cumulative 1566 s
+Traceback (most recent call last):
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 406, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 301, in main
+    full_cache[delta] = fit_projections(X_tr_all, y_tr_all, delta, max(k_grid))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\run_m2_matrix.py", line 114, in fit_projections
+    cache["go"] = go_lda(X_tr, y_tr, K=k_max, delta=delta, route="dense")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\golda.py", line 180, in go_lda
+    B_r, A_r = sc.dense_SB(), sc.dense_SW(delta)
+                              ^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\golda.py", line 69, in dense_SW
+    return S + delta * np.eye(self.M) if delta else S
+               ~~~~~~^~~~~~~~~~~~~~~~
+ValueError: operands could not be broadcast together with shapes (2,) (512,512) 
+exit=1

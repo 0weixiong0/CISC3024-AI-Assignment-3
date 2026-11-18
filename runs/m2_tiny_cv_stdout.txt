@@ -1,0 +1,24 @@
+tiny_imagenet/resnet18: train (100000, 512), test (10000, 512), C=200, cap=199, K=[20, 100, 199, 200, 256], dim=512
+tiny_imagenet/resnet18: CV-only against the stored selection - ['GO-LDA', 'PCA-then-LDA', 'classic-ridge-LDA', 'classic-shrinkage-LDA'] at [(0.0001, 199), (0.0001, 256), (0.01, 199), (0.01, 256)]
+  cv fold 1/5: 417 s cumulative
+  cv fold 2/5: 791 s cumulative
+  cv fold 3/5: 1125 s cumulative
+  cv fold 4/5: 1460 s cumulative
+  cv fold 5/5: 1788 s cumulative
+  cv GO-LDA: 0.6131 +/- 0.0023 over 5 folds
+  cv PCA-then-LDA: 0.6317 +/- 0.0021 over 5 folds
+  cv classic-ridge-LDA: 0.6275 +/- 0.0025 over 5 folds
+  cv classic-shrinkage-LDA: 0.6323 +/- 0.0024 over 5 folds
+tiny_imagenet/dinov2_vits14: train (100000, 384), test (10000, 384), C=200, cap=199, K=[20, 100, 199, 200, 256], dim=384
+tiny_imagenet/dinov2_vits14: CV-only against the stored selection - ['GO-LDA', 'PCA-then-LDA', 'classic-ridge-LDA', 'classic-shrinkage-LDA'] at [(0.0001, 100), (0.0001, 199), (0.005, 200)]
+  cv fold 1/5: 161 s cumulative
+  cv fold 2/5: 320 s cumulative
+  cv fold 3/5: 494 s cumulative
+  cv fold 4/5: 664 s cumulative
+  cv fold 5/5: 837 s cumulative
+  cv GO-LDA: 0.7883 +/- 0.0016 over 5 folds
+  cv PCA-then-LDA: 0.7953 +/- 0.0007 over 5 folds
+  cv classic-ridge-LDA: 0.7882 +/- 0.0013 over 5 folds
+  cv classic-shrinkage-LDA: 0.7929 +/- 0.0013 over 5 folds
+
+0 rows, 0 selected cells in 2625 s -> D:\claude\workspace\CISC3024 AI Assignment 3\runs\m2_matrix

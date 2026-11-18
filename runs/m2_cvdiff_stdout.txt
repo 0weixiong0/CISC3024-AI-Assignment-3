@@ -1,0 +1,10 @@
+cifar100/dinov2_vits14: train (50000, 384), test (10000, 384), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=384
+cifar100/dinov2_vits14: CV-only against the stored selection - ['GO-LDA', 'PCA-then-LDA', 'classic-ridge-LDA', 'classic-shrinkage-LDA'] at [(0.0001, 99), (0.0001, 256), (0.005, 99), (0.005, 128)]
+  cv fold 1/2: 66 s cumulative
+  cv fold 2/2: 128 s cumulative
+  cv GO-LDA: 0.7872 +/- 0.0058 over 2 folds
+  cv PCA-then-LDA: 0.7933 +/- 0.0063 over 2 folds
+  cv classic-ridge-LDA: 0.7955 +/- 0.0079 over 2 folds
+  cv classic-shrinkage-LDA: 0.7974 +/- 0.0057 over 2 folds
+
+0 rows, 0 selected cells in 128 s -> runs\m2_matrix_smoke2

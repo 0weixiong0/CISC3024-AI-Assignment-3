@@ -1,0 +1,121 @@
+{
+  "per_pair": [
+    {
+      "dataset": "cifar100",
+      "backbone": "resnet18",
+      "delta": 0.005,
+      "K_max": 256,
+      "cap": 99,
+      "rows": 50000,
+      "go_offdiag": 2.991357161974406e-14,
+      "classic_offdiag": 0.20433345841459316,
+      "shrunk_offdiag": 0.20424378014432787,
+      "span_at_cap_deg": 89.84378786654058,
+      "residual_rel_max": 6.015589470633873e-14,
+      "residual_tol": 1.4054340091974369e-12,
+      "kappa": 632.9512080115398,
+      "residual_within_bound": true,
+      "fisher_monotone": true,
+      "mu_at_cap": 0.4572874736355841,
+      "mu_beyond_cap_first_three": [
+        0.4463286736128575,
+        0.44101991400340984,
+        0.4384051184156844
+      ]
+    },
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.005,
+      "K_max": 256,
+      "cap": 99,
+      "rows": 50000,
+      "go_offdiag": 1.0165433404069057e-07,
+      "classic_offdiag": 0.2389956609421695,
+      "shrunk_offdiag": 0.19702379342730322,
+      "span_at_cap_deg": 89.07788550688312,
+      "residual_rel_max": 1.6557388781016196e-09,
+      "residual_tol": 1.0385204972704271e-06,
+      "kappa": 467708052.45237184,
+      "residual_within_bound": true,
+      "fisher_monotone": true,
+      "mu_at_cap": 0.4812391727397114,
+      "mu_beyond_cap_first_three": [
+        0.4712776892672229,
+        0.46681404839075175,
+        0.46366339207059304
+      ]
+    },
+    {
+      "dataset": "tiny_imagenet",
+      "backbone": "resnet18",
+      "delta": 0.01,
+      "K_max": 256,
+      "cap": 199,
+      "rows": 100000,
+      "go_offdiag": 1.2455314557513475e-14,
+      "classic_offdiag": 0.18603300210354806,
+      "shrunk_offdiag": 0.17496950193932292,
+      "span_at_cap_deg": 89.93898082340495,
+      "residual_rel_max": 2.404078226262679e-14,
+      "residual_tol": 1e-12,
+      "kappa": 377.1292426543563,
+      "residual_within_bound": true,
+      "fisher_monotone": true,
+      "mu_at_cap": 0.2140834168276176,
+      "mu_beyond_cap_first_three": [
+        0.2132559955395187,
+        0.21206082330089315,
+        0.21015057142419227
+      ]
+    },
+    {
+      "dataset": "tiny_imagenet",
+      "backbone": "dinov2_vits14",
+      "delta": 0.005,
+      "K_max": 200,
+      "cap": 199,
+      "rows": 100000,
+      "go_offdiag": 2.826342400050197e-08,
+      "classic_offdiag": 0.2524332770588931,
+      "shrunk_offdiag": 0.17927523496236308,
+      "span_at_cap_deg": 89.54671067564279,
+      "residual_rel_max": 9.85366728388748e-10,
+      "residual_tol": 9.214246186275181e-07,
+      "kappa": 414972756.9100892,
+      "residual_within_bound": true,
+      "fisher_monotone": true,
+      "mu_at_cap": 0.1664098794943781,
+      "mu_beyond_cap_first_three": [
+        0.16563029024544598
+      ]
+    }
+  ],
+  "seed": 20261117,
+  "val_fraction": 0.05,
+  "deltas": [
+    0.0001,
+    0.005,
+    0.01,
+    0.1
+  ],
+  "k_grid": {
+    "cifar100": [
+      10,
+      50,
+      99,
+      100,
+      128,
+      256
+    ],
+    "tiny_imagenet": [
+      20,
+      100,
+      199,
+      200,
+      256
+    ]
+  },
+  "shrinkage_alpha": 0.1,
+  "delta_rule": "certified range from M1: delta >= 1e-4 only, so every beyond-cap row is a row whose numerics were checked"
+}

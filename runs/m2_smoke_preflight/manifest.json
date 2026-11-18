@@ -1,0 +1,44 @@
+{
+  "stage": "M2 / WP6 frozen-feature matrix",
+  "seed": 20261117,
+  "mode": "cv-only",
+  "pairs": [
+    [
+      "cifar100",
+      "dinov2_vits14"
+    ]
+  ],
+  "cv_folds_for_these_pairs": 2,
+  "calibration": "runs/m2_matrix/calibration.json",
+  "route": "dense (M = 512 or 384, N >> M): the span-reduced route is exact but solves a deflated pencil sequentially, which costs K eigendecompositions of an M x M pencil either way, so at these dimensions dense has no numerical downside",
+  "head": "L2 logistic regression, LBFGS, max_iter=5000, C=1.0, StandardScaler fitted on the fitting split only (C4's configuration)",
+  "selection": "5 % stratified hold-out of train (seed 20261117); official test split used once per method after refitting on all of train",
+  "feature_cache": "D:\\claude\\workspace\\CISC3024 AI Assignment 3\\data\\features\\manifest.json",
+  "deltas": [
+    0.0001,
+    0.005,
+    0.01,
+    0.1
+  ],
+  "k_grid": {
+    "cifar100": [
+      10,
+      50,
+      99,
+      100,
+      128,
+      256
+    ],
+    "tiny_imagenet": [
+      20,
+      100,
+      199,
+      200,
+      256
+    ]
+  },
+  "tables_written_this_invocation": {
+    "cv_rows": 4
+  },
+  "total_wall_clock_s_this_invocation": 310.58394359998056
+}

@@ -1,0 +1,19 @@
+{
+  "stage": "test-split scoring cifar100/dinov2_vits14",
+  "mode": "cv-only",
+  "elapsed_s": 0.1,
+  "rows_in_memory": {
+    "rows": 0,
+    "sel_rows": 0,
+    "cv_rows": 0,
+    "diag": 0,
+    "timings": 0
+  },
+  "pairs_this_invocation": [
+    [
+      "cifar100",
+      "dinov2_vits14"
+    ]
+  ],
+  "cv_folds": 1
+}

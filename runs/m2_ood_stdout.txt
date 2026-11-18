@@ -1,0 +1,14 @@
+resnet18       corrupting 10000 test images at sigma=0.08
+    5120/10000 images, 521.0 img/s, 10 s elapsed
+resnet18       corrupted features extracted in 19 s on cuda; mean |feature shift| 0.5352
+resnet18       delta=0.0001: solved for K<=256 in 266 s
+resnet18       delta=0.005: solved for K<=256 in 241 s
+resnet18       clean rank ['classic-shrinkage-LDA', 'classic-ridge-LDA', 'PCA-then-LDA', 'GO-LDA'] -> corrupted rank ['classic-ridge-LDA', 'PCA-then-LDA', 'classic-shrinkage-LDA', 'GO-LDA']
+dinov2_vits14  corrupting 10000 test images at sigma=0.08
+    5120/10000 images, 230.2 img/s, 22 s elapsed
+dinov2_vits14  corrupted features extracted in 43 s on cuda; mean |feature shift| 1.7775
+dinov2_vits14  delta=0.0001: solved for K<=256 in 91 s
+dinov2_vits14  delta=0.005: solved for K<=128 in 49 s
+dinov2_vits14  clean rank ['classic-ridge-LDA', 'classic-shrinkage-LDA', 'PCA-then-LDA', 'GO-LDA'] -> corrupted rank ['classic-shrinkage-LDA', 'PCA-then-LDA', 'classic-ridge-LDA', 'GO-LDA']
+
+wrote D:\claude\workspace\CISC3024 AI Assignment 3\runs\m2_matrix\probe_ood.json

@@ -1,0 +1,22 @@
+{
+  "stage": "final",
+  "elapsed_s": 4748.1,
+  "rows_in_memory": {
+    "rows": 130,
+    "sel_rows": 8,
+    "cv_rows": 0,
+    "diag": 2,
+    "timings": 16
+  },
+  "pairs_this_invocation": [
+    [
+      "tiny_imagenet",
+      "resnet18"
+    ],
+    [
+      "tiny_imagenet",
+      "dinov2_vits14"
+    ]
+  ],
+  "cv_folds": 0
+}

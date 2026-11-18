@@ -1,0 +1,44 @@
+resnet18: torchvision ResNet18_Weights.IMAGENET1K_V1 -> 512-d at 224x224 on cuda
+calibration: 512 images in 1.0 s = 499.0 img/s; both splits would take 2.0 min
+    10112/50000 images, 533.3 img/s, 19 s elapsed
+    20096/50000 images, 530.0 img/s, 38 s elapsed
+    30080/50000 images, 527.9 img/s, 57 s elapsed
+    40064/50000 images, 526.5 img/s, 76 s elapsed
+  train: (50000, 512) in 93.3 s (536.1 img/s) -> cifar100_resnet18_train.npy
+  test: (10000, 512) in 19.2 s (521.6 img/s) -> cifar100_resnet18_test.npy
+total for this pair 1.9 min; all cached extractions 14.2 min; manifest: D:\claude\workspace\CISC3024 AI Assignment 3\data\features\manifest.json
+dinov2_vits14: timm vit_small_patch14_dinov2.lvd142m, num_classes=0, timm registered input 518 x 518 -> 384-d at 224x224 on cuda
+calibration: 512 images in 2.1 s = 241.6 img/s; both splits would take 4.1 min
+    10112/50000 images, 256.3 img/s, 39 s elapsed
+    20096/50000 images, 252.0 img/s, 80 s elapsed
+    30080/50000 images, 250.6 img/s, 120 s elapsed
+    40064/50000 images, 248.9 img/s, 161 s elapsed
+  train: (50000, 384) in 202.1 s (247.3 img/s) -> cifar100_dinov2_vits14_train.npy
+  test: (10000, 384) in 40.8 s (245.0 img/s) -> cifar100_dinov2_vits14_test.npy
+total for this pair 4.0 min; all cached extractions 18.2 min; manifest: D:\claude\workspace\CISC3024 AI Assignment 3\data\features\manifest.json
+  solve 398 directions on 5000 rows: 462.3 s
+  solve 398 directions on 95000 rows: 387.4 s
+  logistic fit at dim 199: 27.4 s, holdout 0.6190
+  logistic fit at dim 50: 14.3 s, holdout 0.4436
+  logistic fit at dim 512: 58.7 s, holdout 0.5938
+  80 head fits at ~33.5 s = 0.74 h of head time alone
+  solve 384 directions on 5000 rows: 116.6 s
+  solve 384 directions on 95000 rows: 124.4 s
+  logistic fit at dim 199: 27.7 s, holdout 0.7814
+  logistic fit at dim 50: 11.4 s, holdout 0.6594
+  logistic fit at dim 384: 35.3 s, holdout 0.7844
+  80 head fits at ~24.8 s = 0.55 h of head time alone
+  solve 198 directions on 5000 rows: 190.9 s
+  solve 198 directions on 47500 rows: 196.4 s
+  logistic fit at dim 99: 6.7 s, holdout 0.5816
+  logistic fit at dim 50: 5.0 s, holdout 0.4692
+  logistic fit at dim 512: 23.7 s, holdout 0.6308
+  96 head fits at ~11.8 s = 0.32 h of head time alone
+  solve 198 directions on 5000 rows: 58.0 s
+  solve 198 directions on 47500 rows: 61.5 s
+  logistic fit at dim 99: 7.2 s, holdout 0.7576
+  logistic fit at dim 50: 5.3 s, holdout 0.6756
+  logistic fit at dim 384: 18.1 s, holdout 0.8088
+  96 head fits at ~10.2 s = 0.27 h of head time alone
+calibration written to D:\claude\workspace\CISC3024 AI Assignment 3\runs\m2_matrix\calibration.json
+exit=0

@@ -1,0 +1,17 @@
+dataset,backbone,method,selected_delta,selected_K,realized_dim,holdout_accuracy,test_accuracy
+cifar100,resnet18,GO-LDA,0.005,256,256,0.6468,0.6478
+cifar100,resnet18,PCA-then-LDA,0.0001,256,99,0.6684,0.6688
+cifar100,resnet18,classic-ridge-LDA,0.0001,99,99,0.6624,0.6699
+cifar100,resnet18,classic-shrinkage-LDA,0.0001,99,99,0.6632,0.6708
+cifar100,dinov2_vits14,GO-LDA,0.005,128,128,0.8184,0.8098
+cifar100,dinov2_vits14,PCA-then-LDA,0.0001,256,99,0.8256,0.8195
+cifar100,dinov2_vits14,classic-ridge-LDA,0.005,99,99,0.826,0.8244
+cifar100,dinov2_vits14,classic-shrinkage-LDA,0.0001,99,99,0.8248,0.824
+tiny_imagenet,resnet18,GO-LDA,0.01,256,256,0.633,0.6333
+tiny_imagenet,resnet18,PCA-then-LDA,0.0001,256,199,0.648,0.652
+tiny_imagenet,resnet18,classic-ridge-LDA,0.01,199,199,0.6426,0.6439
+tiny_imagenet,resnet18,classic-shrinkage-LDA,0.0001,199,199,0.648,0.6498
+tiny_imagenet,dinov2_vits14,GO-LDA,0.005,200,200,0.7988,0.7948
+tiny_imagenet,dinov2_vits14,PCA-then-LDA,0.0001,100,100,0.8012,0.7962
+tiny_imagenet,dinov2_vits14,classic-ridge-LDA,0.0001,199,199,0.7992,0.793
+tiny_imagenet,dinov2_vits14,classic-shrinkage-LDA,0.0001,100,100,0.7992,0.795

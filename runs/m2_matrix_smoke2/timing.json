@@ -1,0 +1,42 @@
+{
+  "per_fit": [],
+  "wall_clock_convention": "no field here is a total for the whole of M2. Each invocation appends to invocations_completed with its own wall_clock_s; sum them (or read the driver stdouts in invocation_logs) for a whole-matrix figure. The crashed first attempt is wasted compute and is counted separately, in stage_03b section 2.",
+  "invocation_logs": {
+    "sweep cifar100": "runs/m2_cifar_stdout.txt",
+    "sweep tiny_imagenet": "runs/m2_tiny_stdout.txt",
+    "cv-only tiny_imagenet": "runs/m2_tiny_cv_stdout.txt"
+  },
+  "invocations_completed": [
+    {
+      "id": "2026-11-17T16:32:39Z",
+      "mode": "cv-only",
+      "cv_folds": 2,
+      "pairs": [
+        [
+          "cifar100",
+          "dinov2_vits14"
+        ]
+      ],
+      "wall_clock_s": 117.523,
+      "tables_written": {
+        "cv_rows": 4
+      }
+    },
+    {
+      "id": "2026-11-17T16:36:08Z",
+      "mode": "cv-only",
+      "cv_folds": 2,
+      "pairs": [
+        [
+          "cifar100",
+          "dinov2_vits14"
+        ]
+      ],
+      "wall_clock_s": 118.401,
+      "tables_written": {
+        "cv_rows": 4
+      }
+    }
+  ],
+  "total_wall_clock_s_this_invocation": 118.401
+}

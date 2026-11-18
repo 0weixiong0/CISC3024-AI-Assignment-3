@@ -1,0 +1,130 @@
+[
+  {
+    "dataset": "tiny_imagenet",
+    "backbone": "resnet18",
+    "rows_fit": 95000,
+    "rows_val": 5000,
+    "dim": 512,
+    "cap": 199,
+    "cells": {
+      "solve_rows_5000": {
+        "seconds": 462.2590491999872,
+        "K": 398
+      },
+      "solve_rows_95000": {
+        "seconds": 387.35186510000494,
+        "K": 398
+      },
+      "logistic_dim_199": {
+        "seconds": 27.382763000001432,
+        "holdout_accuracy": 0.619
+      },
+      "logistic_dim_50": {
+        "seconds": 14.28590100002475,
+        "holdout_accuracy": 0.4436
+      },
+      "logistic_dim_512": {
+        "seconds": 58.74790949997259,
+        "holdout_accuracy": 0.5938
+      }
+    },
+    "projected_head_seconds": 2677.7752933333004,
+    "projected_total_hours": 0.7438264703703612
+  },
+  {
+    "dataset": "tiny_imagenet",
+    "backbone": "dinov2_vits14",
+    "rows_fit": 95000,
+    "rows_val": 5000,
+    "dim": 384,
+    "cap": 199,
+    "cells": {
+      "solve_rows_5000": {
+        "seconds": 116.64167989999987,
+        "K": 384
+      },
+      "solve_rows_95000": {
+        "seconds": 124.42719970000326,
+        "K": 384
+      },
+      "logistic_dim_199": {
+        "seconds": 27.676420400006464,
+        "holdout_accuracy": 0.7814
+      },
+      "logistic_dim_50": {
+        "seconds": 11.435226700006751,
+        "holdout_accuracy": 0.6594
+      },
+      "logistic_dim_384": {
+        "seconds": 35.296629999997094,
+        "holdout_accuracy": 0.7844
+      }
+    },
+    "projected_head_seconds": 1984.2207226669416,
+    "projected_total_hours": 0.5511724229630394
+  },
+  {
+    "dataset": "cifar100",
+    "backbone": "resnet18",
+    "rows_fit": 47500,
+    "rows_val": 2500,
+    "dim": 512,
+    "cap": 99,
+    "cells": {
+      "solve_rows_5000": {
+        "seconds": 190.89459450001596,
+        "K": 198
+      },
+      "solve_rows_47500": {
+        "seconds": 196.40375759999733,
+        "K": 198
+      },
+      "logistic_dim_99": {
+        "seconds": 6.701284800015856,
+        "holdout_accuracy": 0.5816
+      },
+      "logistic_dim_50": {
+        "seconds": 5.0240560000238474,
+        "holdout_accuracy": 0.4692
+      },
+      "logistic_dim_512": {
+        "seconds": 23.733960100013064,
+        "holdout_accuracy": 0.6308
+      }
+    },
+    "projected_head_seconds": 1134.6976288016886,
+    "projected_total_hours": 0.3151937857782468
+  },
+  {
+    "dataset": "cifar100",
+    "backbone": "dinov2_vits14",
+    "rows_fit": 47500,
+    "rows_val": 2500,
+    "dim": 384,
+    "cap": 99,
+    "cells": {
+      "solve_rows_5000": {
+        "seconds": 57.95080520000192,
+        "K": 198
+      },
+      "solve_rows_47500": {
+        "seconds": 61.4507053999987,
+        "K": 198
+      },
+      "logistic_dim_99": {
+        "seconds": 7.200046600017231,
+        "holdout_accuracy": 0.7576
+      },
+      "logistic_dim_50": {
+        "seconds": 5.273512899992056,
+        "holdout_accuracy": 0.6756
+      },
+      "logistic_dim_384": {
+        "seconds": 18.12821779999649,
+        "holdout_accuracy": 0.8088
+      }
+    },
+    "projected_head_seconds": 979.2568736001849,
+    "projected_total_hours": 0.27201579822227356
+  }
+]

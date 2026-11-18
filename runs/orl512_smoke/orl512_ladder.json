@@ -1,0 +1,476 @@
+{
+  "question": "which of cap/M, M/N and the representation decides whether GO-LDA agrees with classic LDA at the rank cap (WP7 section 5 confound)",
+  "released_by": "supervisor U010, item 2 (ORL at reduced pixel dimension, same C and folds)",
+  "dim_rule": "ORL PGM 112 x 92 flattened (M = 10304) box-averaged (PIL Image.BOX) to each rung's W x H; a fixed linear, label-blind map applied identically to every method, fold and split",
+  "delta": 0.005,
+  "shrinkage_alpha": 0.1,
+  "head": "1-NN exact (paper's Table II protocol)",
+  "folds": 10,
+  "seed": 20261117,
+  "cap": 39,
+  "C": 40,
+  "n_train_per_fold": 360,
+  "route": "dense",
+  "budget_s": 600.0,
+  "wall_clock_s": 15.0,
+  "stopped_early": false,
+  "rungs": [
+    {
+      "per_fold": [
+        {
+          "fold": 0,
+          "GO-LDA": 0.8,
+          "classic-ridge-LDA": 0.975,
+          "classic-shrinkage-LDA": 0.975,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.17499999999999993,
+          "span_go_vs_classic_deg": 89.58868528990695,
+          "defect_go_vs_classic": 0.9928212657068395,
+          "span_go_vs_shrunk_deg": 89.95907212577755,
+          "defect_go_vs_shrunk": 0.9992856738997251
+        },
+        {
+          "fold": 1,
+          "GO-LDA": 0.85,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 1.0,
+          "go_minus_classic": -0.09999999999999998,
+          "span_go_vs_classic_deg": 89.8813743350474,
+          "defect_go_vs_classic": 0.9979295930483748,
+          "span_go_vs_shrunk_deg": 89.6799624590609,
+          "defect_go_vs_shrunk": 0.9944143202264002
+        },
+        {
+          "fold": 2,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 0.975,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.95,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.07499999999999996,
+          "span_go_vs_classic_deg": 89.59458791971242,
+          "defect_go_vs_classic": 0.9929242834148132,
+          "span_go_vs_shrunk_deg": 88.72931003948172,
+          "defect_go_vs_shrunk": 0.9778240943963615
+        },
+        {
+          "fold": 3,
+          "GO-LDA": 0.825,
+          "classic-ridge-LDA": 0.925,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.925,
+          "no-projection": 0.975,
+          "go_minus_classic": -0.10000000000000009,
+          "span_go_vs_classic_deg": 87.9483826588054,
+          "defect_go_vs_classic": 0.9642001738260626,
+          "span_go_vs_shrunk_deg": 87.97889425768382,
+          "defect_go_vs_shrunk": 0.9647323653769497
+        },
+        {
+          "fold": 4,
+          "GO-LDA": 0.95,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 0.925,
+          "no-projection": 1.0,
+          "go_minus_classic": 0.0,
+          "span_go_vs_classic_deg": 87.86825624883782,
+          "defect_go_vs_classic": 0.9628026360629868,
+          "span_go_vs_shrunk_deg": 89.03100974919418,
+          "defect_go_vs_shrunk": 0.9830887358852805
+        },
+        {
+          "fold": 5,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 1.0,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 1.0,
+          "no-projection": 0.925,
+          "go_minus_classic": -0.09999999999999998,
+          "span_go_vs_classic_deg": 88.79584273031482,
+          "defect_go_vs_classic": 0.9789850380411124,
+          "span_go_vs_shrunk_deg": 88.65891237172161,
+          "defect_go_vs_shrunk": 0.9765957425054473
+        },
+        {
+          "fold": 6,
+          "GO-LDA": 0.85,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.09999999999999998,
+          "span_go_vs_classic_deg": 88.45587719632275,
+          "defect_go_vs_classic": 0.9730532352207628,
+          "span_go_vs_shrunk_deg": 89.51305494667908,
+          "defect_go_vs_shrunk": 0.9915013078535037
+        },
+        {
+          "fold": 7,
+          "GO-LDA": 0.8,
+          "classic-ridge-LDA": 1.0,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 1.0,
+          "no-projection": 0.975,
+          "go_minus_classic": -0.19999999999999996,
+          "span_go_vs_classic_deg": 89.77010289435985,
+          "defect_go_vs_classic": 0.9959875493324344,
+          "span_go_vs_shrunk_deg": 88.62672243780094,
+          "defect_go_vs_shrunk": 0.9760340797879882
+        },
+        {
+          "fold": 8,
+          "GO-LDA": 0.775,
+          "classic-ridge-LDA": 0.925,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.95,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.15000000000000002,
+          "span_go_vs_classic_deg": 89.52442791251285,
+          "defect_go_vs_classic": 0.9916997965505626,
+          "span_go_vs_shrunk_deg": 88.41453992836598,
+          "defect_go_vs_shrunk": 0.9723320328548026
+        },
+        {
+          "fold": 9,
+          "GO-LDA": 0.775,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 0.925,
+          "PCA-then-LDA": 0.875,
+          "no-projection": 0.925,
+          "go_minus_classic": -0.17499999999999993,
+          "span_go_vs_classic_deg": 87.81224959503547,
+          "defect_go_vs_classic": 0.9618258299682343,
+          "span_go_vs_shrunk_deg": 88.20006416511337,
+          "defect_go_vs_shrunk": 0.9685903602617854
+        }
+      ],
+      "folds_completed": 10,
+      "arms_at_cap": {
+        "GO-LDA": {
+          "mean": 0.8425,
+          "sd": 0.058984,
+          "min": 0.775,
+          "max": 0.95
+        },
+        "classic-ridge-LDA": {
+          "mean": 0.96,
+          "sd": 0.026874,
+          "min": 0.925,
+          "max": 1.0
+        },
+        "classic-shrinkage-LDA": {
+          "mean": 0.97,
+          "sd": 0.028382,
+          "min": 0.925,
+          "max": 1.0
+        },
+        "PCA-then-LDA": {
+          "mean": 0.955,
+          "sd": 0.03873,
+          "min": 0.875,
+          "max": 1.0
+        },
+        "no-projection": {
+          "mean": 0.96,
+          "sd": 0.026874,
+          "min": 0.925,
+          "max": 1.0
+        }
+      },
+      "paired_go_minus_classic": {
+        "mean": -0.1175,
+        "sd": 0.058984,
+        "min": -0.2,
+        "max": 0.0
+      },
+      "folds_go_ahead": 0,
+      "folds_classic_ahead": 9,
+      "folds_tied": 1,
+      "span_go_vs_classic_deg": {
+        "mean": 88.923979,
+        "sd": 0.844751,
+        "min": 87.81225,
+        "max": 89.881374
+      },
+      "defect_go_vs_classic": {
+        "mean": 0.9812229401172183,
+        "max": 0.9979295930483748,
+        "floor_scale": 1.7763568394002505e-15
+      },
+      "span_go_vs_shrunk_deg": {
+        "mean": 88.879154,
+        "sd": 0.654437,
+        "min": 87.978894,
+        "max": 89.959072
+      },
+      "rung_seconds": 1.5,
+      "stopped_by_budget": false,
+      "rung": {
+        "width": 10,
+        "height": 8,
+        "M": 80,
+        "cap_over_M": 0.4875,
+        "M_over_N_train": 0.222,
+        "rows_per_class_at_fit": 9
+      }
+    },
+    {
+      "per_fold": [
+        {
+          "fold": 0,
+          "GO-LDA": 0.85,
+          "classic-ridge-LDA": 0.975,
+          "classic-shrinkage-LDA": 0.975,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 0.975,
+          "go_minus_classic": -0.125,
+          "span_go_vs_classic_deg": 89.80139243865271,
+          "defect_go_vs_classic": 0.9965336510768664,
+          "span_go_vs_shrunk_deg": 89.42572488230417,
+          "defect_go_vs_shrunk": 0.9899771762019791
+        },
+        {
+          "fold": 1,
+          "GO-LDA": 0.85,
+          "classic-ridge-LDA": 1.0,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 1.0,
+          "go_minus_classic": -0.15000000000000002,
+          "span_go_vs_classic_deg": 89.19132616790006,
+          "defect_go_vs_classic": 0.9858864476491072,
+          "span_go_vs_shrunk_deg": 89.90290456629718,
+          "defect_go_vs_shrunk": 0.9983053658043389
+        },
+        {
+          "fold": 2,
+          "GO-LDA": 0.925,
+          "classic-ridge-LDA": 0.975,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 1.0,
+          "no-projection": 0.975,
+          "go_minus_classic": -0.04999999999999993,
+          "span_go_vs_classic_deg": 89.40030153200725,
+          "defect_go_vs_classic": 0.9895334783216673,
+          "span_go_vs_shrunk_deg": 89.60606484266815,
+          "defect_go_vs_shrunk": 0.9931245886346004
+        },
+        {
+          "fold": 3,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 0.9,
+          "classic-shrinkage-LDA": 0.975,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 1.0,
+          "go_minus_classic": 0.0,
+          "span_go_vs_classic_deg": 89.67659852554539,
+          "defect_go_vs_classic": 0.9943556094363015,
+          "span_go_vs_shrunk_deg": 89.0580216808259,
+          "defect_go_vs_shrunk": 0.9835601174718784
+        },
+        {
+          "fold": 4,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 0.975,
+          "PCA-then-LDA": 0.975,
+          "no-projection": 1.0,
+          "go_minus_classic": -0.04999999999999993,
+          "span_go_vs_classic_deg": 89.34665343461455,
+          "defect_go_vs_classic": 0.9885971983979798,
+          "span_go_vs_shrunk_deg": 89.6318411942167,
+          "defect_go_vs_shrunk": 0.9935744608854903
+        },
+        {
+          "fold": 5,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 1.0,
+          "no-projection": 0.925,
+          "go_minus_classic": -0.04999999999999993,
+          "span_go_vs_classic_deg": 89.73403895381304,
+          "defect_go_vs_classic": 0.9953581207319457,
+          "span_go_vs_shrunk_deg": 89.68457473962799,
+          "defect_go_vs_shrunk": 0.9944948184705386
+        },
+        {
+          "fold": 6,
+          "GO-LDA": 0.875,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 0.975,
+          "PCA-then-LDA": 0.925,
+          "no-projection": 0.9,
+          "go_minus_classic": -0.07499999999999996,
+          "span_go_vs_classic_deg": 89.10399092324664,
+          "defect_go_vs_classic": 0.9843623288839418,
+          "span_go_vs_shrunk_deg": 89.98765047025454,
+          "defect_go_vs_shrunk": 0.9997844600465375
+        },
+        {
+          "fold": 7,
+          "GO-LDA": 0.9,
+          "classic-ridge-LDA": 0.975,
+          "classic-shrinkage-LDA": 1.0,
+          "PCA-then-LDA": 1.0,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.07499999999999996,
+          "span_go_vs_classic_deg": 89.54030358547463,
+          "defect_go_vs_classic": 0.9919768700850455,
+          "span_go_vs_shrunk_deg": 89.3253324516986,
+          "defect_go_vs_shrunk": 0.9882251020375383
+        },
+        {
+          "fold": 8,
+          "GO-LDA": 0.8,
+          "classic-ridge-LDA": 0.95,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.95,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.1499999999999999,
+          "span_go_vs_classic_deg": 89.85953567228792,
+          "defect_go_vs_classic": 0.9975484374555438,
+          "span_go_vs_shrunk_deg": 89.55014776008045,
+          "defect_go_vs_shrunk": 0.9921486779316822
+        },
+        {
+          "fold": 9,
+          "GO-LDA": 0.8,
+          "classic-ridge-LDA": 0.9,
+          "classic-shrinkage-LDA": 0.95,
+          "PCA-then-LDA": 0.925,
+          "no-projection": 0.95,
+          "go_minus_classic": -0.09999999999999998,
+          "span_go_vs_classic_deg": 89.36035167002431,
+          "defect_go_vs_classic": 0.9888362624876863,
+          "span_go_vs_shrunk_deg": 89.54316149107464,
+          "defect_go_vs_shrunk": 0.9920267483520124
+        }
+      ],
+      "folds_completed": 10,
+      "arms_at_cap": {
+        "GO-LDA": {
+          "mean": 0.87,
+          "sd": 0.04378,
+          "min": 0.8,
+          "max": 0.925
+        },
+        "classic-ridge-LDA": {
+          "mean": 0.9525,
+          "sd": 0.032167,
+          "min": 0.9,
+          "max": 1.0
+        },
+        "classic-shrinkage-LDA": {
+          "mean": 0.98,
+          "sd": 0.01972,
+          "min": 0.95,
+          "max": 1.0
+        },
+        "PCA-then-LDA": {
+          "mean": 0.97,
+          "sd": 0.028382,
+          "min": 0.925,
+          "max": 1.0
+        },
+        "no-projection": {
+          "mean": 0.9625,
+          "sd": 0.03385,
+          "min": 0.9,
+          "max": 1.0
+        }
+      },
+      "paired_go_minus_classic": {
+        "mean": -0.0825,
+        "sd": 0.048663,
+        "min": -0.15,
+        "max": 0.0
+      },
+      "folds_go_ahead": 0,
+      "folds_classic_ahead": 9,
+      "folds_tied": 1,
+      "span_go_vs_classic_deg": {
+        "mean": 89.501449,
+        "sd": 0.260923,
+        "min": 89.103991,
+        "max": 89.859536
+      },
+      "defect_go_vs_classic": {
+        "mean": 0.9912988404526084,
+        "max": 0.9975484374555438,
+        "floor_scale": 1.7763568394002505e-15
+      },
+      "span_go_vs_shrunk_deg": {
+        "mean": 89.571542,
+        "sd": 0.268204,
+        "min": 89.058022,
+        "max": 89.98765
+      },
+      "rung_seconds": 13.4,
+      "stopped_by_budget": false,
+      "rung": {
+        "width": 13,
+        "height": 12,
+        "M": 156,
+        "cap_over_M": 0.25,
+        "M_over_N_train": 0.433,
+        "rows_per_class_at_fit": 9
+      }
+    }
+  ],
+  "ladder": [
+    {
+      "M": 80,
+      "cap_over_M": 0.4875,
+      "M_over_N_train": 0.222,
+      "go": 0.8425,
+      "classic": 0.96,
+      "shrunk": 0.97,
+      "pca": 0.955,
+      "no_proj": 0.96,
+      "paired_diff": -0.1175,
+      "span_deg": 88.923979,
+      "span_defect": 0.9812229401172183,
+      "control_span_deg": 88.879154
+    },
+    {
+      "M": 156,
+      "cap_over_M": 0.25,
+      "M_over_N_train": 0.433,
+      "go": 0.87,
+      "classic": 0.9525,
+      "shrunk": 0.98,
+      "pca": 0.97,
+      "no_proj": 0.9625,
+      "paired_diff": -0.0825,
+      "span_deg": 89.501449,
+      "span_defect": 0.9912988404526084,
+      "control_span_deg": 89.571542
+    }
+  ],
+  "feature_regime_reference": {
+    "cap_over_M": [
+      0.193,
+      0.258,
+      0.389,
+      0.518
+    ],
+    "paired_gap_at_cap_holdout": -0.0656,
+    "paired_gap_at_cap_test": -0.0654,
+    "span_deg_at_cap": 89.8,
+    "source": "runs/m2_matrix/accuracy_rows.csv (delta pinned for both arms), probe_cap_gap.json, probe_head_control.json"
+  },
+  "full_dimension_reference": {
+    "M": 10304,
+    "cap_over_M": 0.003785,
+    "go_at_cap": 0.985,
+    "classic_at_cap": 0.985,
+    "paired_difference": 0.0,
+    "span_deg": "1.5e-6 to 2.1e-6",
+    "source": "runs/mvp_orl/diagnostics.json, stage_03a section 4 (quoted, not recomputed)"
+  }
+}

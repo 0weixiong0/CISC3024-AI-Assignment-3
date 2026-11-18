@@ -1,0 +1,5 @@
+dataset,backbone,method,selected_delta,selected_K,realized_dim,holdout_accuracy,test_accuracy
+cifar100,dinov2_vits14,GO-LDA,0.005,128,128,0.8184,0.8098
+cifar100,dinov2_vits14,PCA-then-LDA,0.0001,256,99,0.8256,0.8195
+cifar100,dinov2_vits14,classic-ridge-LDA,0.005,99,99,0.826,0.8244
+cifar100,dinov2_vits14,classic-shrinkage-LDA,0.0001,99,99,0.8248,0.824

@@ -1,0 +1,40 @@
+cifar100/resnet18: train (50000, 512), test (10000, 512), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=512
+  delta-independent fits on the hold-out split: 2.6 s, once for all four deltas
+  delta=0.0001: ridge + deflated pencils in 185.1 s; cumulative 315 s
+  delta=0.005: ridge + deflated pencils in 188.9 s; cumulative 610 s
+  delta=0.01: ridge + deflated pencils in 185.3 s; cumulative 904 s
+  delta=0.1: ridge + deflated pencils in 189.4 s; cumulative 1201 s
+  test GO-LDA: delta=0.005 K=256 dim=256 -> 0.6478
+  test PCA-then-LDA: delta=0.0001 K=256 dim=99 -> 0.6688
+  test classic-ridge-LDA: delta=0.0001 K=99 dim=99 -> 0.6699
+  test classic-shrinkage-LDA: delta=0.0001 K=99 dim=99 -> 0.6708
+  cv fold 1/5: 402 s cumulative
+  cv fold 2/5: 810 s cumulative
+  cv fold 3/5: 1207 s cumulative
+  cv fold 4/5: 1606 s cumulative
+  cv fold 5/5: 2003 s cumulative
+  cv GO-LDA: 0.6385 +/- 0.0046 over 5 folds
+  cv PCA-then-LDA: 0.6605 +/- 0.0039 over 5 folds
+  cv classic-ridge-LDA: 0.6636 +/- 0.0056 over 5 folds
+  cv classic-shrinkage-LDA: 0.6671 +/- 0.0042 over 5 folds
+cifar100/dinov2_vits14: train (50000, 384), test (10000, 384), C=100, cap=99, K=[10, 50, 99, 100, 128, 256], dim=384
+  delta-independent fits on the hold-out split: 1.5 s, once for all four deltas
+  delta=0.0001: ridge + deflated pencils in 48.1 s; cumulative 3790 s
+  delta=0.005: ridge + deflated pencils in 52.7 s; cumulative 3957 s
+  delta=0.01: ridge + deflated pencils in 52.6 s; cumulative 4125 s
+  delta=0.1: ridge + deflated pencils in 51.9 s; cumulative 4297 s
+  test GO-LDA: delta=0.005 K=128 dim=128 -> 0.8098
+  test PCA-then-LDA: delta=0.0001 K=256 dim=99 -> 0.8195
+  test classic-ridge-LDA: delta=0.005 K=99 dim=99 -> 0.8244
+  test classic-shrinkage-LDA: delta=0.0001 K=99 dim=99 -> 0.8240
+  cv fold 1/5: 100 s cumulative
+  cv fold 2/5: 197 s cumulative
+  cv fold 3/5: 296 s cumulative
+  cv fold 4/5: 391 s cumulative
+  cv fold 5/5: 490 s cumulative
+  cv GO-LDA: 0.7996 +/- 0.0063 over 5 folds
+  cv PCA-then-LDA: 0.8095 +/- 0.0068 over 5 folds
+  cv classic-ridge-LDA: 0.8113 +/- 0.0061 over 5 folds
+  cv classic-shrinkage-LDA: 0.8118 +/- 0.0065 over 5 folds
+
+146 rows, 8 selected cells in 4923 s -> D:\claude\workspace\CISC3024 AI Assignment 3\runs\m2_matrix

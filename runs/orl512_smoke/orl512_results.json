@@ -1,0 +1,112 @@
+{
+  "question": "does the cap/M ratio or the representation decide whether GO-LDA agrees with classic LDA at the rank cap (WP7 section 5 confound)",
+  "released_by": "supervisor U010, item 2",
+  "dim_rule": "ORL PGM 92 x 112 flattened (M = 10304) box-averaged to 32 x 16 (M = 512)",
+  "M": 512,
+  "C": 40,
+  "cap": 39,
+  "cap_over_M": 0.0762,
+  "rows_per_class_at_fit": 5,
+  "delta": 0.005,
+  "head": "1-NN (the paper's Table II protocol), exact search",
+  "folds": 2,
+  "seed": 20261117,
+  "route": "dense (M = 512, N = 360 per fold: the pencil is 512 x 512 either way)",
+  "shrinkage_alpha": 0.1,
+  "wall_clock_s": 83.1,
+  "per_fold": [
+    {
+      "fold": 0,
+      "seconds": 41.4,
+      "GO-LDA": 0.895,
+      "GO-LDA_dim": 39,
+      "classic-ridge-LDA": 0.895,
+      "classic-ridge-LDA_dim": 39,
+      "classic-shrinkage-LDA": 0.93,
+      "classic-shrinkage-LDA_dim": 39,
+      "PCA-then-LDA": 0.925,
+      "PCA-then-LDA_dim": 39,
+      "no-projection": 0.925,
+      "no-projection_dim": 512,
+      "go_minus_classic": 0.0,
+      "span_at_cap_deg": 1.7075472925031877e-06
+    },
+    {
+      "fold": 1,
+      "seconds": 41.3,
+      "GO-LDA": 0.92,
+      "GO-LDA_dim": 39,
+      "classic-ridge-LDA": 0.92,
+      "classic-ridge-LDA_dim": 39,
+      "classic-shrinkage-LDA": 0.93,
+      "classic-shrinkage-LDA_dim": 39,
+      "PCA-then-LDA": 0.915,
+      "PCA-then-LDA_dim": 39,
+      "no-projection": 0.935,
+      "no-projection_dim": 512,
+      "go_minus_classic": 0.0,
+      "span_at_cap_deg": 1.7075472925031877e-06
+    }
+  ],
+  "summary": {
+    "folds_completed": 2,
+    "folds_requested": 2,
+    "stopped_by_budget_at_fold": null,
+    "arms_at_cap": {
+      "GO-LDA": {
+        "mean": 0.9075,
+        "sd": 0.017678,
+        "min": 0.895,
+        "max": 0.92
+      },
+      "classic-ridge-LDA": {
+        "mean": 0.9075,
+        "sd": 0.017678,
+        "min": 0.895,
+        "max": 0.92
+      },
+      "classic-shrinkage-LDA": {
+        "mean": 0.93,
+        "sd": 0.0,
+        "min": 0.93,
+        "max": 0.93
+      },
+      "PCA-then-LDA": {
+        "mean": 0.92,
+        "sd": 0.007071,
+        "min": 0.915,
+        "max": 0.925
+      },
+      "no-projection": {
+        "mean": 0.93,
+        "sd": 0.007071,
+        "min": 0.925,
+        "max": 0.935
+      }
+    },
+    "paired_go_minus_classic": {
+      "mean": 0.0,
+      "sd": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "folds_go_ahead": 0,
+    "folds_classic_ahead": 0,
+    "folds_tied": 2,
+    "span_at_cap_deg": {
+      "mean": 1.7075472925031877e-06,
+      "max": 1.7075472925031877e-06,
+      "min": 1.7075472925031877e-06
+    }
+  },
+  "reference_same_protocol_at_full_dimension": {
+    "M": 10304,
+    "cap_over_M": 0.003785,
+    "go_at_cap": 0.985,
+    "classic_at_cap": 0.985,
+    "paired_difference": 0.0,
+    "span_deg": "1.5e-6 to 2.1e-6",
+    "source": "runs/mvp_orl/diagnostics.json and stage_03a section 4",
+    "note": "quoted, not recomputed here: the full-dimension run is already on disk"
+  }
+}

@@ -1,0 +1,289 @@
+method,delta,K,realized_dim,dim_rule,head,fold,accuracy,train_n,test_n
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,0.0,1,1,first K GO-LDA directions,1-NN,0,0.008333333333333333,160,240
+GO-LDA,0.0,1,1,first K GO-LDA directions,NCM,0,0.025,160,240
+classic-ridge-LDA,0.0,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.008333333333333333,160,240
+classic-ridge-LDA,0.0,1,1,K of C-1 pencil eigenvectors,NCM,0,0.025,160,240
+PCA-then-LDA,0.0,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,0.0,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,0.0,5,5,first K GO-LDA directions,1-NN,0,0.041666666666666664,160,240
+GO-LDA,0.0,5,5,first K GO-LDA directions,NCM,0,0.0125,160,240
+classic-ridge-LDA,0.0,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.05,160,240
+classic-ridge-LDA,0.0,5,5,K of C-1 pencil eigenvectors,NCM,0,0.029166666666666667,160,240
+PCA-then-LDA,0.0,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,0.0,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,0.0,10,10,first K GO-LDA directions,1-NN,0,0.07083333333333333,160,240
+GO-LDA,0.0,10,10,first K GO-LDA directions,NCM,0,0.03333333333333333,160,240
+classic-ridge-LDA,0.0,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.08333333333333333,160,240
+classic-ridge-LDA,0.0,10,10,K of C-1 pencil eigenvectors,NCM,0,0.016666666666666666,160,240
+PCA-then-LDA,0.0,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,0.0,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,0.0,20,20,first K GO-LDA directions,1-NN,0,0.1625,160,240
+GO-LDA,0.0,20,20,first K GO-LDA directions,NCM,0,0.029166666666666667,160,240
+classic-ridge-LDA,0.0,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.17083333333333334,160,240
+classic-ridge-LDA,0.0,20,20,K of C-1 pencil eigenvectors,NCM,0,0.05,160,240
+PCA-then-LDA,0.0,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,0.0,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,0.0,30,30,first K GO-LDA directions,1-NN,0,0.17916666666666667,160,240
+GO-LDA,0.0,30,30,first K GO-LDA directions,NCM,0,0.041666666666666664,160,240
+classic-ridge-LDA,0.0,30,28,K of C-1 pencil eigenvectors,1-NN,0,0.21666666666666667,160,240
+classic-ridge-LDA,0.0,30,28,K of C-1 pencil eigenvectors,NCM,0,0.04583333333333333,160,240
+PCA-then-LDA,0.0,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,0.0,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,0.0,39,39,first K GO-LDA directions,1-NN,0,0.25416666666666665,160,240
+GO-LDA,0.0,39,39,first K GO-LDA directions,NCM,0,0.04583333333333333,160,240
+classic-ridge-LDA,0.0,39,28,K of C-1 pencil eigenvectors,1-NN,0,0.21666666666666667,160,240
+classic-ridge-LDA,0.0,39,28,K of C-1 pencil eigenvectors,NCM,0,0.04583333333333333,160,240
+PCA-then-LDA,0.0,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,0.0,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.0,40,40,first K GO-LDA directions,1-NN,0,0.2625,160,240
+GO-LDA,0.0,40,40,first K GO-LDA directions,NCM,0,0.05416666666666667,160,240
+PCA-then-LDA,0.0,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,0.0,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.0,50,50,first K GO-LDA directions,1-NN,0,0.30416666666666664,160,240
+GO-LDA,0.0,50,50,first K GO-LDA directions,NCM,0,0.04583333333333333,160,240
+PCA-then-LDA,0.0,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,0.0,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240
+classic-shrinkage-LDA,n/a,1,1,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.14583333333333334,160,240
+classic-shrinkage-LDA,n/a,1,1,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.14583333333333334,160,240
+classic-shrinkage-LDA,n/a,5,5,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-shrinkage-LDA,n/a,5,5,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.7875,160,240
+classic-shrinkage-LDA,n/a,10,10,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.8666666666666667,160,240
+classic-shrinkage-LDA,n/a,10,10,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.8666666666666667,160,240
+classic-shrinkage-LDA,n/a,20,20,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.875,160,240
+classic-shrinkage-LDA,n/a,20,20,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.875,160,240
+classic-shrinkage-LDA,n/a,30,30,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-shrinkage-LDA,n/a,30,30,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+classic-shrinkage-LDA,n/a,39,39,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-shrinkage-LDA,n/a,39,39,K of C-1 shrunken (alpha=0.1) pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,1e-06,1,1,first K GO-LDA directions,1-NN,0,0.1375,160,240
+GO-LDA,1e-06,1,1,first K GO-LDA directions,NCM,0,0.1375,160,240
+classic-ridge-LDA,1e-06,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.1375,160,240
+classic-ridge-LDA,1e-06,1,1,K of C-1 pencil eigenvectors,NCM,0,0.1375,160,240
+PCA-then-LDA,1e-06,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,1e-06,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,1e-06,5,5,first K GO-LDA directions,1-NN,0,0.7875,160,240
+GO-LDA,1e-06,5,5,first K GO-LDA directions,NCM,0,0.7875,160,240
+classic-ridge-LDA,1e-06,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-ridge-LDA,1e-06,5,5,K of C-1 pencil eigenvectors,NCM,0,0.7875,160,240
+PCA-then-LDA,1e-06,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,1e-06,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,1e-06,10,10,first K GO-LDA directions,1-NN,0,0.8666666666666667,160,240
+GO-LDA,1e-06,10,10,first K GO-LDA directions,NCM,0,0.8666666666666667,160,240
+classic-ridge-LDA,1e-06,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.8625,160,240
+classic-ridge-LDA,1e-06,10,10,K of C-1 pencil eigenvectors,NCM,0,0.8625,160,240
+PCA-then-LDA,1e-06,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,1e-06,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,1e-06,20,20,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,1e-06,20,20,first K GO-LDA directions,NCM,0,0.875,160,240
+classic-ridge-LDA,1e-06,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.8791666666666667,160,240
+classic-ridge-LDA,1e-06,20,20,K of C-1 pencil eigenvectors,NCM,0,0.8791666666666667,160,240
+PCA-then-LDA,1e-06,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,1e-06,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,1e-06,30,30,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,1e-06,30,30,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,1e-06,30,30,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,1e-06,30,30,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,1e-06,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,1e-06,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,1e-06,39,39,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,1e-06,39,39,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,1e-06,39,39,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,1e-06,39,39,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,1e-06,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,1e-06,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,1e-06,40,40,first K GO-LDA directions,1-NN,0,0.9,160,240
+GO-LDA,1e-06,40,40,first K GO-LDA directions,NCM,0,0.9,160,240
+PCA-then-LDA,1e-06,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,1e-06,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,1e-06,50,50,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,1e-06,50,50,first K GO-LDA directions,NCM,0,0.8625,160,240
+PCA-then-LDA,1e-06,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,1e-06,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,0.0001,1,1,first K GO-LDA directions,1-NN,0,0.14583333333333334,160,240
+GO-LDA,0.0001,1,1,first K GO-LDA directions,NCM,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.0001,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.0001,1,1,K of C-1 pencil eigenvectors,NCM,0,0.14583333333333334,160,240
+PCA-then-LDA,0.0001,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,0.0001,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,0.0001,5,5,first K GO-LDA directions,1-NN,0,0.7875,160,240
+GO-LDA,0.0001,5,5,first K GO-LDA directions,NCM,0,0.7875,160,240
+classic-ridge-LDA,0.0001,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-ridge-LDA,0.0001,5,5,K of C-1 pencil eigenvectors,NCM,0,0.7875,160,240
+PCA-then-LDA,0.0001,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,0.0001,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,0.0001,10,10,first K GO-LDA directions,1-NN,0,0.8625,160,240
+GO-LDA,0.0001,10,10,first K GO-LDA directions,NCM,0,0.8625,160,240
+classic-ridge-LDA,0.0001,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.8625,160,240
+classic-ridge-LDA,0.0001,10,10,K of C-1 pencil eigenvectors,NCM,0,0.8625,160,240
+PCA-then-LDA,0.0001,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,0.0001,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,0.0001,20,20,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,0.0001,20,20,first K GO-LDA directions,NCM,0,0.875,160,240
+classic-ridge-LDA,0.0001,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.875,160,240
+classic-ridge-LDA,0.0001,20,20,K of C-1 pencil eigenvectors,NCM,0,0.875,160,240
+PCA-then-LDA,0.0001,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,0.0001,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,0.0001,30,30,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.0001,30,30,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.0001,30,30,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.0001,30,30,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.0001,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,0.0001,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,0.0001,39,39,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.0001,39,39,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.0001,39,39,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.0001,39,39,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.0001,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,0.0001,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.0001,40,40,first K GO-LDA directions,1-NN,0,0.9,160,240
+GO-LDA,0.0001,40,40,first K GO-LDA directions,NCM,0,0.9,160,240
+PCA-then-LDA,0.0001,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,0.0001,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.0001,50,50,first K GO-LDA directions,1-NN,0,0.8916666666666667,160,240
+GO-LDA,0.0001,50,50,first K GO-LDA directions,NCM,0,0.8833333333333333,160,240
+PCA-then-LDA,0.0001,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,0.0001,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,0.005,1,1,first K GO-LDA directions,1-NN,0,0.14583333333333334,160,240
+GO-LDA,0.005,1,1,first K GO-LDA directions,NCM,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.005,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.005,1,1,K of C-1 pencil eigenvectors,NCM,0,0.14583333333333334,160,240
+PCA-then-LDA,0.005,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,0.005,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,0.005,5,5,first K GO-LDA directions,1-NN,0,0.7875,160,240
+GO-LDA,0.005,5,5,first K GO-LDA directions,NCM,0,0.7875,160,240
+classic-ridge-LDA,0.005,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-ridge-LDA,0.005,5,5,K of C-1 pencil eigenvectors,NCM,0,0.7875,160,240
+PCA-then-LDA,0.005,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,0.005,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,0.005,10,10,first K GO-LDA directions,1-NN,0,0.8625,160,240
+GO-LDA,0.005,10,10,first K GO-LDA directions,NCM,0,0.8625,160,240
+classic-ridge-LDA,0.005,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.8625,160,240
+classic-ridge-LDA,0.005,10,10,K of C-1 pencil eigenvectors,NCM,0,0.8625,160,240
+PCA-then-LDA,0.005,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,0.005,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,0.005,20,20,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,0.005,20,20,first K GO-LDA directions,NCM,0,0.875,160,240
+classic-ridge-LDA,0.005,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.875,160,240
+classic-ridge-LDA,0.005,20,20,K of C-1 pencil eigenvectors,NCM,0,0.875,160,240
+PCA-then-LDA,0.005,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,0.005,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,0.005,30,30,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.005,30,30,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.005,30,30,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.005,30,30,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.005,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,0.005,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,0.005,39,39,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.005,39,39,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.005,39,39,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.005,39,39,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.005,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,0.005,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.005,40,40,first K GO-LDA directions,1-NN,0,0.9,160,240
+GO-LDA,0.005,40,40,first K GO-LDA directions,NCM,0,0.9,160,240
+PCA-then-LDA,0.005,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,0.005,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.005,50,50,first K GO-LDA directions,1-NN,0,0.8916666666666667,160,240
+GO-LDA,0.005,50,50,first K GO-LDA directions,NCM,0,0.8833333333333333,160,240
+PCA-then-LDA,0.005,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,0.005,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,0.01,1,1,first K GO-LDA directions,1-NN,0,0.14583333333333334,160,240
+GO-LDA,0.01,1,1,first K GO-LDA directions,NCM,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.01,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.01,1,1,K of C-1 pencil eigenvectors,NCM,0,0.14583333333333334,160,240
+PCA-then-LDA,0.01,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,0.01,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,0.01,5,5,first K GO-LDA directions,1-NN,0,0.7875,160,240
+GO-LDA,0.01,5,5,first K GO-LDA directions,NCM,0,0.7875,160,240
+classic-ridge-LDA,0.01,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-ridge-LDA,0.01,5,5,K of C-1 pencil eigenvectors,NCM,0,0.7875,160,240
+PCA-then-LDA,0.01,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,0.01,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,0.01,10,10,first K GO-LDA directions,1-NN,0,0.8625,160,240
+GO-LDA,0.01,10,10,first K GO-LDA directions,NCM,0,0.8625,160,240
+classic-ridge-LDA,0.01,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.8625,160,240
+classic-ridge-LDA,0.01,10,10,K of C-1 pencil eigenvectors,NCM,0,0.8625,160,240
+PCA-then-LDA,0.01,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,0.01,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,0.01,20,20,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,0.01,20,20,first K GO-LDA directions,NCM,0,0.875,160,240
+classic-ridge-LDA,0.01,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.875,160,240
+classic-ridge-LDA,0.01,20,20,K of C-1 pencil eigenvectors,NCM,0,0.875,160,240
+PCA-then-LDA,0.01,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,0.01,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,0.01,30,30,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.01,30,30,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.01,30,30,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.01,30,30,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.01,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,0.01,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,0.01,39,39,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.01,39,39,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.01,39,39,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.01,39,39,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.01,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,0.01,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.01,40,40,first K GO-LDA directions,1-NN,0,0.9,160,240
+GO-LDA,0.01,40,40,first K GO-LDA directions,NCM,0,0.9,160,240
+PCA-then-LDA,0.01,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,0.01,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.01,50,50,first K GO-LDA directions,1-NN,0,0.8916666666666667,160,240
+GO-LDA,0.01,50,50,first K GO-LDA directions,NCM,0,0.8833333333333333,160,240
+PCA-then-LDA,0.01,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,0.01,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240
+no-projection,n/a,10304,10304,unprojected,1-NN,0,0.8833333333333333,160,240
+no-projection,n/a,10304,10304,unprojected,NCM,0,0.8583333333333333,160,240
+GO-LDA,0.1,1,1,first K GO-LDA directions,1-NN,0,0.14583333333333334,160,240
+GO-LDA,0.1,1,1,first K GO-LDA directions,NCM,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.1,1,1,K of C-1 pencil eigenvectors,1-NN,0,0.14583333333333334,160,240
+classic-ridge-LDA,0.1,1,1,K of C-1 pencil eigenvectors,NCM,0,0.14583333333333334,160,240
+PCA-then-LDA,0.1,1,1,"PCA to 1, then LDA (realized 1, cap 39)",1-NN,0,0.125,160,240
+PCA-then-LDA,0.1,1,1,"PCA to 1, then LDA (realized 1, cap 39)",NCM,0,0.12916666666666668,160,240
+GO-LDA,0.1,5,5,first K GO-LDA directions,1-NN,0,0.7875,160,240
+GO-LDA,0.1,5,5,first K GO-LDA directions,NCM,0,0.7875,160,240
+classic-ridge-LDA,0.1,5,5,K of C-1 pencil eigenvectors,1-NN,0,0.7875,160,240
+classic-ridge-LDA,0.1,5,5,K of C-1 pencil eigenvectors,NCM,0,0.7875,160,240
+PCA-then-LDA,0.1,5,5,"PCA to 5, then LDA (realized 5, cap 39)",1-NN,0,0.6875,160,240
+PCA-then-LDA,0.1,5,5,"PCA to 5, then LDA (realized 5, cap 39)",NCM,0,0.55,160,240
+GO-LDA,0.1,10,10,first K GO-LDA directions,1-NN,0,0.8625,160,240
+GO-LDA,0.1,10,10,first K GO-LDA directions,NCM,0,0.8625,160,240
+classic-ridge-LDA,0.1,10,10,K of C-1 pencil eigenvectors,1-NN,0,0.8625,160,240
+classic-ridge-LDA,0.1,10,10,K of C-1 pencil eigenvectors,NCM,0,0.8625,160,240
+PCA-then-LDA,0.1,10,10,"PCA to 10, then LDA (realized 10, cap 39)",1-NN,0,0.8333333333333334,160,240
+PCA-then-LDA,0.1,10,10,"PCA to 10, then LDA (realized 10, cap 39)",NCM,0,0.7666666666666667,160,240
+GO-LDA,0.1,20,20,first K GO-LDA directions,1-NN,0,0.875,160,240
+GO-LDA,0.1,20,20,first K GO-LDA directions,NCM,0,0.875,160,240
+classic-ridge-LDA,0.1,20,20,K of C-1 pencil eigenvectors,1-NN,0,0.875,160,240
+classic-ridge-LDA,0.1,20,20,K of C-1 pencil eigenvectors,NCM,0,0.875,160,240
+PCA-then-LDA,0.1,20,20,"PCA to 20, then LDA (realized 20, cap 39)",1-NN,0,0.8458333333333333,160,240
+PCA-then-LDA,0.1,20,20,"PCA to 20, then LDA (realized 20, cap 39)",NCM,0,0.8416666666666667,160,240
+GO-LDA,0.1,30,30,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.1,30,30,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.1,30,30,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.1,30,30,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.1,30,30,"PCA to 30, then LDA (realized 30, cap 39)",1-NN,0,0.8708333333333333,160,240
+PCA-then-LDA,0.1,30,30,"PCA to 30, then LDA (realized 30, cap 39)",NCM,0,0.8625,160,240
+GO-LDA,0.1,39,39,first K GO-LDA directions,1-NN,0,0.9041666666666667,160,240
+GO-LDA,0.1,39,39,first K GO-LDA directions,NCM,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.1,39,39,K of C-1 pencil eigenvectors,1-NN,0,0.9041666666666667,160,240
+classic-ridge-LDA,0.1,39,39,K of C-1 pencil eigenvectors,NCM,0,0.9041666666666667,160,240
+PCA-then-LDA,0.1,39,39,"PCA to 39, then LDA (realized 39, cap 39)",1-NN,0,0.8833333333333333,160,240
+PCA-then-LDA,0.1,39,39,"PCA to 39, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.1,40,40,first K GO-LDA directions,1-NN,0,0.9,160,240
+GO-LDA,0.1,40,40,first K GO-LDA directions,NCM,0,0.9,160,240
+PCA-then-LDA,0.1,40,39,"PCA to 40, then LDA (realized 39, cap 39)",1-NN,0,0.8916666666666667,160,240
+PCA-then-LDA,0.1,40,39,"PCA to 40, then LDA (realized 39, cap 39)",NCM,0,0.8666666666666667,160,240
+GO-LDA,0.1,50,50,first K GO-LDA directions,1-NN,0,0.8916666666666667,160,240
+GO-LDA,0.1,50,50,first K GO-LDA directions,NCM,0,0.8833333333333333,160,240
+PCA-then-LDA,0.1,50,39,"PCA to 50, then LDA (realized 39, cap 39)",1-NN,0,0.9041666666666667,160,240
+PCA-then-LDA,0.1,50,39,"PCA to 50, then LDA (realized 39, cap 39)",NCM,0,0.8875,160,240

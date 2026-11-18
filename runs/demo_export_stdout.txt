@@ -1,0 +1,27 @@
+  orl: GO-LDA 40 directions in 10 s
+  orl: block built in 14 s (span at cap 2.09e-06 deg)
+  checkpoint: 1 block(s) in demo.js
+  cifar100/resnet18: 7 K values [10, 50, 99, 100, 128, 256, 512], 73 (method, delta, K) cells, 4 with a test score
+  cifar100/resnet18: bases at delta=0.0001 solved in 251 s
+  cifar100/resnet18: bases at delta=0.005 solved in 507 s
+  cifar100/resnet18: arms built in 778 s
+  checkpoint: 2 block(s) in demo.js
+  cifar100/dinov2_vits14: 7 K values [10, 50, 99, 100, 128, 256, 384], 73 (method, delta, K) cells, 4 with a test score
+  cifar100/dinov2_vits14: bases at delta=0.0001 solved in 75 s
+  cifar100/dinov2_vits14: bases at delta=0.005 solved in 125 s
+  cifar100/dinov2_vits14: arms built in 216 s
+  checkpoint: 3 block(s) in demo.js
+  tiny_imagenet/resnet18: 6 K values [20, 100, 199, 200, 256, 512], 65 (method, delta, K) cells, 4 with a test score
+  tiny_imagenet/resnet18: bases at delta=0.0001 solved in 237 s
+  tiny_imagenet/resnet18: bases at delta=0.01 solved in 552 s
+  tiny_imagenet/resnet18: arms built in 827 s
+  checkpoint: 4 block(s) in demo.js
+  tiny_imagenet/dinov2_vits14: 6 K values [20, 100, 199, 200, 256, 384], 65 (method, delta, K) cells, 4 with a test score
+  tiny_imagenet/dinov2_vits14: bases at delta=0.0001 solved in 59 s
+  tiny_imagenet/dinov2_vits14: bases at delta=0.005 solved in 107 s
+  tiny_imagenet/dinov2_vits14: arms built in 188 s
+  checkpoint: 5 block(s) in demo.js
+  ood control carried into the demo
+  orl ladder carried into the demo
+
+wrote D:\claude\workspace\CISC3024 AI Assignment 3\webapp\demo.js (4.43 MiB) in 2039.4 s

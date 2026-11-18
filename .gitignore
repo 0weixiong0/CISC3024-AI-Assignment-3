@@ -1,0 +1,29 @@
+# Datasets and cached features (986 MB) - downloaded per the released list, never published here
+data/
+
+# Course material, kept out of the public repository by the supervisor's ruling (U015)
+/AIassign3.pdf
+/Agent_coding.pptx
+/Report Template.docx
+report_assets/
+
+# My stale 11-17 patch helper
+_rev.py
+
+# The dialogue record is a report deliverable, not repository content
+research_records/conversation_log.md
+runs/conversation_log_backup_before_dedup.md
+
+# Superseded parity logs; runs/parity/README.md says which ones and why
+/runs/parity_after_orlfix_stdout.txt
+/runs/parity_rerun_stdout.txt
+/runs/parity/parity_stdout.txt
+
+# Scratch and verification debris
+runs/_*
+__pycache__/
+*.py[cod]
+nohup.out
+# Publisher-accepted manuscript of a third-party IEEE paper: local retrieval cache only,
+# not redistributed from this repository (the citation and arXiv/DOI pointers are in stage_01).
+research_records/retrieval_cache/dlr_2dpca_tce2025_accepted_manuscript.pdf

@@ -1,0 +1,113 @@
+{
+  "written_by": "src/export_demo.py",
+  "total_seconds": 12.4,
+  "seed": 20261117,
+  "specimens_per_pair": 240,
+  "orl_fold": 0,
+  "bytes": 4506533,
+  "blocks": {
+    "orl": {
+      "seconds": 12.2,
+      "arms": [
+        "GO-LDA",
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA"
+      ],
+      "k_grid": [
+        1,
+        5,
+        10,
+        20,
+        30,
+        39,
+        40,
+        50
+      ],
+      "cap": 39,
+      "feature_dim": 10304,
+      "specimens": 40
+    },
+    "cifar100__resnet18": {
+      "seconds": 778.3,
+      "arms": [
+        "GO-LDA",
+        "PCA-then-LDA",
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA"
+      ],
+      "k_grid": [
+        10,
+        50,
+        99,
+        100,
+        128,
+        256,
+        512
+      ],
+      "cap": 99,
+      "feature_dim": 512,
+      "specimens": 200
+    },
+    "cifar100__dinov2_vits14": {
+      "seconds": 215.6,
+      "arms": [
+        "GO-LDA",
+        "PCA-then-LDA",
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA"
+      ],
+      "k_grid": [
+        10,
+        50,
+        99,
+        100,
+        128,
+        256,
+        384
+      ],
+      "cap": 99,
+      "feature_dim": 384,
+      "specimens": 200
+    },
+    "tiny_imagenet__resnet18": {
+      "seconds": 827.0,
+      "arms": [
+        "GO-LDA",
+        "PCA-then-LDA",
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA"
+      ],
+      "k_grid": [
+        20,
+        100,
+        199,
+        200,
+        256,
+        512
+      ],
+      "cap": 199,
+      "feature_dim": 512,
+      "specimens": 200
+    },
+    "tiny_imagenet__dinov2_vits14": {
+      "seconds": 188.0,
+      "arms": [
+        "GO-LDA",
+        "PCA-then-LDA",
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA"
+      ],
+      "k_grid": [
+        20,
+        100,
+        199,
+        200,
+        256,
+        384
+      ],
+      "cap": 199,
+      "feature_dim": 384,
+      "specimens": 200
+    }
+  }
+}

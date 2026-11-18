@@ -1,0 +1,192 @@
+{
+  "question": "does the method ranking survive a distribution shift it was never fitted for (plan section 4's out-of-distribution control, option A of U010)",
+  "corruption": {
+    "kind": "additive white Gaussian noise, per pixel, per channel",
+    "sigma_on_unit_pixels": 0.08,
+    "applied_at": "native 32 x 32 uint8 test images, before the backbone's resize / ToTensor / Normalize",
+    "severity_choice": "one level, fixed here before any arm was scored; the levels were not swept, so a null result stays a null result",
+    "noise_seed": 20261117,
+    "shared_across_backbones": "the same noise field is applied once, so the two backbone rows differ only in backbone"
+  },
+  "protocol": "projections, scalers and logistic heads fitted on CLEAN train exactly as in M2 (each method at its own selected delta and K from selection.csv), then evaluated on the corrupted test features. Nothing is refitted on the shift.",
+  "reference": "the clean-test column reproduces stage_03b section 3.1, which is the check that this script's pipeline is the same pipeline that produced the table",
+  "backbones": {
+    "resnet18": {
+      "dataset": "cifar100",
+      "backbone": "resnet18",
+      "feature_dim": 512,
+      "train_rows": 50000,
+      "test_rows": 10000,
+      "C": 100,
+      "cap": 99,
+      "extraction_seconds": 19.2,
+      "device": "cuda",
+      "mean_abs_feature_shift": 0.535241,
+      "arms": [
+        {
+          "method": "GO-LDA",
+          "delta": 0.005,
+          "K": 256,
+          "realized_dim": 256,
+          "accuracy_clean_test": 0.6478,
+          "accuracy_corrupted_test": 0.1499,
+          "drop": -0.4979,
+          "holdout_clean": 0.6468,
+          "clean_reference_stage_03b": 0.6478,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "PCA-then-LDA",
+          "delta": 0.0001,
+          "K": 256,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.6688,
+          "accuracy_corrupted_test": 0.1522,
+          "drop": -0.5166,
+          "holdout_clean": 0.6684,
+          "clean_reference_stage_03b": 0.6688,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "classic-ridge-LDA",
+          "delta": 0.0001,
+          "K": 99,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.6699,
+          "accuracy_corrupted_test": 0.155,
+          "drop": -0.5149,
+          "holdout_clean": 0.6624,
+          "clean_reference_stage_03b": 0.6699,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "classic-shrinkage-LDA",
+          "delta": 0.0001,
+          "K": 99,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.6708,
+          "accuracy_corrupted_test": 0.1521,
+          "drop": -0.5187,
+          "holdout_clean": 0.6632,
+          "clean_reference_stage_03b": 0.6708,
+          "clean_reproduces_reference": true
+        }
+      ],
+      "no_projection": {
+        "accuracy_clean_test": 0.6282,
+        "accuracy_corrupted_test": 0.1239,
+        "note": "reference arm: how much of the drop is the shift itself, with no projection in the path"
+      },
+      "rank_clean": [
+        "classic-shrinkage-LDA",
+        "classic-ridge-LDA",
+        "PCA-then-LDA",
+        "GO-LDA"
+      ],
+      "rank_corrupted": [
+        "classic-ridge-LDA",
+        "PCA-then-LDA",
+        "classic-shrinkage-LDA",
+        "GO-LDA"
+      ],
+      "ranking_preserved": false,
+      "go_minus_best_baseline": {
+        "clean": -0.023,
+        "corrupted": -0.0051,
+        "best_baseline_clean": "classic-shrinkage-LDA",
+        "best_baseline_corrupted": "classic-ridge-LDA"
+      },
+      "seconds": 644.4
+    },
+    "dinov2_vits14": {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "feature_dim": 384,
+      "train_rows": 50000,
+      "test_rows": 10000,
+      "C": 100,
+      "cap": 99,
+      "extraction_seconds": 43.0,
+      "device": "cuda",
+      "mean_abs_feature_shift": 1.777453,
+      "arms": [
+        {
+          "method": "GO-LDA",
+          "delta": 0.005,
+          "K": 128,
+          "realized_dim": 128,
+          "accuracy_clean_test": 0.8098,
+          "accuracy_corrupted_test": 0.4194,
+          "drop": -0.3904,
+          "holdout_clean": 0.8184,
+          "clean_reference_stage_03b": 0.8098,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "PCA-then-LDA",
+          "delta": 0.0001,
+          "K": 256,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.8195,
+          "accuracy_corrupted_test": 0.4448,
+          "drop": -0.3747,
+          "holdout_clean": 0.8256,
+          "clean_reference_stage_03b": 0.8195,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "classic-ridge-LDA",
+          "delta": 0.005,
+          "K": 99,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.8244,
+          "accuracy_corrupted_test": 0.4401,
+          "drop": -0.3843,
+          "holdout_clean": 0.826,
+          "clean_reference_stage_03b": 0.8244,
+          "clean_reproduces_reference": true
+        },
+        {
+          "method": "classic-shrinkage-LDA",
+          "delta": 0.0001,
+          "K": 99,
+          "realized_dim": 99,
+          "accuracy_clean_test": 0.824,
+          "accuracy_corrupted_test": 0.4453,
+          "drop": -0.3787,
+          "holdout_clean": 0.8248,
+          "clean_reference_stage_03b": 0.824,
+          "clean_reproduces_reference": true
+        }
+      ],
+      "no_projection": {
+        "accuracy_clean_test": 0.8074,
+        "accuracy_corrupted_test": 0.3973,
+        "note": "reference arm: how much of the drop is the shift itself, with no projection in the path"
+      },
+      "rank_clean": [
+        "classic-ridge-LDA",
+        "classic-shrinkage-LDA",
+        "PCA-then-LDA",
+        "GO-LDA"
+      ],
+      "rank_corrupted": [
+        "classic-shrinkage-LDA",
+        "PCA-then-LDA",
+        "classic-ridge-LDA",
+        "GO-LDA"
+      ],
+      "ranking_preserved": false,
+      "go_minus_best_baseline": {
+        "clean": -0.0146,
+        "corrupted": -0.0259,
+        "best_baseline_clean": "classic-ridge-LDA",
+        "best_baseline_corrupted": "classic-shrinkage-LDA"
+      },
+      "seconds": 270.6
+    }
+  },
+  "total_seconds": 915.0,
+  "written_by": "src/probe_m2_ood.py",
+  "sigma_note": "every block in this file was scored at the sigma above; if a block was reused from an earlier invocation, its own arms carry the delta and K it was fitted at"
+}

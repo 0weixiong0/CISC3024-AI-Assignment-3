@@ -1,0 +1,78 @@
+ORL (400, 10304), 10 folds of 10, deltas [0.0, 1e-06, 0.0001, 0.005, 0.01, 0.1], K grid [1, 5, 10, 20, 30, 39, 40, 50], rank cap C-1 = 39
+  delta=0 fold 0: go_lda 18.0s, fold 27.8s, cumulative 28s
+  delta=0 fold 1: go_lda 18.8s, fold 23.7s, cumulative 52s
+  delta=0 fold 2: go_lda 19.5s, fold 24.4s, cumulative 76s
+  delta=0 fold 3: go_lda 17.6s, fold 22.2s, cumulative 98s
+  delta=0 fold 4: go_lda 19.7s, fold 25.0s, cumulative 123s
+  delta=0 fold 5: go_lda 18.6s, fold 24.1s, cumulative 147s
+  delta=0 fold 6: go_lda 19.2s, fold 24.2s, cumulative 171s
+  delta=0 fold 7: go_lda 19.4s, fold 24.8s, cumulative 196s
+  delta=0 fold 8: go_lda 19.2s, fold 24.5s, cumulative 221s
+  delta=0 fold 9: go_lda 18.8s, fold 23.5s, cumulative 244s
+  delta=1e-06 fold 0: go_lda 11.2s, fold 16.5s, cumulative 261s
+  delta=1e-06 fold 1: go_lda 13.4s, fold 17.9s, cumulative 279s
+  delta=1e-06 fold 2: go_lda 11.1s, fold 15.6s, cumulative 294s
+  delta=1e-06 fold 3: go_lda 11.7s, fold 16.1s, cumulative 310s
+  delta=1e-06 fold 4: go_lda 13.0s, fold 18.9s, cumulative 329s
+  delta=1e-06 fold 5: go_lda 11.8s, fold 16.3s, cumulative 346s
+  delta=1e-06 fold 6: go_lda 10.8s, fold 15.7s, cumulative 361s
+  delta=1e-06 fold 7: go_lda 11.7s, fold 16.6s, cumulative 378s
+  delta=1e-06 fold 8: go_lda 11.1s, fold 15.8s, cumulative 394s
+  delta=1e-06 fold 9: go_lda 10.8s, fold 15.2s, cumulative 409s
+  delta=0.0001 fold 0: go_lda 11.3s, fold 16.8s, cumulative 426s
+  delta=0.0001 fold 1: go_lda 9.9s, fold 13.2s, cumulative 439s
+  delta=0.0001 fold 2: go_lda 11.8s, fold 16.2s, cumulative 455s
+  delta=0.0001 fold 3: go_lda 12.1s, fold 16.6s, cumulative 472s
+  delta=0.0001 fold 4: go_lda 11.3s, fold 15.9s, cumulative 488s
+  delta=0.0001 fold 5: go_lda 10.7s, fold 15.4s, cumulative 503s
+  delta=0.0001 fold 6: go_lda 11.4s, fold 15.9s, cumulative 519s
+  delta=0.0001 fold 7: go_lda 11.2s, fold 15.6s, cumulative 535s
+  delta=0.0001 fold 8: go_lda 11.3s, fold 15.8s, cumulative 550s
+  delta=0.0001 fold 9: go_lda 11.7s, fold 16.4s, cumulative 567s
+  delta=0.005 fold 0: go_lda 12.4s, fold 19.8s, cumulative 587s
+  delta=0.005 fold 1: go_lda 9.9s, fold 13.1s, cumulative 600s
+  delta=0.005 fold 2: go_lda 15.3s, fold 18.3s, cumulative 618s
+  delta=0.005 fold 3: go_lda 8.9s, fold 15.5s, cumulative 633s
+  delta=0.005 fold 4: go_lda 11.5s, fold 17.7s, cumulative 651s
+  delta=0.005 fold 5: go_lda 12.3s, fold 17.0s, cumulative 668s
+  delta=0.005 fold 6: go_lda 11.4s, fold 16.3s, cumulative 684s
+  delta=0.005 fold 7: go_lda 11.6s, fold 17.0s, cumulative 701s
+  delta=0.005 fold 8: go_lda 11.4s, fold 16.2s, cumulative 718s
+  delta=0.005 fold 9: go_lda 11.1s, fold 15.8s, cumulative 733s
+  delta=0.01 fold 0: go_lda 11.4s, fold 16.8s, cumulative 750s
+  delta=0.01 fold 1: go_lda 11.1s, fold 15.9s, cumulative 766s
+  delta=0.01 fold 2: go_lda 12.4s, fold 18.6s, cumulative 785s
+  delta=0.01 fold 3: go_lda 11.4s, fold 15.8s, cumulative 801s
+  delta=0.01 fold 4: go_lda 11.0s, fold 15.5s, cumulative 816s
+  delta=0.01 fold 5: go_lda 11.2s, fold 16.1s, cumulative 832s
+  delta=0.01 fold 6: go_lda 12.3s, fold 17.9s, cumulative 850s
+  delta=0.01 fold 7: go_lda 11.6s, fold 16.5s, cumulative 866s
+  delta=0.01 fold 8: go_lda 11.0s, fold 15.7s, cumulative 882s
+  delta=0.01 fold 9: go_lda 10.8s, fold 15.5s, cumulative 898s
+  delta=0.1 fold 0: go_lda 11.1s, fold 17.1s, cumulative 915s
+  delta=0.1 fold 1: go_lda 11.5s, fold 16.2s, cumulative 931s
+  delta=0.1 fold 2: go_lda 11.7s, fold 16.4s, cumulative 947s
+  delta=0.1 fold 3: go_lda 11.4s, fold 15.9s, cumulative 963s
+  delta=0.1 fold 4: go_lda 10.8s, fold 16.2s, cumulative 980s
+  delta=0.1 fold 5: go_lda 11.0s, fold 15.4s, cumulative 995s
+  delta=0.1 fold 6: go_lda 11.0s, fold 15.5s, cumulative 1010s
+  delta=0.1 fold 7: go_lda 11.6s, fold 17.1s, cumulative 1028s
+  delta=0.1 fold 8: go_lda 12.8s, fold 17.5s, cumulative 1045s
+  delta=0.1 fold 9: go_lda 11.3s, fold 16.0s, cumulative 1061s
+
+2880 accuracy rows, 278 summary cells in 1061 s; peak RSS 2901 MB -> D:\claude\workspace\CISC3024 AI Assignment 3\runs\mvp_orl
+  PCA-then-LDA             delta=0.0      K=50    dim=39     0.9925 +/- 0.0121
+  PCA-then-LDA             delta=0.0001   K=50    dim=39     0.9925 +/- 0.0121
+  PCA-then-LDA             delta=0.005    K=50    dim=39     0.9925 +/- 0.0121
+  PCA-then-LDA             delta=0.01     K=50    dim=39     0.9925 +/- 0.0121
+  PCA-then-LDA             delta=0.1      K=50    dim=39     0.9925 +/- 0.0121
+  PCA-then-LDA             delta=1e-06    K=50    dim=39     0.9925 +/- 0.0121
+  GO-LDA                   delta=0.0001   K=50    dim=50     0.9900 +/- 0.0129
+  GO-LDA                   delta=0.005    K=50    dim=50     0.9900 +/- 0.0129
+  H1 delta=0: GO-LDA 0.2425 vs classic 0.4600; paired diff -0.2175 (sem 0.0183, 0/0/10 go/tie/classic)
+  H1 delta=1e-06: GO-LDA 0.9850 vs classic 0.9850; paired diff +0.0000 (sem 0.0000, 0/10/0 go/tie/classic)
+  H1 delta=0.0001: GO-LDA 0.9850 vs classic 0.9850; paired diff +0.0000 (sem 0.0000, 0/10/0 go/tie/classic)
+  H1 delta=0.005: GO-LDA 0.9850 vs classic 0.9850; paired diff +0.0000 (sem 0.0000, 0/10/0 go/tie/classic)
+  H1 delta=0.01: GO-LDA 0.9850 vs classic 0.9850; paired diff +0.0000 (sem 0.0000, 0/10/0 go/tie/classic)
+  H1 delta=0.1: GO-LDA 0.9850 vs classic 0.9850; paired diff +0.0000 (sem 0.0000, 0/10/0 go/tie/classic)
+exit=0

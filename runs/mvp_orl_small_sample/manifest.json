@@ -1,0 +1,59 @@
+{
+  "stage": "M1 / WP5 ORL raw-pixel experiment",
+  "seed": 20261117,
+  "protocol": "supplementary: 4 train / 6 test images per subject, one fixed split, identical for every method - never pooled with the ten-fold main table",
+  "splits": 1,
+  "train_per_subject": 4,
+  "folds_available_if_cv": 10,
+  "deltas": [
+    0.0,
+    1e-06,
+    0.0001,
+    0.005,
+    0.01,
+    0.1
+  ],
+  "k_grid": [
+    1,
+    5,
+    10,
+    20,
+    30,
+    39,
+    40,
+    50
+  ],
+  "shrinkage_alpha": 0.1,
+  "heads": [
+    "1-NN (paper Table II protocol)",
+    "nearest-class-mean (closed-form read-out)"
+  ],
+  "dataset": {
+    "name": "ORL / AT&T Database of Faces",
+    "shape": [
+      400,
+      10304
+    ],
+    "image": {
+      "height": 112,
+      "width": 92
+    },
+    "subjects": 40,
+    "images_per_subject": 10,
+    "source": "https://www.cl.cam.ac.uk/Research/DTG/attarchive/pub/data/att_faces.zip",
+    "local": "data/orl/att_faces.zip",
+    "loader": "src/orl.py (PGM P5 reader, no sklearn)",
+    "image_label_correction": "2026-11-18 label correction: the PGM header writes width before height, so the images are 92 columns x 112 rows. Only this field's wording changed; no measured value did. See research_records/stage_03b_full_results.md section 8."
+  },
+  "code": [
+    "src/orl.py",
+    "src/golda.py",
+    "src/baselines.py",
+    "src/run_mvp_orl.py"
+  ],
+  "parity_gate": "runs/parity/parity_report.json",
+  "python": "3.12.10",
+  "numpy": "2.4.6",
+  "rows_written": 288,
+  "total_wall_clock_s": 42.47053840002627
+}

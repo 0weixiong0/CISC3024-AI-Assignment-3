@@ -1,0 +1,35 @@
+cifar100/resnet18: cap=99 dim=512 delta=0.005 solving GO to K=256
+  GO-LDA (dense) solved in 189 s
+  GO-LDA (reduced) solved in 72 s - the route control: the two must agree or M2 is measuring an implementation
+  classic pencils done (99 directions from eig, 99 from eigh)
+  GO@cap                 test 0.6045  (dim 99, 9.9 s)
+  GO@cap-QR              test 0.6045  (dim 99, 9.8 s)
+  GO-reduced@cap         test 0.6045  (dim 99, 9.8 s)
+  GO-reduced@cap-QR      test 0.6045  (dim 99, 10.0 s)
+  classic-eig@cap        test 0.6699  (dim 99, 3.9 s)
+  classic-eig@cap-QR     test 0.6694  (dim 99, 5.2 s)
+  classic-eigh@cap       test 0.6699  (dim 99, 3.9 s)
+  classic-eigh@cap-QR    test 0.6694  (dim 99, 5.3 s)
+  GO@beyond              test 0.6478  (dim 256, 14.8 s)
+  GO@beyond-QR           test 0.6471  (dim 256, 17.0 s)
+  no-projection          test 0.6282  (dim 512, 19.4 s)
+
+wrote runs/m2_matrix/probe_cap_gap.json
+
+drift: span of GO's first m directions against classic's first m (eigh)
+     m    max_deg  median_deg      mu_GO  mu_classic
+     1     0.0000      0.0000    3.42944     3.42944
+     2     0.1171      0.0586    3.23310     3.23309
+     3    61.2850      0.0597    2.77938     2.60270
+     5    88.7855      4.1335    2.55727     1.69880
+    10    89.2413     75.1733    2.01147     1.13240
+    25    89.6277     71.1316    1.29713     0.54981
+    50    88.9696     64.2145    0.80838     0.22868
+    75    89.4581     59.9154    0.58745     0.10019
+    99    89.8438     55.9378    0.45729     0.02257
+
+sorted-multiset mu comparison: {"GO_vs_classic-eig_n": 99, "GO_vs_classic-eig_max_abs_diff": 0.8790622780706505, "GO_vs_classic-eig_rel_diff_at_cap": 19.258852204864752, "GO_vs_classic-eig_sum_a": 103.98693739428114, "GO_vs_classic-eig_sum_b": 45.632597127409426, "GO_vs_classic-eigh_n": 99, "GO_vs_classic-eigh_max_abs_diff": 0.8790622780706483, "GO_vs_classic-eigh_rel_diff_at_cap": 19.25885220486485, "GO_vs_classic-eigh_sum_a": 103.98693739428114, "GO_vs_classic-eigh_sum_b": 45.63259712740945, "GO-dense_vs_GO-reduced_n": 99, "GO-dense_vs_GO-reduced_max_abs_diff": 1.0658141036401503e-14, "GO-dense_vs_GO-reduced_rel_diff_at_cap": 3.641767231666719e-15, "GO-dense_vs_GO-reduced_sum_a": 103.98693739428114, "GO-dense_vs_GO-reduced_sum_b": 103.98693739428109}
+route control: {"GO_dense_vs_reduced_span_deg": 2.091309789151873e-06, "GO_dense_vs_reduced_max_abs_U_diff": 0.8587761692551765}
+first direction: {"abs_cos_GO_vs_eigh": 1.0, "abs_cos_GO_vs_eig": 0.9999999999999998, "abs_cos_eig_vs_eigh": 1.0000000000000002}
+raw gap GO-classic -0.0654; after QR on both -0.0649
+if the QR gap collapses, the headline gap is the head's basis dependence, not a span difference

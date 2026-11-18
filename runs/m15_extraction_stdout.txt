@@ -1,0 +1,42 @@
+resnet18: torchvision ResNet18_Weights.IMAGENET1K_V1 -> 512-d at 224x224 on cuda
+calibration: 512 images in 1.8 s = 287.9 img/s; both splits would take 6.4 min
+    10112/100000 images, 449.2 img/s, 23 s elapsed
+    20096/100000 images, 452.7 img/s, 44 s elapsed
+    30080/100000 images, 450.9 img/s, 67 s elapsed
+    40064/100000 images, 448.6 img/s, 89 s elapsed
+    50048/100000 images, 448.9 img/s, 111 s elapsed
+    60032/100000 images, 448.3 img/s, 134 s elapsed
+    70016/100000 images, 444.6 img/s, 157 s elapsed
+    80000/100000 images, 443.7 img/s, 180 s elapsed
+    90112/100000 images, 441.8 img/s, 204 s elapsed
+  train: (100000, 512) in 227.0 s (440.5 img/s) -> tiny_imagenet_resnet18_train.npy
+  test: (10000, 512) in 23.8 s (419.7 img/s) -> tiny_imagenet_resnet18_test.npy
+total for this pair 4.2 min; all cached extractions 4.2 min; manifest: D:\claude\workspace\CISC3024 AI Assignment 3\data\features\manifest.json
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+dinov2_vits14: timm vit_small_patch14_dinov2.lvd142m, num_classes=0, timm registered input 518 x 518 -> 384-d at 224x224 on cuda
+calibration: 512 images in 2.8 s = 185.7 img/s; both splits would take 9.9 min
+    10112/100000 images, 228.2 img/s, 44 s elapsed
+    20096/100000 images, 225.4 img/s, 89 s elapsed
+    30080/100000 images, 227.6 img/s, 132 s elapsed
+    40064/100000 images, 227.3 img/s, 176 s elapsed
+    50048/100000 images, 227.0 img/s, 220 s elapsed
+    60032/100000 images, 226.5 img/s, 265 s elapsed
+    70016/100000 images, 224.9 img/s, 311 s elapsed
+    80000/100000 images, 225.5 img/s, 355 s elapsed
+    90112/100000 images, 225.5 img/s, 400 s elapsed
+  train: (100000, 384) in 442.4 s (226.1 img/s) -> tiny_imagenet_dinov2_vits14_train.npy
+  test: (10000, 384) in 44.5 s (224.9 img/s) -> tiny_imagenet_dinov2_vits14_test.npy
+total for this pair 8.1 min; all cached extractions 12.3 min; manifest: D:\claude\workspace\CISC3024 AI Assignment 3\data\features\manifest.json
+resnet18: torchvision ResNet18_Weights.IMAGENET1K_V1 -> 512-d at 224x224 on cuda
+Traceback (most recent call last):
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\extract_features.py", line 299, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\extract_features.py", line 243, in main
+    data = DATASETS[args.dataset]()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\claude\workspace\CISC3024 AI Assignment 3\src\extract_features.py", line 112, in __init__
+    self._raw[split] = (meta["data"].reshape(len(meta["data"]), 3, 32, 32)
+                        ~~~~^^^^^^^^
+KeyError: 'data'
+exit=1

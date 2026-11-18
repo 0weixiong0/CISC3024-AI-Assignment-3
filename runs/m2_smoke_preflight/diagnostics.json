@@ -1,0 +1,54 @@
+{
+  "per_pair": [
+    {
+      "dataset": "cifar100",
+      "backbone": "dinov2_vits14",
+      "delta": 0.005,
+      "K_max": 256,
+      "cap": 99,
+      "rows": 50000,
+      "go_offdiag": 1.0165433404069057e-07,
+      "classic_offdiag": 0.2389956609421695,
+      "shrunk_offdiag": 0.19702379342730322,
+      "span_at_cap_deg": 89.07788550688312,
+      "residual_rel_max": 1.6557388781016196e-09,
+      "residual_tol": 1.0385204972704271e-06,
+      "kappa": 467708052.45237184,
+      "residual_within_bound": true,
+      "fisher_monotone": true,
+      "mu_at_cap": 0.4812391727397114,
+      "mu_beyond_cap_first_three": [
+        0.4712776892672229,
+        0.46681404839075175,
+        0.46366339207059304
+      ]
+    }
+  ],
+  "seed": 20261117,
+  "val_fraction": 0.05,
+  "deltas": [
+    0.0001,
+    0.005,
+    0.01,
+    0.1
+  ],
+  "k_grid": {
+    "cifar100": [
+      10,
+      50,
+      99,
+      100,
+      128,
+      256
+    ],
+    "tiny_imagenet": [
+      20,
+      100,
+      199,
+      200,
+      256
+    ]
+  },
+  "shrinkage_alpha": 0.1,
+  "delta_rule": "certified range from M1: delta >= 1e-4 only, so every beyond-cap row is a row whose numerics were checked"
+}
