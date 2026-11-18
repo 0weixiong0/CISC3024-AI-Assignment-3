@@ -26,6 +26,42 @@ TOP_LIMIT = 200      # a first exhibit on a page must start above this y
 BOTTOM_LIMIT = 320   # a second exhibit on the same page must start below this y
 PAGE_BOTTOM = 700    # nothing may start below this and still be on the page
 
+# The contents field is resolved by Word, so its length is not known when the document is written. If it
+# runs onto the next page the body starts under its last entry, which is a layout fault the exhibit checks
+# cannot see. Dot leaders are the signature: prose never has them.
+TOC_LINE = re.compile(r"\.{5,}\s*\d+\s*$")
+FIRST_SECTION = "Introduction and Human-AI Workflow"
+
+
+def toc_checks(pages) -> list[str]:
+    """Return findings when the contents and the first section share a page."""
+    problems = []
+    toc_pages = [n for n, page in enumerate(pages, start=1)
+                 if sum(1 for line in page.get_text().splitlines() if TOC_LINE.search(line.strip())) >= 3]
+    body_page = next((n for n, page in enumerate(pages, start=1)
+                      if TOC_LINE.search("") is None and _starts_section(page)), None)
+    if not toc_pages:
+        return ["no contents page detected - the field is unresolved, so the check cannot run"]
+    if body_page is None:
+        return [f"the first section ({FIRST_SECTION!r}) was not found as a heading line"]
+    if body_page in toc_pages:
+        problems.append(f"page {body_page} carries both contents entries and the first section heading")
+    if body_page < max(toc_pages):
+        problems.append(f"body starts on page {body_page}, before the last contents page {max(toc_pages)}")
+    print(f"contents pages: {toc_pages}   first section page: {body_page}")
+    return problems
+
+
+def _starts_section(page) -> bool:
+    for block in page.get_text("dict")["blocks"]:
+        if block["type"] != 0:
+            continue
+        for line in block["lines"]:
+            text = "".join(span["text"] for span in line["spans"]).strip()
+            if text == FIRST_SECTION and line["bbox"][1] < 200:
+                return True
+    return False
+
 
 def labels_on(page) -> list[tuple[str, int]]:
     """Caption labels on a page, with the y of the label line itself.
@@ -77,6 +113,9 @@ def main(pdf: Path) -> int:
                     problems.append(
                         f"{label} is the second exhibit on page {number} at y={y}, not bottomed"
                     )
+
+        # The contents field is resolved by Word, so this is checked on the rendered pages.
+        problems += toc_checks(pages)
 
         # A figure must be on the page that carries its caption.
         for number, page in enumerate(pages, start=1):

@@ -24,8 +24,9 @@ answers no single brief item; the six items map onto sections 2–7.
 | References | APA 7 | the entries in `stage_01_search_protocol.md` and the sources cited above | 14–16 entries |
 
 Total ≈ **5,300 prose words** including the Introduction; the 4,700 ceiling U017 accepted is measured on
-sections 2–7, so the Introduction is the first thing to trim if the whole runs long — after that §2 and
-§4, and never §5 or §7.
+sections 2–7. **Trim order, as U020 restated U017:** compress §1 and §3 first, §2's overage may follow, and
+**§4 and §5 are not touched** — the earlier sentence in this file that put §4 next in line is withdrawn,
+because it contradicted the ruling it was summarising.
 
 ## 2. Formatting requirements, with the traps already known
 
@@ -91,12 +92,13 @@ the page, the region clipped and the two caption lines the builder will place ab
 
 | Figure | From | What it shows |
 | --- | --- | --- |
-| figure_01 | GO-LDA p6, full page | equations (37) and (38) - the Euclidean-orthogonality constraint and the deflated pencil |
-| figure_02 | GO-LDA p11, full page | the accuracy claim ahead of Table 2: after the third direction GO-LDA directions "achieve significantly better results" |
+| figure_01 | GO-LDA p6, full page | equations (37) **and (38)** - the Euclidean-orthogonality constraint and the deflated pencil that answers it |
+| figure_02 | GO-LDA p11, full page | the accuracy claim ahead of Table 2. **Caption corrected after U020:** the page says the GO-LDA directions "achieve significantly better results than that of the classic-LDA", and the "after the third direction" clause belongs to the *separate* comparison against PCA's principal directions - the first draft of the caption merged the two |
 | figure_03 | GO-LDA p12, caption + table crop | Table 2, the nine-data-set subspace MCA rows including ORL 40/400/10304 at Ω39 and Ω50 |
-| figure_04 | ImageNet-C p4, full page | the Gaussian-noise corruption description; the σ value itself is in the code, not the paper |
-| figure_05 | C4 paper p6, caption + table crop | Table I, CIFAR-100 per backbone at d = 99 - the paper side of the diff (PCA row 65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60) |
-| figure_06 | cached `c4_README.md`, lines 77-83 rendered with their own line numbers | the README side of the same six configurations (PCA row 65.07 / 69.14 / 64.65 / 69.77 / 78.05 / 81.55) |
+| figure_04 | ImageNet-C p4, full page | "Common Corruptions. The first corruption type is Gaussian noise." - the description page is the right evidence for using that corruption type; the σ number itself is figure_07, not this page |
+| figure_05 | C4 paper p6, caption + table crop | Table I, CIFAR-100 per backbone - the paper side of the diff (PCA row 65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60). **d = 99 carries an exception the caption must keep:** the table's own note says all reduction methods project to d = 99 *except* RDA and RDA+SMD, which use 99 + k |
+| figure_06 | cached `c4_README.md`, lines 77-83 rendered with their own line numbers | the README side of the same six configurations (PCA row 65.07 / 69.14 / 64.65 / 69.77 / 78.05 / 81.55). **19 of 72 is the overall count across all three dataset tables**, not the CIFAR-100 table shown here, where the disagreement is 4 of 6 PCA cells plus 2 DSB cells |
+| figure_07 | `corruptions.py` lines 122-126, pinned at commit `712bfcd` of `github.com/hendrycks/robustness` (path `ImageNet-C/imagenet_c/imagenet_c/corruptions.py`, blob `f0bf2d4`) | the severity list `c = [.08, .12, 0.18, 0.26, 0.38][severity - 1]` - where σ = 0.08 for severity 1 actually comes from, since the paper has no σ-versus-severity table |
 
 The four disagreeing cells are readable across figures 05 and 06 without re-typing them. Sources live in
 `research_records/retrieval_cache/`, which `.gitignore` now covers as a directory - the previous rule named
@@ -164,16 +166,20 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, drafted §2+§4 (2026-11-19) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 2,995 |
-| PDF full-text words | pymupdf over the exported PDF — includes tables, the contents page and the cover | 3,528 | 9,792 | 3,037 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 2,779 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4) | 3,024 | 8,286 | **2,562** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 5,450 
+| PDF full-text words | pymupdf over the exported PDF — includes tables, the contents page and the cover | 3,528 | 9,792 | 5,509 
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 5,234 
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4) | 3,024 | 8,286 | **5,017** 
 | table words alone | `python-docx` over table cells | 187 | 1,107 | 0 |
 
-The A3 column was measured on the 2026-11-19 build that carries the drafted §2 and §4: 13 PDF pages,
-31 headings (8 H1 including References, 23 H2), no tables yet, so the table-word row is 0 by construction.
-The prose count is the same 2,562 the two drafted sections report individually (1,134 + 1,428), which is
-the cross-check that nothing else on the page is being counted as prose.
+The A3 column was measured on the 2026-11-19 build that carries the drafted §1, §2, §3, §4 and §5: 22 PDF
+pages, 31 headings (8 H1 including References, 23 H2), no tables yet, so the table-word row is 0 by
+construction. The prose count equals the sum of the five drafted sections exactly - 300 + 1,134 + 686 +
+1,428 + 1,469 = 5,017 - which is the cross-check that nothing else on the page is being counted as prose.
+**The draft is 317 prose words over the 4,700 ceiling before §6 and §7 exist**, so the trim pass is not
+optional; and since §6 and §7 are budgeted at 250 and 600, the ceiling cannot be met by trimming §1 and §3
+alone (§1 and §3 together are 986 words, and §4/§5 are off limits). The arithmetic needs a ruling: either
+§6/§7 come in short, or §2 absorbs more than its 234-word overage, or the ceiling is restated.
 
 **The 4,700 budget is in prose words**, because that is the unit A2's record reported and it is the closest
 to "text the reader reads" — it excludes tables, the contents page and the cover. The observed ratios are
@@ -205,20 +211,28 @@ untouched; everything after the TOC control is deleted and re-emitted.
   exhibit-integrity findings.
   Two findings remain and both are expected at this step: the cover's own template placeholders
   (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`) and "no URL anywhere" — the URL arrives with §6.
-* `src/audit_layout.py`: passes (no exhibits yet).
+* `src/audit_layout.py`: passes (no exhibits yet). **Extended in the U020 round**, because it had no
+  opinion about the contents page: `toc_checks()` now finds the pages carrying dot-leader lines and the
+  page where the first section heading starts, and fails if they are the same page or if the body starts
+  before the last contents page. On this build it reports `contents pages: [2, 3]  first section page: 4`.
+  The underlying fault was real and the audit was blind to it: with 31 resolved entries the contents ran
+  onto page 3 and §1 began underneath its last entry. The fix is `w:pageBreakBefore` on the first content
+  H1 rather than a break paragraph after the content control - the paragraph version was counted by
+  `audit_docx` as a 32nd contents entry, which is how the mismatch surfaced.
 * **Cover fill (U018 item 1).** `Builder.fill_cover()` reads `report_assets/cover_values.json` —
   gitignored, so the values the supervisor supplies never enter the repository. It is inert while the file
   is absent; the audit's placeholder finding is the visible signal that the values are still outstanding.
 
-**Step 2 of §7 — §2 and §4 drafted (U019 accepted, with the overage deferred to the trim pass).** The prose lives in `src/report_content.py` in two functions
+**Step 2 of §7 — §2 and §4 drafted (U019), then §1, §3 and §5 (U020). §6 and §7 are still shells, and step 3 also owes §5's two own-run figures, not only
+the seven page images.** The prose lives in `src/report_content.py` in two functions
 (`search_sections` for §2, `implementation_sections` for §4), keyed by the builder's exact H1 titles; every
 digit in the sentences is interpolated at build time from the run artefacts (`probe_cap_gap.json`,
 `diagnostics.json`, the MVP `timing/manifest/diagnostics`, `probe_ood.json`,
 `orl512_fix/orl512_ladder.json`, `parity_report.json`) and from the stage records (the ledger row count,
-the gate and rubric table rows, the wave counts, the corrections count). §2 drafted at **1,134 prose words**
-(budget ~900 — trim ~230 before submission), §4 at **1,428** (budget ~1,100 — trim ~330). The built
-document: 7 H1 / 23 H2 = 30 headings, 13 PDF pages, Word 2,977, docx paragraph 2,771, non-heading prose
-2,597. Both audits re-ran on that pass: `audit_docx` matched 30 headings to 30 TOC entries with no
+the gate and rubric table rows, the wave counts, the corrections count). Drafted prose, per section: §1 **300**
+(~350), §2 **1,134** (~900, trimmable), §3 **686** (~700), §4 **1,428** (~1,100, not to be trimmed per
+U017/U020), §5 **1,469** (~1,400, not to be trimmed). The built document: 8 H1 / 23 H2 = 31 headings,
+22 PDF pages, Word 5,450, prose 5,017. Both audits re-ran on that pass: `audit_docx` matched 30 headings to 30 TOC entries with no
 font/jargon/exhibit findings; `audit_layout` passed (no exhibits yet). The remaining findings are the
 expected ones: cover placeholders pending the values (U018 item 1), no URL until §6, no tables until step
 3 of §7.
@@ -227,13 +241,14 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 
 * **Cover values** — awaiting the supervisor's name / student number / date; once supplied they go into
   `report_assets/cover_values.json` and the next build fills the cover (that file is gitignored).
-* **The `corruptions.py` line** for the σ = 0.08 claim — the paper has no σ-versus-severity table, so the
-  code file (or the supervisor's word that severity 1 is the right reading) is needed before that figure
-  is complete.
+* **`corruptions.py`** — released by U020 and fetched pinned (commit `712bfcd`, blob `f0bf2d4`), rendered
+  as figure_07; the σ = 0.08 claim now has its source line. §5 quotes it.
 * **Tables and figures** (step 3) — §2's candidate table, §4's code-path table, §5's four tables and two
   own-run figures, plus the six page images now on disk, each with its two-line caption and a cross-
   reference field rather than a typed number.
-* **Trim pass** — the 234/328-word overages U019 accepted (§2 at 1,134 against ~900, §4 at 1,428 against
-  ~1,100); then the Introduction, and finally the 4,700-ceiling check against §9's units.
-* **Placing the six page images** (step 3) — the PNGs and their caption lines exist; they enter the document
+* **Trim pass** — per U020: compress §1 and §3 first, §2's 234-word overage may follow, and **§4 and §5
+  are not touched**. The drafted five sections total 4,998 prose words against the 4,700 ceiling with §6
+  and §7 still unwritten, so the ceiling cannot be met by trimming alone unless §6/§7 come in well under
+  budget; that arithmetic is for the supervisor to rule on before the trim starts.
+* **Placing the seven page images** (step 3) — the PNGs and their caption lines exist; they enter the document
   as `Figure N` plus the italic description with a caption field, next to the claims they support.

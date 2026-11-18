@@ -259,7 +259,7 @@ approval fixes the regime order: **MVP = raw-pixel ORL first**, then the frozen-
 - No dataset, weight, package or repository was downloaded. The two files in
   `research_records/retrieval_cache/` are an **openly accessible** article and an article figure: the
   DLR-2DPCA author accepted manuscript (`dlr_2dpca_tce2025_accepted_manuscript.pdf`) and the PLOS ONE
-  RSSPCA Table 3 figure (`rsspca_plosone2025_table3.png`), kept as read-only evidence for this stage.
+  RSSPCA Table 3 figure (`rsspca_plosone2025_table3.png`), kept as read-only evidence for this stage and **local-only**: it was untracked on 2026-11-19 so the public repository no longer carries the publisher's asset, while the working copy stays on disk for re-verification.
   That figure had been cached earlier as `table3.png` and described in this file as a DLR figure; on
   2026-11-17 it was matched byte for byte against the PLOS ONE asset for `pone.0323281.t003`
   (md5 `ab3eb10721d2ee0ab45a23971dde0c17`), so it is the RSSPCA table and the duplicate was deleted.

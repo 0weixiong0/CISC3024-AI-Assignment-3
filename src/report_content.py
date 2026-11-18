@@ -778,3 +778,326 @@ def implementation_sections(f: dict) -> dict:
 
     }
 
+
+def results_facts() -> dict:
+    """The numbers the results section quotes, read from the run tables rather than retyped from records."""
+    dg = _json("m2_matrix/diagnostics.json")
+    mvp_diag = _json("mvp_orl/diagnostics.json")
+    head = _json("m2_matrix/probe_head_control.json")
+    ood = _json("m2_matrix/probe_ood.json")
+    lad = _json("orl512_fix/orl512_ladder.json")
+    sel = list(csv.DictReader((RUNS / "m2_matrix/selection.csv").open(encoding="utf-8")))
+    cv = list(csv.DictReader((RUNS / "m2_matrix/cv_summary.csv").open(encoding="utf-8")))
+    orl = list(csv.DictReader((RUNS / "mvp_orl/accuracy_summary.csv").open(encoding="utf-8")))
+    small = list(csv.DictReader((RUNS / "mvp_orl_small_sample/accuracy_summary.csv").open(encoding="utf-8")))
+
+    def one(rows, **keys):
+        match = [r for r in rows if all(r.get(k) == v for k, v in keys.items())]
+        if len(match) != 1:
+            raise SystemExit(f"expected exactly one row for {keys}, found {len(match)}")
+        return match[0]
+
+    pairs = [("cifar100", "resnet18"), ("cifar100", "dinov2_vits14"),
+             ("tiny_imagenet", "resnet18"), ("tiny_imagenet", "dinov2_vits14")]
+    arms = ["GO-LDA", "classic-ridge-LDA", "classic-shrinkage-LDA", "PCA-then-LDA"]
+    test, cvcell, choice = {}, {}, {}
+    for pair in pairs:
+        for arm in arms:
+            row = one(sel, dataset=pair[0], backbone=pair[1], method=arm)
+            test[(pair, arm)] = float(row["test_accuracy"])
+            choice[(pair, arm)] = (float(row["selected_delta"]), int(row["selected_K"]),
+                                   int(row["realized_dim"]))
+            crow = one(cv, dataset=pair[0], backbone=pair[1], method=arm)
+            cvcell[(pair, arm)] = (float(crow["mean"]), float(crow["sd"]), float(crow["min"]),
+                                   float(crow["max"]))
+    kn = {r["arm"]: r for r in head["rows"]}
+    backbones = ood["backbones"]
+    backbones = {b["backbone"]: b for b in backbones} if isinstance(backbones, list) else backbones
+    return {
+        "pairs": pairs, "arms": arms, "test": test, "cv": cvcell, "choice": choice,
+        "deficit": {p: max(test[(p, a)] for a in arms[1:]) - test[(p, "GO-LDA")] for p in pairs},
+        "orl": {k: float(one(orl, method="GO-LDA", head="1-NN", delta="0.005", K=k)["mean"])
+                for k in ("39", "40", "50")},
+        "orl_classic": float(one(orl, method="classic-ridge-LDA", head="1-NN", delta="0.005",
+                                 K="39")["mean"]),
+        "orl_pca": float(one(orl, method="PCA-then-LDA", head="1-NN", delta="0.005", K="39")["mean"]),
+        "orl_noproj": mvp_diag["no_projection_1nn_mean"],
+        "small": {k: float(one(small, method="GO-LDA", head="1-NN", delta="0.005", K=k)["mean"])
+                  for k in ("39", "40", "50")},
+        "small_classic": float(one(small, method="classic-ridge-LDA", head="1-NN", delta="0.005",
+                                   K="39")["mean"]),
+        "separation": {p: {a: ("disjoint" if cvcell[(p, "GO-LDA")][3] < cvcell[(p, a)][2] else "overlap")
+                            for a in arms[1:]} for p in pairs},
+        "head_gap": {name: float(kn["GO-LDA@99"][name]) - float(kn["classic-LDA@99"][name])
+                     for name in ("logistic", "knn1_raw", "knn1_scaled")},
+        "ood": {k: {"shift": v["mean_abs_feature_shift"], "deficit": v["go_minus_best_baseline"],
+                    "ranking": v["ranking_preserved"]} for k, v in backbones.items()},
+        "ood_sigma": ood["corruption"]["sigma_on_unit_pixels"],
+        "ood_s": ood["total_seconds"],
+        "ladder": [(r["M"], r["cap_over_M"], r["paired_diff"]) for r in lad["ladder"]],
+        "ladder_s": lad["wall_clock_s"],
+        "ladder_folds": lad["folds"],
+        "rank_cap": mvp_diag["rank_cap"],
+        "k_grid": mvp_diag["k_grid"],
+        "deltas": dg["deltas"],
+        "seed": dg["seed"],
+        "val": dg["val_fraction"],
+        "shrink": dg["shrinkage_alpha"],
+        "offdiag_go": min(p["go_offdiag"] for p in dg["per_pair"]),
+        "offdiag_classic": (min(p["classic_offdiag"] for p in dg["per_pair"]),
+                            max(p["classic_offdiag"] for p in dg["per_pair"])),
+        "rows": {p["dataset"]: p["rows"] for p in dg["per_pair"]},
+        "classes": {p["dataset"]: p["cap"] + 1 for p in dg["per_pair"]},
+        "orl_subjects": mvp_diag["rank_cap"] + 1,
+    }
+
+
+def intro_sections() -> dict:
+    """Section 1: the AI-use and responsibility statement and the reading order. ~350 prose words."""
+    return {
+        "Introduction and Human-AI Workflow": [
+            ("h2", "AI use and responsibility"),
+            ("body",
+             "The student acted as supervisor and the AI agent as researcher, implementer and experimenter. "
+             "Every artefact behind this report was produced by the agent: the literature search and its "
+             "verification records, all code, all experiment runs and their diagnostics, the interactive "
+             "front end, the repository and the published site, and the drafting of this document. The "
+             "student wrote no code, which the brief forbids, and no analysis text either. Supervision was "
+             "exercised where it changes outcomes: the search scope and the recency floor were fixed before "
+             "searching; the shortlist, the two evaluation regimes and the order of the work was approved at "
+             "gates; dataset, weight and source downloads happened only on named release; and each stage's "
+             "write-up was fact-checked before the next one opened. Those checks were not decorative. Six of "
+             "the twenty scoring rows in the search ledger carried arithmetic that disagreed with the rubric "
+             "stated in the same file, and one withdrawn experiment came from a constant that looked like it "
+             "only affected the pictures. Both are reported where they happened, with the correction, rather "
+             "than cleaned up."),
+            ("h2", "What this report covers and how it is ordered"),
+            ("body",
+             "The brief's six numbered items answer this assignment, and sections 2 to 7 answer them in that "
+             "order: how the AI found the algorithm, what the algorithm is, how the AI implemented it, the "
+             "settings and results with discussion, the interactive visualisation and the source-code link, "
+             "and what was learnt. The algorithm is generalised optimal discriminant analysis, published as "
+             "a preprint in May 2023. The study reproduces it in three regimes - raw-pixel faces, frozen "
+             "convolutional features, frozen foundation-model features - across four dataset and backbone "
+             "pairs plus a face database, which is what lets the report separate the properties that belong "
+             "to the algorithm from the ones that belonged to the regime the paper happened to measure them "
+             "in."),
+        ],
+    }
+
+
+def algorithm_sections(f: dict) -> dict:
+    """Section 3: the algorithm, the adaptation, and the hypotheses fixed first. ~700 prose words."""
+    return {
+        "Algorithm Description and Task Adaptation": [
+            ("h2", "GO-LDA's deflated eigensolve"),
+            ("body",
+             "Classical multiclass linear discriminant analysis takes its directions from the generalised "
+             "eigenproblem for the between-class and within-class scatter pencil, and the leading C - 1 "
+             f"eigenvectors are the whole subspace: on the {f['dim']}-dimensional features used here the "
+             f"largest off-diagonal element of that basis's Gram matrix is {f['classic_offdiag']:.4f}, which "
+             "is the sense in which classical directions are conjugate in the pencil rather than orthogonal "
+             "in the ordinary sense. GO-LDA changes the constraint. Its equation (37) chooses each new "
+             "direction to maximise the Fisher ratio subject to Euclidean orthogonality to every direction "
+             "already accepted, and equation (38) gives the direction that answers it: the leading "
+             "eigenvector of the pencil after the accepted directions have been deflated out of it. The "
+             "procedure is sequential, so it yields up to M directions where the classical pencil stops at "
+             "C - 1, and its first direction is the classical leading eigenvector by construction."),
+            ("body",
+             "Both properties were checked against the implementation rather than assumed. The deflated "
+             f"basis is orthogonal to {_sci(f['go_offdiag'])}, and the first direction coincides with the "
+             f"classical one to {abs(f['first_cos']):.6f} in absolute cosine against an independently built "
+             "classical pencil. What the two constructions then do with the remaining directions is the "
+             f"substance of the study: the Fisher ratios of the first {f['cap']} GO-LDA directions sum to "
+             f"{f['mu_sum_go']:.2f} against {f['mu_sum_classic']:.2f} for the classical pencil, so each "
+             "accepted direction is individually the more efficient one - and the subspaces they span are "
+             f"still different, with a median principal angle of {f['span_median']:.1f} degrees and only "
+             f"{f['span_under_1deg']:.1f} per cent of the angles below one degree. The divergence begins at "
+             f"the third direction: the second differs by {f['drift2']:.3f} degrees, the third by "
+             f"{f['drift3']:.1f}."),
+            ("h2", "Baselines and the protocol adapted to this study"),
+            ("body",
+             "Three classical comparators run on the same pencil and the same folds: the ridge-regularised "
+             f"pencil, the pencil with shrinkage alpha = {f['shrink']:g} applied to the within-class scatter, "
+             "and PCA-then-LDA, which projects onto principal components and discriminates inside that "
+             "subspace; a no-projection arm is the floor. The paper's face-data rows use a one-nearest-"
+             "neighbour head, so the raw-pixel regime keeps that classifier unchanged; the feature regime "
+             "uses the protocol of the companion benchmark study adopted as this project's bench - an L2 "
+             "logistic regression fitted with LBFGS at max_iter 5000 and C = 1.0 on features standardised "
+             "with a scaler fitted on the fitting split only. Hyper-parameters are chosen on a "
+             f"{100 * f['val']:.0f} per cent stratified hold-out of the training split under seed "
+             f"{f['seed']}, and the official test split is scored exactly once per method after refitting on "
+             f"all of training. The regularisation grid is delta = {', '.join(f'{d:g}' for d in f['deltas'])} "
+             f"and the dimension grid crosses the rank cap C - 1 = {f['rank_cap']} in both directions."),
+            ("body",
+             "Two adaptations were forced by arithmetic rather than chosen. The pencil is singular whenever "
+             "the feature dimension exceeds the rows available per class, which is the everyday case in raw "
+             "pixels, so the deflation needs a ridge and the certified range is the part of the grid where "
+             "deflated directions stay numerically distinguishable: below delta = 1e-4 they come out "
+             "parallel and the Fisher sequence stops being monotone, and those settings are excluded from "
+             "every beyond-cap claim. And because the dense pencil at M = 10,304 is not the only way to "
+             "solve it, a span-reduced route was implemented as well and the two are verified against each "
+             "other; the reduced route is what the feature-scale numbers come from."),
+            ("h2", "Hypotheses fixed before implementation"),
+            ("body",
+             "Three hypotheses were written before any experiment ran, in the form the records still use. "
+             "H1: on the paper's own face-data protocol the two methods are indistinguishable at the rank "
+             "cap. H2: GO-LDA's accuracy advantage appears beyond the cap, not at it. H3: the classical "
+             "pencil's orthogonality violation is large enough to measure at any scale. The framing "
+             "correction belongs here because it changed what H1 should have expected: equation (37) "
+             "constrains ordinary Euclidean orthogonality, not conjugacy in the pencil, so agreement with "
+             "the classical subspace at the cap was never a theorem of the paper - what its own results "
+             "section asserts at that point is superiority. Parity at the cap is therefore a property of a "
+             "regime, and the study was built to find out which one."),
+        ],
+    }
+
+
+def results_sections(f: dict) -> dict:
+    """Section 5: settings, results, the two released controls, and the negative result. ~1,400 words."""
+    names = {"cifar100": "CIFAR-100", "tiny_imagenet": "Tiny ImageNet",
+             "resnet18": "ResNet-18", "dinov2_vits14": "DINOv2"}
+    pair_name = lambda p: f"{names[p[0]]} x {names[p[1]]}"
+    deficits = "; ".join(f"{pair_name(p)} {_pt(-f['deficit'][p])}" for p in f["pairs"])
+    head_labels = {"logistic": "the benchmark study's logistic head",
+                   "knn1_raw": "the paper's 1-NN on the projections as they come out",
+                   "knn1_scaled": "1-NN after standardisation"}
+    head = ", ".join(f"{head_labels[k]} {_pt(v)}" for k, v in f["head_gap"].items())
+    shifts = ", ".join(f"{names[k]} {v['shift']:.3f}" for k, v in f["ood"].items())
+    rankings = ", ".join(f"{names[k]} {'preserved' if v['ranking'] else 'not preserved'}"
+                    for k, v in f["ood"].items())
+    ood_deficits = ", ".join(f"{names[k]} clean {_pt(v['deficit']['clean'])} against corrupted "
+                             f"{_pt(v['deficit']['corrupted'])}" for k, v in f["ood"].items())
+    ladder = ", ".join(f"{_pt(d)} at M = {m}" for m, _, d in f["ladder"])
+    ladder_M = ", ".join(str(m) for m, _, _ in f["ladder"])
+    verdict = {}
+    for pair in f["pairs"]:
+        kinds = f["separation"][pair]
+        short = {"classic-ridge-LDA": "ridge", "classic-shrinkage-LDA": "shrinkage",
+                "PCA-then-LDA": "PCA-then-LDA"}
+        disjoint = [a for a, kind in kinds.items() if kind == "disjoint"]
+        if len(disjoint) == 3:
+            verdict[pair] = f"on {pair_name(pair)} every baseline's worst fold sits above GO-LDA's best"
+        elif disjoint:
+            overlapped = " and ".join(short[a] for a in kinds if a not in disjoint)
+            winners = " and ".join(short[a] for a in disjoint)
+            verdict[pair] = (f"on {pair_name(pair)} the ranges overlap {overlapped} and stay disjoint from "
+                             f"{winners}")
+        else:
+            verdict[pair] = f"on {pair_name(pair)} the ranges overlap all three comparators"
+    separate = "; ".join(verdict[p] for p in f["pairs"])
+    return {
+        "Experimental Settings, Results and Discussion": [
+            ("h2", "Datasets, features and the evaluation protocol"),
+            ("body",
+             "Two data regimes were run against one implementation. The raw-pixel regime is the ORL face "
+             f"database - 400 images, {f['orl_subjects']} subjects of ten images each, every image a "
+             "112-row by 92-column "
+             "greyscale raster flattened to 10,304 dimensions - with ten folds of nine training and one test "
+             "image per subject and the paper's one-nearest-neighbour head. The frozen-feature regime is "
+             f"CIFAR-100 ({f['classes']['cifar100']} classes, {f['rows']['cifar100']:,} training rows) and "
+             f"Tiny ImageNet ({f['classes']['tiny_imagenet']} classes, {f['rows']['tiny_imagenet']:,}) scored through two backbones whose "
+             "weights were never touched: ResNet-18 giving 512-dimensional vectors, and DINOv2 ViT-S/14 "
+             "giving 384 at 224 by 224 input. Extraction was measured once before the matrix, at 18.2 "
+             "minutes for all four pairs, and the input resolution was settled by that measurement rather "
+             "than by the model registry's default, which ran eight times slower on this GPU."),
+            ("body",
+             "Every method sees the same folds, the same seed and the same head, and each is allowed its own "
+             f"hyper-parameters: a {100 * f['val']:.0f} per cent stratified hold-out selects (delta, K), the "
+             "official test split is scored once per method after refitting on all of training, and the "
+             f"dimension grid runs from {min(f['k_grid'])} to {max(f['k_grid'])} in the raw-pixel regime so "
+             "that it crosses the rank cap in both directions. Two readings of the same quantity are kept "
+             "apart in this section and labelled on every table: hold-out values are what selection saw, "
+             "test values are what the report concludes from, and the no-projection arm exists only as a "
+             "hold-out number in the run tables."),
+            ("h2", "Small-scale feasibility run"),
+            ("body",
+             "At the raw-pixel scale the two methods are identical at the cap, fold for fold: GO-LDA and the "
+             f"ridge pencil both average {f['orl']['39']:.4f} at K = {f['rank_cap']} over ten folds, with a "
+             "paired difference of exactly zero on every fold. Beyond the cap GO-LDA rises to "
+             f"{f['orl']['40']:.4f} at K = 40 and {f['orl']['50']:.4f} at K = 50, against {f['orl_pca']:.4f} "
+             f"for PCA-then-LDA at its own cap and {f['orl_noproj']:.4f} with no projection at all. H1 and "
+             "H2 both held here, and H3 held in the geometry: the deflated basis is orthogonal to about "
+             f"1e-14 where the classical basis's largest off-diagonal reaches "
+             f"{max(f['offdiag_classic']):.2f}. The run cost 1,061 s at 2,901 MB peak and wrote 2,880 "
+             "per-fold rows, which is what made the full matrix look affordable."),
+            ("body",
+             "One supplementary variant argued against H2 before the matrix ran. At four training images per "
+             f"subject - same raster, same cap - the two methods again tie at the cap ({f['small']['39']:.4f} "
+             f"against {f['small_classic']:.4f}), and past it GO-LDA falls to {f['small']['40']:.4f} and "
+             f"{f['small']['50']:.4f} instead of rising. That run stays out of the main table and is "
+             "labelled supplementary, because it is a single split, but it is the reason the feature-scale "
+             "outcome was not treated as a surprise when it arrived."),
+            ("h2", "Main results and the hypothesis verdicts"),
+            ("body",
+             "On frozen features the picture changes, and it changes in the same direction on all four pairs. "
+             "At each method's own selected (delta, K) on the official test split, GO-LDA finishes behind the "
+             f"best LDA baseline everywhere - the shortfalls are {deficits}. Against the paper's own "
+             f"classifier the gap is wider rather than narrower ({head} on CIFAR-100 with ResNet-18 "
+             "features, where the one-nearest-neighbour head is the harshest of the three). So H1 fails in "
+             "this regime, and it fails as a measurement rather than as a solver artefact. The five-fold "
+             "ranges say where the separation is real: " + separate + ". The wording for the closest pair "
+             "is fixed by both readings being true at once - the near-tie is against one of the three "
+             "baselines, and against the baseline that wins that pair the single-split gap understates the "
+             "five-fold one."),
+            ("body",
+             "H2 splits in the same way the design stage anticipated, with the opposite sign from the paper. "
+             "The mechanism holds: the growth curve rises past the cap on every pair, and the deflated "
+             "directions keep positive monotone Fisher ratios in all four. The claim does not: the endpoint "
+             "of that rising curve never reaches the baselines' cap value, on the test split or on the "
+             "five-fold mean, and on the hold-out it falls short on all four pairs. H3 holds everywhere, as "
+             "reported above, and it is the only hypothesis that travels between regimes untouched."),
+            ("h2", "Two controls: fixed corruption and reduced pixel dimension"),
+            ("body",
+             "The first control asked whether the ordering survives a distribution shift. One corruption - "
+             f"additive white Gaussian noise at sigma = {f['ood_sigma']:g} on unit pixels - the first entry "
+             "of the reference implementation's severity list, `c = [.08, .12, 0.18, 0.26, 0.38]"
+             "[severity - 1]` in `corruptions.py` at commit 712bfcd - was applied to the CIFAR-100 test "
+             "images before the "
+             "frozen backbone saw them, and the clean-fitted projections, scalers and heads were re-scored "
+             f"without refitting. Both backbones degrade (mean absolute feature shift {shifts}), the deficit "
+             f"against the best baseline moves in opposite directions on the two ({ood_deficits}), and the "
+             f"ranking is not preserved on either ({rankings}). What that licenses is narrow: the gap is not "
+             "an artefact of a clean test set. What it does not license is a robustness claim, because one "
+             f"severity was run and the levels were deliberately not swept. The control cost {f['ood_s']:.0f} "
+             "s, because the main run stored accuracies rather than bases and both pencils had to be solved "
+             "again."),
+            ("body",
+             "The second control attacked the confound the three regimes left open: rows per class and the "
+             "cap's share of the space moved together, so nothing yet separated conditioning from geometry. "
+             "Holding classes and rows per class fixed and shrinking the pixel dimension instead, the paired "
+             f"GO-minus-classic difference at the cap is {ladder} across M = {ladder_M} pixels over "
+             f"{f['ladder_folds']} folds, in {f['ladder_s']:.0f} s. There is no trend to read: the largest "
+             "rung difference goes the other way, and at the widest rung the two arms agree to within a "
+             "numerical tolerance. The control is negative and it is reported as negative. Its first run "
+             "found a clean reversal tracking the cap share, and that run was withdrawn: the loader's height "
+             "and width constants were transposed, so the box-average downsample had been slicing a sheared "
+             "raster rather than a reduced one. The same constant had appeared to affect only the front-end "
+             "pictures, which is precisely why it went unsuspected for a stage."),
+            ("h2", "Interpretation, limits and the negative result"),
+            ("body",
+             "Read across the regimes, the properties that travel are the ones the construction guarantees: "
+             "Euclidean-orthogonal directions with monotone Fisher ratios, each individually more "
+             "discriminative than the classical pencil's counterpart, reproduced to machine precision by two "
+             "solver routes. The properties that do not travel are the empirical ones the paper's numbers "
+             "rest on. In raw pixels the cap is a fraction of a per cent of the space and nine images per "
+             "class make the within-class scatter so degenerate that deflation has almost nothing to remove, "
+             "so the two constructions land on one subspace and parity appears. Widen the cap to a fifth or a "
+             "half of the space, fit on five hundred well-conditioned rows per class, and they part company "
+             "from the third direction onward - and the individually better directions then span a subspace "
+             "the attached classifier handles worse. That is the finding, and it is why parity at the cap "
+             "should not be cited as a property of GO-LDA."),
+            ("body",
+             "The limits bound the wording, and they are the ordinary ones. Five folds give a scale estimate, "
+             "not a test, and the stored summaries keep mean, standard deviation, minimum and maximum rather "
+             "than per-fold values, so no sign-per-fold claim is available anywhere in this report. One "
+             "corruption at one severity cannot speak to robustness. The comparison study's published cells "
+             "are an external plausibility reference and not a target, and its README and paper disagree in "
+             "19 of 72 comparable cells across the three dataset tables. The algorithm's source is an "
+             "unreviewed preprint with no official implementation, so every verification here is internal: "
+             "two routes, two solvers, an independent reconstruction of the classical pencil, and a residual "
+             "bound derived from the pencil under test with a control arm expected to violate it. And the "
+             "negative result is itself a result: the dimension control did not rescue the hypothesis, it "
+             "removed the last explanation that had any support in our own data."),
+        ],
+    }

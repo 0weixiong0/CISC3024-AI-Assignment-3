@@ -124,7 +124,10 @@ def main() -> int:
                             f"{re.search(r'\b(\w+)\s+\1\b', text).group(0)!r} in {text[:70]!r}")
         if re.search(r"\S  +\S", text):
             flag("hygiene", f"double space in paragraph {index}: {text[:70]!r}")
-        if re.search(r"\s[.,;]", text):
+        # A space before . , or ; is a typo, except when the punctuation starts a decimal: quoted
+        # source lines such as `c = [.08, .12, 0.18, 0.26, 0.38][severity - 1]` are legitimate text and
+        # the earlier form of this rule flagged them.
+        if re.search(r"\s[.,;](?!\d)", text):
             flag("hygiene", f"space before punctuation in paragraph {index}: {text[:70]!r}")
     internal = [term for term in ("D-1", "option b", "Gate 0", "Gate 1", "Gate 2", "Gate 3", "Gate 4",
                                   "Gate 5", "milestone", "SECTION_")

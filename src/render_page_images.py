@@ -33,25 +33,40 @@ C4 = "c4_arxiv2604.03928v2.pdf"
 # name, source, page, region, caption
 PAGES = [
     ("figure_01", GOLDA, 6, "full",
-     "GO-LDA equation (37): each new direction maximises the Fisher ratio subject to ordinary Euclidean "
-     "orthogonality to the directions already accepted."),
+     "GO-LDA equations (37) and (38): each new direction maximises the Fisher ratio subject to ordinary "
+     "Euclidean orthogonality to the directions already accepted, and is the eigenvector of the deflated "
+     "pencil that follows from that constraint."),
     ("figure_02", GOLDA, 11, "full",
-     "The same paper's accuracy claim ahead of Table II: after the third direction the GO-LDA directions "
-     "achieve significantly better results than classic-LDA's."),
+     "The same paper's accuracy claim ahead of Table 2: the GO-LDA directions achieve significantly better "
+     "results than classic-LDA's, and after the third direction they also beat PCA's principal directions."),
     ("figure_03", GOLDA, 12, ("table", "TABLE 2"),
      "GO-LDA Table 2: subspace accuracies by mean classification accuracy on nine data sets, the row set "
      "this study reproduces on ORL."),
     ("figure_04", IMC, 4, "full",
-     "ImageNet-C's own description of the Gaussian-noise corruption this study's control used. The paper "
-     "gives no sigma-versus-severity table, so the sigma = 0.08 (severity 1) value rests on the reference "
-     "implementation's code, which is not in the released download set."),
+     "ImageNet-C's own description of the Gaussian-noise corruption this study's control used; the opening "
+     "sentence of Common Corruptions names it as the first corruption type."),
     ("figure_05", C4, 6, ("table", "TABLE I"),
-     "The companion study's Table I: CIFAR-100 accuracy per frozen backbone at d = 99, the paper side of "
-     "the README-versus-paper diff."),
+     "The companion study's Table I: CIFAR-100 accuracy per frozen backbone at d = 99 for every reduction "
+     "except its own RDA and RDA+SMD, which the caption says use 99 + k - the paper side of the "
+     "README-versus-paper diff."),
     ("figure_06", None, None, "readme",
      "The companion repository's README table for the same CIFAR-100 configurations, the other side of the "
-     "19-of-72-cell disagreement."),
+     "cell-by-cell diff whose overall count is 19 of 72 across all three dataset tables."),
 ]
+
+# The code line the sigma value rests on: the released ImageNet-C reference implementation.
+CORRUPTIONS = "imagenetc_corruptions.py"
+CODE = {
+    "name": "figure_07",
+    "file": CORRUPTIONS,
+    "lines": (122, 126),
+    "repo": "github.com/hendrycks/robustness",
+    "path": "ImageNet-C/imagenet_c/imagenet_c/corruptions.py",
+    "commit": "712bfcd18ba1159df5f7ed46f4e6cae611bfe60e",
+    "blob_sha": "f0bf2d495dc9514e8e6f800d1d2a753f781f9dd8",
+    "caption": "The reference implementation's gaussian_noise: the severity list opens at 0.08 on unit "
+               "pixels, which is the sigma this study's single fixed corruption used.",
+}
 
 
 def clip_caption(page: pymupdf.Page, label: str) -> pymupdf.Rect:
@@ -123,6 +138,30 @@ def render_readme(out: Path) -> dict:
     return {"first_line": start + 1, "last_line": start + len(block), "rows": len(block)}
 
 
+def render_code(out: Path) -> dict:
+    """Render the pinned corruption file's gaussian_noise lines, with their own line numbers."""
+    lines = (CACHE / CODE["file"]).read_text(encoding="utf-8").split("\n")
+    first, last = CODE["lines"]
+    block = lines[first - 1:last]
+    doc = pymupdf.open()
+    page = doc.new_page(width=880, height=70 * len(block) + 90)
+    page.insert_text((28, 40), f"{CODE['repo']} - {CODE['path']}", fontsize=11, fontname="helv")
+    page.insert_text((28, 56), f"pinned at commit {CODE['commit']}, blob sha256-less git sha "
+                              f"{CODE['blob_sha']}", fontsize=9, fontname="helv")
+    y = 84
+    for offset, text in enumerate(block):
+        page.insert_text((28, y), f"{first + offset:>4}  {text[:118]}", fontsize=9, fontname="cour")
+        y += 14
+    tmp = out.with_suffix(".tmp.pdf")
+    tmp.write_bytes(doc.convert_to_pdf())
+    doc.close()
+    rendered = pymupdf.open(str(tmp))
+    rendered[0].get_pixmap(dpi=DPI, clip=pymupdf.Rect(18, 26, 862, 96 + 14 * len(block))).save(str(out))
+    rendered.close()
+    tmp.unlink()
+    return {"first_line": first, "last_line": last, "block": block}
+
+
 def main() -> int:
     ASSETS.mkdir(exist_ok=True)
     manifest = {}
@@ -146,8 +185,20 @@ def main() -> int:
                           "caption_line_2": caption, "dpi": DPI}
         print(f"{name}: {source} p{page_number} clip {[round(v,1) for v in clip]} -> "
               f"{out.name} {pix.width}x{pix.height}px")
+    code_out = ASSETS / f"{CODE['name']}.png"
+    info = render_code(code_out)
+    manifest[CODE["name"]] = {
+        "source": f"research_records/retrieval_cache/{CODE['file']}",
+        "page": f"rendered text, lines {info['first_line']}-{info['last_line']}",
+        "repository": CODE["repo"], "path": CODE["path"], "commit": CODE["commit"],
+        "blob_sha": CODE["blob_sha"], "quoted": info["block"],
+        "caption_line_1": CODE["name"].replace("figure_", "Figure "), "caption_line_2": CODE["caption"],
+        "dpi": DPI,
+    }
     (ASSETS / "figure_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1),
                                                  encoding="utf-8")
+    print(f"{CODE['name']}: {CODE['file']} lines {info['first_line']}-{info['last_line']} "
+          f"@ {CODE['commit'][:8]} -> {code_out.name}")
     print("manifest:", ASSETS / "figure_manifest.json")
     return 0
 

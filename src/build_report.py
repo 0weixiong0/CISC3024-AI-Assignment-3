@@ -45,18 +45,11 @@ TITLE = ("CISC3024 Assignment 3: Apply a Principal Component Analysis or Linear 
 # The seven content sections, in report order. Sections whose prose has not been drafted yet emit H2s only
 # (drafted=False: skeleton), the drafted ones emit H2 + body blocks via `insert_prose`.
 SECTIONS = [
-    ("Introduction and Human-AI Workflow",
-     ["AI use and responsibility", "What this report covers and how it is ordered"], False),
+    ("Introduction and Human-AI Workflow", [], True),
     ("AI-Assisted Literature Search and Algorithm Selection", [], True),
-    ("Algorithm Description and Task Adaptation",
-     ["GO-LDA's deflated eigensolve", "Baselines and the protocol adapted to this study",
-      "Hypotheses fixed before implementation"], False),
+    ("Algorithm Description and Task Adaptation", [], True),
     ("AI-Assisted Implementation and Verification", [], True),
-    ("Experimental Settings, Results and Discussion",
-     ["Datasets, features and the evaluation protocol", "Small-scale feasibility run",
-      "Main results and the hypothesis verdicts",
-      "Two controls: fixed corruption and reduced pixel dimension",
-      "Interpretation, limits and the negative result"], False),
+    ("Experimental Settings, Results and Discussion", [], True),
     ("Interactive Visualisation and Source-Code Availability",
      ["The live demo and what the visitor does", "The repository and the Pages site",
       "Citation block for brief item (6)"], False),
@@ -213,6 +206,12 @@ class Builder:
         for title, subs, drafted in SECTIONS:
             el = copy.deepcopy(protos["h1"])
             _set_text(el, title)
+            if not builder.h1:
+                # The contents field is resolved by Word and runs longer than its own page, so the first
+                # section would otherwise start underneath its last entry. pageBreakBefore is carried by
+                # the heading itself, which keeps the contents region a single block for the audit.
+                pPr = el.get_or_add_pPr()
+                pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
             if tail is not None:
                 tail.addprevious(el)
             else:
@@ -234,8 +233,11 @@ class Builder:
     def blocks(self) -> dict:
         """H1 title -> list of (kind, text) blocks for drafted sections."""
         return {
+            **rc.intro_sections(),
             **rc.search_sections(rc.search_facts()),
+            **rc.algorithm_sections(rc.facts()),
             **rc.implementation_sections(rc.facts()),
+            **rc.results_sections(rc.results_facts()),
         }
 
     def insert_prose(self) -> list[str]:
