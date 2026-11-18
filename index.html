@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GO-LDA, live — CISC3024 AI Assignment 3</title>
+<meta name="description" content="Interactive instrument: build a GO-LDA subspace direction by direction on real test images and watch what each direction is worth.">
+<style>
+  :root{
+    --ink:#101418; --ink2:#39424e; --mut:#78828e; --line:#dbe1e8; --bg:#f4f6f9; --panel:#fff;
+    --go:#1d4ed8; --ridge:#b45309; --shrunk:#047857; --pca:#be123c; --none:#64748b;
+    --accent:#1d4ed8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{background:var(--ink);color:#fff;padding:.7rem 1.1rem;display:flex;gap:1rem;align-items:baseline;flex-wrap:wrap}
+  header h1{font-size:1rem;margin:0;font-weight:650}
+  header .ans{font-size:.82rem;color:#c9d3df;flex:1 1 26rem;min-width:16rem}
+  header .ans b{color:#fff}
+  nav{display:flex;gap:.3rem;padding:.45rem 1.1rem 0;background:var(--ink);flex-wrap:wrap;align-items:flex-end}
+  nav button{font:inherit;font-size:.84rem;padding:.4rem .8rem;border:0;border-radius:6px 6px 0 0;
+    background:#2b333d;color:#c9d3df;cursor:pointer}
+  nav button[aria-selected=true]{background:var(--bg);color:var(--ink);font-weight:600}
+  nav .sep{flex:1}
+  nav .src{font-size:.72rem;color:#8d99a8;padding-bottom:.4rem}
+  main{padding:1rem 1.1rem 3rem;max-width:118rem;width:100%;margin:0 auto}
+  .bar{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;margin-bottom:.7rem}
+  .chip,.mchip{font:inherit;font-size:.8rem;padding:.3rem .62rem;border:1px solid var(--line);
+    background:var(--panel);border-radius:999px;cursor:pointer;color:var(--ink2);white-space:nowrap}
+  .chip[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .mchip[aria-selected=true]{background:var(--mc);color:#fff;border-color:var(--mc)}
+  .mchip .d{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;background:var(--mc);margin-right:.34rem}
+  .mchip[aria-selected=true] .d{background:#fff}
+  .grid{display:grid;gap:.9rem;grid-template-columns:minmax(16rem,1fr) minmax(21rem,1.4fr) minmax(18rem,1fr)}
+  .pane{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.8rem .9rem 1rem;min-width:0}
+  .pane.wide{grid-column:span 2}
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+  .split2>div{min-width:0}
+  @media(max-width:80rem){.grid{grid-template-columns:1fr 1fr}.pane.wide{grid-column:1/-1}}
+  @media(max-width:54rem){.grid{grid-template-columns:1fr}.pane.wide{grid-column:auto}.split2{grid-template-columns:1fr}}
+  .pane h2{font-size:.76rem;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);margin:0 0 .55rem;font-weight:650}
+  .pane h2 .hint{text-transform:none;letter-spacing:0;font-weight:400;margin-left:.35rem}
+  .big{font-size:2rem;line-height:1.05;font-weight:680;font-variant-numeric:tabular-nums}
+  .big small{font-size:.78rem;font-weight:500;color:var(--mut);display:block;margin-top:.2rem}
+  .row{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end}
+  .kv{font-size:.79rem;color:var(--mut)}
+  .kv b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .cap{font-size:.74rem;color:var(--mut);margin-top:.5rem}
+  .cap b{color:var(--ink2)}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  .ticks{display:flex;justify-content:space-between;font-size:.7rem;color:var(--mut);font-variant-numeric:tabular-nums}
+  .ticks span.at{color:var(--ink);font-weight:700}
+  .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:.34rem;max-height:17rem;overflow:auto;padding-right:.2rem}
+  .thumb{border:2px solid transparent;border-radius:6px;padding:0;background:#000;cursor:pointer;line-height:0;position:relative}
+  .thumb img{width:100%;border-radius:4px;display:block;image-rendering:pixelated}
+  .thumb[aria-pressed=true]{border-color:var(--accent)}
+  .thumb .y{position:absolute;left:2px;top:1px;font-size:.6rem;color:#fff;text-shadow:0 0 3px #000}
+  .dirrow{display:flex;gap:.3rem;overflow-x:auto;padding-bottom:.3rem}
+  .dir{flex:0 0 auto;width:62px;text-align:center;font-size:.62rem;color:var(--mut);cursor:pointer}
+  .dir img{width:62px;height:50px;object-fit:cover;border-radius:4px;background:#111;border:2px solid transparent}
+  .dir[aria-pressed=true] img{border-color:var(--accent)}
+  .tw{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:.8rem}
+  th,td{border-bottom:1px solid var(--line);padding:.3rem .4rem;text-align:left;white-space:nowrap}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  thead th{color:var(--mut);font-weight:600;border-bottom:1px solid var(--ink2)}
+  .tag{font-size:.68rem;padding:.06rem .34rem;border-radius:3px;background:var(--bg);border:1px solid var(--line);color:var(--ink2)}
+  .tag.hold{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}
+  .tag.test{background:#fef3c7;border-color:#fde68a;color:#92400e}
+  .tag.cv{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
+  .dot{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;margin-right:.3rem}
+  .hidden{display:none}
+  .note{font-size:.79rem;color:var(--ink2);background:#fff8e6;border:1px solid #f2d488;border-radius:8px;padding:.55rem .7rem}
+  .note.good{background:#eefbf1;border-color:#b7e0c2}
+  ul.tight{margin:.5rem 0 0 1.1rem;font-size:.79rem;color:var(--ink2)}
+  ul.tight li{margin:.25rem 0}
+  details{margin-top:.5rem}
+  summary{font-size:.78rem;cursor:pointer;color:var(--ink2)}
+</style>
+</head>
+<body>
+<header>
+  <h1>GO-LDA, live</h1>
+  <div class="ans" id="answer">loading the exported results…</div>
+</header>
+<nav role="tablist" aria-label="Views">
+  <button role="tab" data-v="instrument" aria-selected="true">Instrument</button>
+  <button role="tab" data-v="noise" aria-selected="false">Noise control</button>
+  <button role="tab" data-v="ladder" aria-selected="false">Dimension ladder</button>
+  <button role="tab" data-v="numbers" aria-selected="false">Tables &amp; receipts</button>
+  <span class="sep"></span>
+  <span class="src" id="src-line"></span>
+</nav>
+<main>
+  <section id="v-instrument">
+    <div class="bar" id="regimes" role="group" aria-label="Regime"></div>
+    <div class="bar" id="methods" role="group" aria-label="Method"></div>
+    <div class="grid">
+      <div class="pane">
+        <h2>Specimens <span class="hint">official test rows — click one</span></h2>
+        <div class="row">
+          <div id="spec-big" style="width:118px;flex:0 0 auto"></div>
+          <div>
+            <div class="big" id="spec-rank">—</div>
+            <div class="kv" id="spec-label"></div>
+          </div>
+        </div>
+        <div id="spec-rankplot" style="margin-top:.5rem"></div>
+        <div class="thumbs" id="strip" style="margin-top:.6rem"></div>
+        <div class="cap" id="spec-cap"></div>
+      </div>
+
+      <div class="pane wide">
+        <h2>The subspace <span class="hint">directions added one at a time</span></h2>
+        <div class="ticks"><span>K</span><span id="klabel"></span></div>
+        <input type="range" id="kslider" min="0" max="5" step="1" aria-label="Number of directions K">
+        <div class="ticks" id="kticks"></div>
+        <div class="row" style="justify-content:space-between;margin-top:.4rem">
+          <div class="big" id="acc-now">—</div>
+          <div class="kv" id="acc-extra" style="max-width:24rem"></div>
+        </div>
+        <div id="curve"></div>
+        <div class="cap" id="curve-cap"></div>
+      </div>
+
+      <div class="pane">
+        <h2>Fisher ratio per direction <span class="hint">the paper's mechanism</span></h2>
+        <div id="mubars"></div>
+        <div class="cap" id="mu-cap"></div>
+      </div>
+
+      <div class="pane">
+        <h2>Where specimens land <span class="hint">directions 1 and 2</span></h2>
+        <div id="scatter"></div>
+        <div class="cap" id="scatter-cap"></div>
+      </div>
+
+      <div class="pane">
+        <h2>Is the basis orthogonal? <span class="hint">U′U, 24 × 24 corner</span></h2>
+        <div class="split2">
+          <div><div id="gram-go"></div><div class="cap" id="gram-go-cap"></div></div>
+          <div><div id="gram-cl"></div><div class="cap" id="gram-cl-cap"></div></div>
+        </div>
+        <div class="cap" id="gram-note"></div>
+      </div>
+
+      <div class="pane wide" id="dirpane">
+        <h2>The directions as pictures <span class="hint">ORL only: each direction reshaped to the image grid, 112 rows × 92 columns</span></h2>
+        <div class="split2">
+          <div><div class="kv" id="dirlab-go"></div><div class="dirrow" id="dirs-go"></div></div>
+          <div><div class="kv" id="dirlab-cl"></div><div class="dirrow" id="dirs-cl"></div></div>
+        </div>
+        <div class="cap" id="dir-cap"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-noise" class="hidden">
+    <div class="grid">
+      <div class="pane wide">
+        <h2>One corruption, one severity <span class="hint">gaussian σ = 0.08 on [0,1] pixels = ImageNet-C severity 1</span></h2>
+        <div class="row" style="align-items:center;gap:.7rem;margin-bottom:.6rem">
+          <button class="chip" id="noisetog" aria-pressed="false">Show the corrupted images</button>
+          <span class="kv">These are the pixels the measured accuracies were earned on — same seed, same noise field.</span>
+        </div>
+        <div class="thumbs" id="noisy-strip" style="max-height:none"></div>
+        <div class="cap">Chance on CIFAR-100 is 1 %. Every arm lost 37–52 points.</div>
+      </div>
+      <div class="pane">
+        <h2>Clean vs corrupted <span class="hint">official test, fitted on clean train</span></h2>
+        <div id="ood-bars"></div>
+        <div class="cap" id="ood-cap"></div>
+      </div>
+      <div class="pane">
+        <h2>What survived, what did not</h2>
+        <div id="ood-verdict"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-ladder" class="hidden">
+    <div class="grid">
+      <div class="pane wide">
+        <h2>Same classes, same nine images per class, shrinking pixel space <span class="hint">ORL, ten folds, 1-NN</span></h2>
+        <div id="ladder-plot"></div>
+        <div class="cap" id="ladder-cap"></div>
+      </div>
+      <div class="pane">
+        <h2>Read-out</h2>
+        <div id="ladder-verdict"></div>
+      </div>
+      <div class="pane">
+        <h2>The table</h2>
+        <div id="ladder-table"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-numbers" class="hidden">
+    <div class="grid">
+      <div class="pane wide">
+        <h2>Every method at its own selection <span class="hint">official test, spent once per method</span></h2>
+        <div id="tbl-selection"></div>
+      </div>
+      <div class="pane">
+        <h2>Fold spread <span class="hint">5-fold on train</span></h2>
+        <div id="tbl-cv"></div>
+      </div>
+      <div class="pane">
+        <h2>Gates</h2>
+        <div id="tbl-gates"></div>
+      </div>
+      <div class="pane">
+        <h2>What the gap is not <span class="hint">controls we ran to kill it</span></h2>
+        <div id="tbl-controls"></div>
+      </div>
+      <div class="pane wide">
+        <h2>Where each number came from</h2>
+        <div id="tbl-sources"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="data.js"></script>
+<script src="demo.js"></script>
+<script>
+"use strict";
+var REP = window.GOLDA_DATA || null;
+var DEMO = window.GOLDA_DEMO || null;
+var HEX = {"GO-LDA":"#1d4ed8","classic-ridge-LDA":"#b45309","classic-shrinkage-LDA":"#047857",
+           "PCA-then-LDA":"#be123c","no-projection":"#64748b"};
+var SHORT = {"GO-LDA":"GO-LDA","classic-ridge-LDA":"ridge LDA","classic-shrinkage-LDA":"shrinkage LDA",
+             "PCA-then-LDA":"PCA-then-LDA","no-projection":"no projection"};
+var CAPTION = {
+  "GO-LDA":"eq. (37): each new direction maximises the Fisher ratio subject to ordinary Euclidean orthogonality to its predecessors.",
+  "classic-ridge-LDA":"the leading eigenvectors of the same pencil without deflation; they stop existing past K = C − 1.",
+  "classic-shrinkage-LDA":"shrinkage-regularised classic LDA — the strongest baseline in this study.",
+  "PCA-then-LDA":"PCA to K components, then LDA inside that subspace; its discriminant room still ends at C − 1.",
+  "no-projection":"the frozen features go straight into the head."};
+
+function $(s){ return document.querySelector(s); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function pc(x,dp){ if(x===null||x===undefined) return "—"; if(dp===undefined) dp=2; return (100*x).toFixed(dp); }
+function sig(x){ if(x===null||x===undefined) return "—"; return x===0?"0":Math.abs(x).toExponential(1); }
+function pretty(s){ return ({cifar100:"CIFAR-100",tiny_imagenet:"Tiny ImageNet",resnet18:"ResNet-18",
+  dinov2_vits14:"DINOv2 ViT-S/14",orl:"ORL faces"})[s] || s; }
+function blockName(k){ return k==="orl" ? "ORL raw pixels (the paper's regime)"
+  : pretty(k.split("__")[0]) + " × " + pretty(k.split("__")[1]); }
+function ordinal(n){ var s=["th","st","nd","rd"], v=n%100; return s[(v-20)%10]||s[v]||s[0]; }
+
+var S = { view:"instrument", block:"orl", method:"GO-LDA", ki:0, spec:0, dir:0, noisy:false };
+var ARMS_ORDER = ["GO-LDA","classic-shrinkage-LDA","classic-ridge-LDA","PCA-then-LDA","no-projection"];
+
+function boot(){
+  if(!DEMO || !DEMO.blocks){
+    $("#answer").innerHTML = "<b>demo.js is missing.</b> Run <code>python src/export_demo.py</code> to build the interactive data.";
+    return;
+  }
+  S.block = DEMO.blocks.orl ? "orl" : Object.keys(DEMO.blocks)[0];
+  $("#answer").innerHTML = "<b>The algorithm does what the paper says; the accuracy claim does not travel.</b> "
+    + "At 10,304 raw pixels with nine images per class, GO-LDA and classic LDA span the same subspace. "
+    + "On frozen deep features the directions keep coming past the rank cap — and the subspace they span classifies worse.";
+  var secs = DEMO.total_seconds !== undefined ? DEMO.total_seconds
+    : Object.keys(DEMO.blocks).reduce(function(s,k){ return s + (DEMO.blocks[k].seconds || 0); }, 0).toFixed(0);
+  $("#src-line").innerHTML = "seed " + DEMO.seed + " · refit in " + secs + " s by src/export_demo.py";
+  chrome(); wire(); redraw();
+}
+
+function chrome(){
+  $("#regimes").innerHTML = Object.keys(DEMO.blocks).map(function(k){
+      return '<button class="chip" data-b="' + k + '" aria-selected="' + (k===S.block) + '">'
+        + esc(blockName(k)) + "</button>"; }).join("")
+    + '<span class="kv" id="blk-meta"></span>';
+  var b = block();
+  $("#blk-meta").innerHTML = "<b>" + b.C + "</b> classes · rank cap <b>" + b.cap + "</b> · "
+    + b.feature_dim + "-dimensional · " + esc(b.regime);
+  $("#regimes").onclick = function(e){ var t = e.target.closest("[data-b]"); if(!t) return;
+    S.block = t.dataset.b; S.method = "GO-LDA"; S.spec = 0; S.dir = 0; S.ki = 0; chrome(); redraw(); };
+  methodChips();
+}
+
+function block(){ return DEMO.blocks[S.block]; }
+
+function methodChips(){
+  var arms = ARMS_ORDER.filter(function(m){ return block().arms[m]; });
+  if(arms.indexOf(S.method) < 0) S.method = arms[0];
+  $("#methods").innerHTML = arms.map(function(m){
+      return '<button class="mchip" data-m="' + m + '" style="--mc:' + HEX[m] + '" aria-selected="'
+        + (m===S.method) + '"><i class="d"></i>' + esc(SHORT[m]) + "</button>"; }).join("")
+    + '<span class="kv">accuracy head: ' + esc(block().heads.accuracy) + "</span>";
+  $("#methods").onclick = function(e){ var t = e.target.closest("[data-m]"); if(!t) return;
+    S.method = t.dataset.m; methodChips(); redraw(); };
+}
+
+/* Tables are wider than a phone. Wrapping each one in a scroller keeps the page itself from
+   going sideways; re-rendered tables arrive unwrapped, so this runs after every draw. */
+function wrapTables(){
+  Array.prototype.forEach.call(document.querySelectorAll("table"), function(t){
+    var p = t.parentElement;
+    if(!p || p.classList.contains("tw") || p.tagName === "TD" || p.tagName === "TH") return;
+    var w = document.createElement("div");
+    w.className = "tw";
+    p.insertBefore(w, t);
+    w.appendChild(t);
+  });
+}
+
+function wire(){
+  $("#kslider").oninput = function(e){ S.ki = +e.target.value; redraw(); };
+  Array.prototype.forEach.call(document.querySelectorAll("nav [data-v]"), function(t){
+    t.onclick = function(){
+      S.view = t.dataset.v;
+      Array.prototype.forEach.call(document.querySelectorAll("nav [data-v]"), function(x){
+        x.setAttribute("aria-selected", String(x===t)); });
+      ["instrument","noise","ladder","numbers"].forEach(function(v){
+        $("#v-" + v).classList.toggle("hidden", v !== S.view); });
+      if(S.view === "noise") drawNoise();
+      if(S.view === "ladder") drawLadder();
+      if(S.view === "numbers") drawNumbers();
+      wrapTables();
+    };
+  });
+  $("#noisetog").onclick = function(){
+    S.noisy = !S.noisy;
+    $("#noisetog").setAttribute("aria-pressed", String(S.noisy));
+    $("#noisetog").textContent = S.noisy ? "Show the clean images" : "Show the corrupted images";
+    drawNoise();
+  };
+}
+
+/* The feature pairs carry a 5 % hold-out; the raw-pixel MVP carries ten-fold CV. Both are the
+   selection-split numbers, and the label has to travel with the value or the page would blur them. */
+function accOf(cell){
+  if(!cell) return null;
+  if(cell.holdout !== null && cell.holdout !== undefined) return {v: cell.holdout, label: "hold-out 5 % (selection split)"};
+  if(cell.cv_mean !== null && cell.cv_mean !== undefined)
+    return {v: cell.cv_mean, label: (cell.cv_folds || 10) + "-fold CV mean (selection split)"};
+  return null;
+}
+function muText(v){
+  if(v === null || v === undefined) return "—";
+  var a = Math.abs(v);
+  return a >= 1000 ? v.toExponential(2) : a >= 10 ? v.toFixed(2) : v.toFixed(3);
+}
+function currentK(){ var g = block().k_grid; return g[Math.min(S.ki, g.length - 1)]; }
+
+function redraw(){
+  var b = block(), arm = b.arms[S.method], K = currentK();
+  var cell = arm.at_K.filter(function(r){ return r.K === K; })[0] || arm.at_K[0];
+  var sl = $("#kslider"); sl.max = b.k_grid.length - 1; sl.value = S.ki;
+  $("#klabel").innerHTML = "<b>K = " + K + "</b>" + (K === b.cap ? " — the rank cap C − 1" : (K > b.cap ? " — beyond the cap" : ""));
+  $("#kticks").innerHTML = b.k_grid.map(function(k,i){
+    return '<span class="' + (i===S.ki?"at":"") + '">' + k + "</span>"; }).join("");
+  var a = accOf(cell);
+  $("#acc-now").innerHTML = (a ? pc(a.v) : "—") + " %"
+    + "<small>" + esc(SHORT[S.method]) + " at K = " + K + " · " + (a ? esc(a.label) : "no accuracy stored for this cell") + "</small>";
+  var extra = "";
+  if(cell.test !== null && cell.test !== undefined)
+    extra += "official test at its own selection <b>" + pc(cell.test) + " %</b><br>";
+  if(cell.cv_mean !== null && cell.cv_mean !== undefined)
+    extra += '<span class="tag cv">5-fold</span> <b>' + pc(cell.cv_mean) + "</b> %, min–max "
+      + pc(cell.cv_min) + "–" + pc(cell.cv_max) + "<br>";
+  extra += "δ = " + arm.selected_delta + " · " + esc(CAPTION[S.method] || "");
+  $("#acc-extra").innerHTML = extra;
+  drawCurve(b, arm, K); drawMu(b, arm, K); drawScatter(b, arm); drawGram(b, arm); drawSpecimen(b, arm, K);
+  if(b.direction_images){ $("#dirpane").classList.remove("hidden"); drawDirections(b); }
+  else $("#dirpane").classList.add("hidden");
+}
+
+function drawCurve(b, arm, K){
+  var W=560,H=196,m={t:12,r:16,b:30,l:42};
+  function series(name){
+    return b.arms[name].at_K.map(function(r){ var q = accOf(r); return q ? {K: r.K, y: q.v, test: r.test} : null; })
+      .filter(Boolean);
+  }
+  var mine = series(S.method);
+  var ys = mine.map(function(r){ return r.y; });
+  var others = Object.keys(b.arms).filter(function(x){ return x !== S.method; }).map(function(x){
+    return {name: x, rows: series(x)}; });
+  others.forEach(function(o){ o.rows.forEach(function(r){ ys.push(r.y); }); });
+  if(!ys.length){ $("#curve").innerHTML = '<div class="cap">no accuracy stored for this arm</div>';
+    $("#curve-cap").innerHTML = ""; return; }
+  var splitLabel = (accOf(arm.at_K[0]) || {label: ""}).label;
+  var lo=Math.min.apply(null,ys), hi=Math.max.apply(null,ys), pad=(hi-lo)*0.14 || 0.02;
+  var kmin=b.k_grid[0], kmax=b.k_grid[b.k_grid.length-1];
+  function X(k){ return m.l + (Math.log(k)-Math.log(kmin))/(Math.log(kmax)-Math.log(kmin))*(W-m.l-m.r); }
+  function Y(v){ return H-m.b-(v-(lo-pad))/((hi+pad)-(lo-pad))*(H-m.t-m.b); }
+  var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="hold-out accuracy against K">';
+  for(var i=0;i<=4;i++){ var v=(lo-pad)+i*((hi+pad)-(lo-pad))/4;
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#e7ebf1"/>'
+      +   '<text x="'+(m.l-6)+'" y="'+(Y(v)+3.5)+'" font-size="9" fill="#78828e" text-anchor="end">'+(100*v).toFixed(1)+"</text>"; }
+  others.forEach(function(o){
+    s += '<path d="' + o.rows.map(function(r,j){ return (j?"L":"M")+X(r.K).toFixed(1)+" "+Y(r.y).toFixed(1); }).join(" ")
+      + '" fill="none" stroke="' + HEX[o.name] + '" stroke-width="1.4" stroke-dasharray="5 3" opacity=".85"/>';
+  });
+  s += '<path d="' + mine.map(function(r,j){ return (j?"L":"M")+X(r.K).toFixed(1)+" "+Y(r.y).toFixed(1); }).join(" ")
+    + '" fill="none" stroke="' + HEX[S.method] + '" stroke-width="2.8"/>';
+  mine.forEach(function(r){
+    s += '<circle cx="'+X(r.K)+'" cy="'+Y(r.y)+'" r="2.8" fill="' + HEX[S.method] + '"/>';
+    if(r.test !== null && r.test !== undefined)
+      s += '<rect x="'+(X(r.K)-4)+'" y="'+(Y(r.test)-4)+'" width="8" height="8" transform="rotate(45 '+X(r.K)+' '+Y(r.test)+')" fill="#fff" stroke="' + HEX[S.method] + '" stroke-width="2"/>';
+  });
+  s += '<line x1="'+X(b.cap)+'" x2="'+X(b.cap)+'" y1="'+m.t+'" y2="'+(H-m.b)+'" stroke="#101418" stroke-dasharray="2 3"/>'
+    +  '<text x="'+(X(b.cap)+4)+'" y="'+(m.t+9)+'" font-size="9" fill="#101418">K = C−1 = '+b.cap+"</text>";
+  s += '<line x1="'+X(K)+'" x2="'+X(K)+'" y1="'+m.t+'" y2="'+(H-m.b)+'" stroke="' + HEX[S.method] + '" stroke-width="1" opacity=".3"/>';
+  b.k_grid.forEach(function(k){ s += '<text x="'+X(k)+'" y="'+(H-8)+'" font-size="9" fill="#78828e" text-anchor="middle">'+k+"</text>"; });
+  $("#curve").innerHTML = s + "</svg>";
+  var hasTest = arm.at_K.some(function(r){ return r.test !== null && r.test !== undefined; });
+  $("#curve-cap").innerHTML = '<span class="tag hold">' + esc(splitLabel) + '</span> solid line = the arm you selected, dashed = the others · '
+    + (hasTest ? '<span class="tag test">official test</span> ◇ only where the protocol spent it · ' : "")
+    + "the ridge and shrinkage arms have <b>no basis past K = " + b.cap + "</b>, so their curves stop there by construction. That is the cap this whole study is about.";
+}
+
+function drawMu(b, arm, K){
+  var mu = arm.fisher_mu || [];
+  if(!mu.length){
+    $("#mubars").innerHTML = '<div class="cap">This arm is not built from a generalised eigenproblem, so it has no per-direction Fisher ratio.</div>';
+    $("#mu-cap").innerHTML = ""; return;
+  }
+  var n = Math.min(mu.length, Math.max(K, 20), 60);
+  var hi = Math.max.apply(null, mu.slice(0,n).concat([1e-9]));
+  var rowH = 15, H = rowH*n + 16;
+  var s = '<svg viewBox="0 0 300 ' + H + '" role="img" aria-label="Fisher ratio per direction">';
+  for(var i=0;i<n;i++){
+    var w = Math.max(1.2, 208*mu[i]/hi), y = 8+i*rowH;
+    s += '<rect x="40" y="'+y+'" width="'+w.toFixed(1)+'" height="'+(rowH-4)+'" rx="2" fill="' + HEX[S.method]
+      + '" opacity="'+(i<K?0.95:0.26)+'"/>'
+      + '<text x="36" y="'+(y+rowH-6)+'" font-size="9" fill="#78828e" text-anchor="end">u'+(i+1)+"</text>"
+      + '<text x="'+(44+w).toFixed(1)+'" y="'+(y+rowH-6)+'" font-size="9" fill="#39424e">'+muText(mu[i])+"</text>";
+  }
+  $("#mubars").innerHTML = s + "</svg>";
+  var mono = mu.every(function(v,i){ return i===0 || v <= mu[i-1] + 1e-9; });
+  var beyond = Math.max(0, mu.length - b.cap);
+  $("#mu-cap").innerHTML = "µ for the first " + n + " directions; dimmed past K = " + K + ". <b>Mechanism check:</b> "
+    + "the sequence is " + (mono ? "monotone non-increasing" : "not monotone") + ", and "
+    + (beyond ? "<b>" + beyond + " direction" + (beyond === 1 ? "" : "s") + " exist" + (beyond === 1 ? "s" : "")
+              + " beyond the rank cap</b> — that is what the method buys (" + mu.length + " solved in total, cap " + b.cap + ")"
+              : "this arm has no directions beyond the cap")
+    + "<br>µ is a Rayleigh quotient on unnormalised " + (b.regime === "raw pixels" ? "0–255 pixels, so its scale is not comparable to the feature regime" : "features") + "; only the ordering matters here.";
+}
+
+function drawScatter(b, arm){
+  var pts = arm.xy_first_two || [];
+  if(!pts.length){ $("#scatter").innerHTML = ""; return; }
+  var W=300,H=236,m=20;
+  var xs = pts.map(function(p){ return p[0]; }), ys = pts.map(function(p){ return p[1]; });
+  var x0=Math.min.apply(null,xs), x1=Math.max.apply(null,xs), y0=Math.min.apply(null,ys), y1=Math.max.apply(null,ys);
+  function X(v){ return m+(v-x0)/((x1-x0)||1)*(W-2*m); }
+  function Y(v){ return H-m-(v-y0)/((y1-y0)||1)*(H-2*m); }
+  var cls = []; b.specimens.forEach(function(s){ if(cls.indexOf(s.y)<0) cls.push(s.y); });
+  function col(c){ return "hsl(" + Math.round(360*cls.indexOf(c)/cls.length) + ",66%,47%)"; }
+  var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="specimens projected onto the first two directions">';
+  s += '<rect x="'+(m-6)+'" y="'+(m-6)+'" width="'+(W-2*m+12)+'" height="'+(H-2*m+12)+'" fill="none" stroke="#e7ebf1"/>';
+  pts.forEach(function(p,i){
+    var on = i===S.spec;
+    s += '<circle cx="'+X(p[0]).toFixed(1)+'" cy="'+Y(p[1]).toFixed(1)+'" r="'+(on?5:2.6)+'" fill="'+col(b.specimens[i].y)
+      + '" opacity="'+(on?1:0.6)+'"' + (on?' stroke="#101418" stroke-width="1.6"':"") + "/>";
+  });
+  s += '<text x="'+(W/2)+'" y="'+(H-4)+'" font-size="9" fill="#78828e" text-anchor="middle">direction 1</text>'
+    +  '<text x="9" y="'+(H/2)+'" font-size="9" fill="#78828e" transform="rotate(-90 9 '+(H/2)+')" text-anchor="middle">direction 2</text>';
+  $("#scatter").innerHTML = s + "</svg>";
+  $("#scatter-cap").innerHTML = pts.length + " test specimens, coloured by true class. <b>Moving K does not change this plot</b>: a deflated basis is prefix-ordered, so directions 1 and 2 are the same vectors at every K. What K changes is the rank readout and the curve.";
+}
+
+function gramSvg(mat){
+  if(!mat || !mat.length) return '<div class="cap">not stored</div>';
+  var n = mat.length, size = Math.min(12, 190/n), W = n*size;
+  var s = '<svg viewBox="0 0 ' + W + " " + W + '" role="img" aria-label="Gram matrix corner">';
+  for(var i=0;i<n;i++) for(var j=0;j<n;j++){
+    var v = mat[i][j], a = Math.min(1, Math.abs(v));
+    s += '<rect x="'+(j*size).toFixed(1)+'" y="'+(i*size).toFixed(1)+'" width="'+(size-0.7).toFixed(1)+'" height="'+(size-0.7).toFixed(1)
+      + '" fill="' + (i===j ? "rgba(29,78,216,"+a+")" : "rgba(190,18,60,"+a+")") + '"/>';
+  }
+  return s + "</svg>";
+}
+
+function drawGram(b, arm){
+  var K = currentK();
+  function offAt(name){ var a = b.arms[name]; if(!a) return null;
+    var c = a.at_K.filter(function(r){ return r.K === K; })[0]; return c ? c.offdiag : null; }
+  $("#gram-go").innerHTML = gramSvg(arm.gram_at_selected_K);
+  $("#gram-go-cap").innerHTML = '<span class="dot" style="background:' + HEX[S.method] + '"></span>'
+    + esc(SHORT[S.method]) + " — largest off-diagonal |uᵢ′uⱼ| at K = " + K + ": <b>" + sig(offAt(S.method)) + "</b>";
+  var other = S.method === "classic-ridge-LDA" ? "GO-LDA" : "classic-ridge-LDA";
+  var ob = b.arms[other];
+  $("#gram-cl").innerHTML = ob ? gramSvg(ob.gram_at_selected_K) : "";
+  $("#gram-cl-cap").innerHTML = ob ? '<span class="dot" style="background:' + HEX[other] + '"></span>'
+    + esc(SHORT[other]) + " — <b>" + sig(offAt(other)) + "</b>" : "";
+  $("#gram-note").innerHTML = "Blue is the diagonal (unit-length directions), red is Euclidean non-orthogonality. "
+    + "Classic LDA's directions are <em>S<sub>W</sub></em>-conjugate rather than orthogonal — that is H3, visible instead of asserted. "
+    + "GO-LDA enforces orthogonality at every step, which is exactly what makes its pencil differ.";
+}
+
+function drawDirections(b){
+  var go = b.direction_images["GO-LDA"] || [], cl = b.direction_images["classic-ridge-LDA"] || [];
+  function fill(arr, sel, lab){
+    $(sel).innerHTML = arr.map(function(src,i){
+      return '<div class="dir" data-k="' + i + '" aria-pressed="' + (i===S.dir) + '"><img src="' + src
+        + '" alt="direction ' + (i+1) + '"><div>u' + (i+1) + "</div></div>"; }).join("");
+    $(lab).innerHTML = "<b>" + arr.length + "</b> directions, |values| scaled to black–white";
+  }
+  fill(go, "#dirs-go", "#dirlab-go"); fill(cl, "#dirs-cl", "#dirlab-cl");
+  ["#dirs-go","#dirs-cl"].forEach(function(sel){
+    $(sel).onclick = function(e){ var t = e.target.closest("[data-k]"); if(!t) return;
+      S.dir = +t.dataset.k;
+      var k = b.k_grid.indexOf(S.dir + 1);
+      if(k >= 0) S.ki = k;
+      redraw(); };
+  });
+  var defl = S.dir === 0 ? "before anything is deflated away"
+    : "after the first " + S.dir + (S.dir === 1 ? " is" : " are") + " deflated away";
+  var sp = b.span_at_cap_deg;
+  var spanTxt = sp === undefined ? "compared in the tables"
+    : sp < 1e-3 ? "the two arms span the <b>same</b> subspace — they agree to " + sp.toExponential(1) + "°, which is the parity result"
+               : "the two subspaces are <b>" + sp.toFixed(1) + "° apart</b> — near-orthogonal, not equal";
+  $("#dir-cap").innerHTML = "Direction " + (S.dir+1) + " of each arm. Classic LDA's is the " + (S.dir+1) + ordinal(S.dir+1)
+    + " eigenvector of the pencil; GO-LDA's is the best direction left " + defl + ". At the cap "
+    + spanTxt + ". Click a direction to move the K slider there.";
+}
+
+function drawSpecimen(b, arm, K){
+  var sp = b.specimens || [];
+  if(!sp.length) return;
+  if(S.spec >= sp.length) S.spec = 0;
+  var s = sp[S.spec];
+  $("#spec-big").innerHTML = s.img ? '<img src="' + s.img + '" alt="test specimen" style="width:118px;border-radius:6px;image-rendering:pixelated">'
+                                   : '<div class="note">no thumbnail in this archive</div>';
+  var name = b.class_names ? b.class_names[s.y] : null;
+  $("#spec-label").innerHTML = "true class <b>" + s.y + "</b>" + (name ? " · " + esc(name) : "")
+    + " · test row " + s.i + (b.fold !== undefined ? " · fold " + b.fold : "");
+  var byK = arm.ncm_rank_by_K || [];
+  var here = byK.filter(function(r){ return r.K === K; })[0] || byK[byK.length-1];
+  var rank = here ? here.rank[S.spec] : null;
+  $("#spec-rank").innerHTML = (rank === undefined || rank === null ? "—" : rank) + " / " + b.C
+    + "<small>rank of the true class among the class means, " + esc(SHORT[S.method]) + " at K = " + K + "</small>";
+  $("#spec-cap").innerHTML = "Rank read-out uses <b>" + esc(b.heads.rank) + "</b>, not the study's logistic head, so it can move one direction at a time. Every accuracy figure on this page is the study's own head.";
+  var strip = $("#strip");
+  if(strip.dataset.block !== S.block){
+    strip.dataset.block = S.block;
+    strip.innerHTML = sp.map(function(x,i){
+      return '<button class="thumb" data-i="' + i + '" aria-pressed="' + (i===S.spec) + '" title="class ' + x.y + '">'
+        + (x.img ? '<img src="' + x.img + '" alt="specimen ' + i + '">' : "") + '<span class="y">' + x.y + "</span></button>"; }).join("");
+    strip.onclick = function(e){ var t = e.target.closest("[data-i]"); if(!t) return;
+      S.spec = +t.dataset.i;
+      Array.prototype.forEach.call(strip.children, function(c,i){ c.setAttribute("aria-pressed", String(i===S.spec)); });
+      drawSpecimen(block(), block().arms[S.method], currentK()); };
+  } else {
+    Array.prototype.forEach.call(strip.children, function(c,i){ c.setAttribute("aria-pressed", String(i===S.spec)); });
+  }
+  drawRankPlot(arm, b);
+}
+
+function drawRankPlot(arm, b){
+  var byK = arm.ncm_rank_by_K || [];
+  if(!byK.length){ $("#spec-rankplot").innerHTML = ""; return; }
+  var W=300,H=118,m={t:12,r:12,b:22,l:32};
+  var ranks = byK.map(function(r){ return r.rank[S.spec]; });
+  var hi = Math.max.apply(null, ranks.concat([b.C]));
+  function X(i){ return m.l + i*(W-m.l-m.r)/Math.max(1,byK.length-1); }
+  function Y(v){ return m.t + (Math.log(v)-Math.log(1))/(Math.log(hi)-Math.log(1))*(H-m.t-m.b); }
+  var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="rank of the true class as directions are added">';
+  [1,2,5,10,25,50,100].forEach(function(v){ if(v>hi) return;
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#e7ebf1"/>'
+      +   '<text x="'+(m.l-4)+'" y="'+(Y(v)+3.5)+'" font-size="8.5" fill="#78828e" text-anchor="end">'+v+"</text>"; });
+  s += '<path d="' + ranks.map(function(v,i){ return (i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1); }).join(" ")
+    + '" fill="none" stroke="' + HEX[S.method] + '" stroke-width="2.2"/>';
+  ranks.forEach(function(v,i){ s += '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="'+(i===S.ki?4.2:2.4)+'" fill="' + HEX[S.method] + '"/>'; });
+  byK.forEach(function(r,i){ s += '<text x="'+X(i)+'" y="'+(H-6)+'" font-size="8.5" fill="#78828e" text-anchor="middle">'+r.K+"</text>"; });
+  $("#spec-rankplot").innerHTML = s + "</svg>"
+    + '<div class="kv">rank 1 = the nearest class mean is the true one · ' + esc(SHORT[S.method]) + " · K along the bottom</div>";
+}
+
+function drawNoise(){
+  var o = DEMO.static && DEMO.static.ood;
+  if(!o){ $("#v-noise .grid").innerHTML = '<div class="pane"><div class="note">The out-of-distribution artefact was not in the export.</div></div>'; return; }
+  var cif = DEMO.blocks.cifar100__resnet18;
+  if(cif && (cif.specimens||[]).length){
+    var use = S.noisy ? (cif.noisy_specimens||[]) : cif.specimens;
+    if(!use.length) use = cif.specimens;
+    $("#noisy-strip").innerHTML = use.slice(0,24).map(function(s){
+      return '<div class="thumb"><img src="' + s.img + '" alt="' + (S.noisy?"corrupted":"clean") + ' specimen"><span class="y">' + s.y + "</span></div>"; }).join("");
+  }
+  var s = "";
+  Object.keys(o.backbones).forEach(function(b){
+    var blk = o.backbones[b];
+    var hi = Math.max.apply(null, blk.arms.map(function(a){ return Math.max(a.accuracy_clean_test, a.accuracy_corrupted_test); }));
+    s += "<h3 style='font-size:.8rem;margin:.7rem 0 .3rem'>" + esc(pretty(b)) + "</h3>";
+    blk.arms.forEach(function(a){
+      var w1 = 100*a.accuracy_clean_test/hi, w2 = 100*a.accuracy_corrupted_test/hi;
+      s += '<div style="margin:.45rem 0"><div class="kv"><span class="dot" style="background:' + HEX[a.method] + '"></span><b>'
+        + esc(SHORT[a.method]) + "</b> · δ " + a.delta + ", K " + a.K + "</div>"
+        + '<div style="display:flex;gap:.3rem;align-items:center;font-size:.72rem"><div style="flex:1;background:#eef2f6;height:.72rem;border-radius:3px"><div style="width:' + w1 + '%;background:' + HEX[a.method] + ';height:.72rem;border-radius:3px"></div></div><b style="width:3.4rem;text-align:right">' + pc(a.accuracy_clean_test) + "</b></div>"
+        + '<div style="display:flex;gap:.3rem;align-items:center;font-size:.72rem"><div style="flex:1;background:#eef2f6;height:.72rem;border-radius:3px"><div style="width:' + w2 + '%;background:' + HEX[a.method] + ';opacity:.4;height:.72rem;border-radius:3px"></div></div><b style="width:3.4rem;text-align:right">' + pc(a.accuracy_corrupted_test) + "</b> <span class='kv'>" + (100*a.drop).toFixed(1) + " pt</span></div></div>";
+    });
+    var np = blk.no_projection || {};
+    var gb = blk.go_minus_best_baseline || {};
+    var pt = function(v){ return v === undefined || v === null ? "—" : (100*v).toFixed(2); };
+    s += '<div class="kv" style="margin-top:.4rem">no projection ' + pc(np.accuracy_clean_test) + " → " + pc(np.accuracy_corrupted_test)
+      + " % · GO-LDA minus best baseline <b>" + pt(gb.clean) + "</b> → <b>" + pt(gb.corrupted)
+      + "</b> points (" + esc(SHORT[gb.best_baseline_clean] || "?") + " clean, "
+      + esc(SHORT[gb.best_baseline_corrupted] || "?") + " corrupted)</div>";
+  });
+  $("#ood-bars").innerHTML = '<div class="kv" style="margin-bottom:.4rem">solid = clean · faded = corrupted</div>' + s;
+  $("#ood-cap").innerHTML = "Corruption: " + esc(o.corruption.kind) + ", σ = " + o.corruption.sigma_on_unit_pixels
+    + " — ImageNet-C gaussian severity 1, fixed before any arm was scored and not swept. Projections, scalers and heads come from <b>clean</b> train; nothing is refitted on the shift. Mean |feature shift| "
+    + Object.keys(o.backbones).map(function(b){ return esc(pretty(b)) + " " + o.backbones[b].mean_abs_feature_shift; }).join(" · ");
+  var goLast = Object.keys(o.backbones).every(function(b){ return o.backbones[b].rank_corrupted.slice(-1)[0] === "GO-LDA"; });
+  $("#ood-verdict").innerHTML = '<div class="note ' + (goLast?"good":"") + '">'
+    + (goLast ? "<b>GO-LDA is last of the four on both backbones after the shift.</b> That is what this control was for: the finding is not an artefact of the two clean pairs that were chosen."
+              : "GO-LDA is not last on both backbones after the shift; see the bars.") + "</div>"
+    + '<ul class="tight"><li><b>Did not</b> survive: the order among the three baselines reshuffles on both backbones, so the four-way ranking is not preserved.</li>'
+    + "<li>Cannot be claimed: the deficit narrows on ResNet-18 (−2.30 → −0.51 pt) and widens on DINOv2 (−1.46 → −2.59 pt), so one severity supports no robustness ranking.</li>"
+    + "<li>Most of the fall is the corruption itself: with no projection at all, 0.6282 → 0.1239 and 0.8074 → 0.3973.</li>"
+    + "<li>Cost: <b>15.3 min</b> measured against ~3 min estimated — M2 stored accuracies, not bases, so both pairs' pencils had to be re-solved.</li></ul>";
+}
+
+function drawLadder(){
+  var l = DEMO.static && DEMO.static.ladder;
+  if(!l){ $("#v-ladder .grid").innerHTML = '<div class="pane"><div class="note">The ladder artefact was not in the export.</div></div>'; return; }
+  var r = l.rungs, W=620,H=254,m={t:14,r:16,b:44,l:44};
+  var ms = r.map(function(x){ return x.M; }), capM = r.map(function(x){ return 100*x.cap_over_M; });
+  function X(v){ return m.l + (Math.log(v)-Math.log(ms[0]))/(Math.log(ms[ms.length-1])-Math.log(ms[0]))*(W-m.l-m.r); }
+  var vals = r.reduce(function(a, x){ return a.concat([x.go, x.classic, x.shrunk, x.pca, x.no_proj]); }, []);
+  var lo = Math.min.apply(null, vals) - 0.005, hi = Math.min(1.0, Math.max.apply(null, vals) + 0.005);
+  function Y(v){ return H-m.b-(v-lo)/(hi-lo)*(H-m.t-m.b); }
+  var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="accuracy against pixel dimension">';
+  for(var i=0;i<=4;i++){ var v=lo+i*(hi-lo)/4;
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#e7ebf1"/>'
+      +   '<text x="'+(m.l-6)+'" y="'+(Y(v)+3.5)+'" font-size="9" fill="#78828e" text-anchor="end">'+(100*v).toFixed(0)+"</text>"; }
+  [["GO-LDA","go",2.8,false],["classic-shrinkage-LDA","shrunk",1.5,true],
+   ["classic-ridge-LDA","classic",1.5,true],["PCA-then-LDA","pca",1.5,true],
+   ["no-projection","no_proj",1.2,true]].forEach(function(cfg){
+    var name=cfg[0], k=cfg[1];
+    s += '<path d="' + r.map(function(x,i){ return (i?"L":"M")+X(x.M).toFixed(1)+" "+Y(x[k]).toFixed(1); }).join(" ")
+      + '" fill="none" stroke="' + (HEX[name]||"#64748b") + '" stroke-width="' + cfg[2] + '"'
+      + (cfg[3] ? ' stroke-dasharray="5 3"' : "") + "/>";
+    r.forEach(function(x){ s += '<circle cx="'+X(x.M)+'" cy="'+Y(x[k])+'" r="3" fill="' + (HEX[name]||"#64748b") + '"/>'; });
+  });
+  ms.forEach(function(v,i){ s += '<text x="'+X(v)+'" y="'+(H-24)+'" font-size="9" fill="#39424e" text-anchor="middle">M = '+v+"</text>"
+    + '<text x="'+X(v)+'" y="'+(H-12)+'" font-size="9" fill="#78828e" text-anchor="middle">cap/M '+capM[i].toFixed(1)+"%</text>"; });
+  $("#ladder-plot").innerHTML = s + "</svg>"
+    + '<div class="kv">native ORL at M = 10,304 (cap/M 0.38 %) is where the paper measured: GO-LDA '
+    + pc(l.full_dimension_reference.go_at_cap) + " %, classic LDA " + pc(l.full_dimension_reference.classic_at_cap)
+    + " %, difference " + pc(l.full_dimension_reference.paired_difference) + " points, span ≈ 2e-6°.</div>";
+  $("#ladder-cap").innerHTML = "C = 40 and nine images per class held fixed at every rung; pixels box-averaged by one label-blind map applied identically to every method and fold. Artefact: <b>" + esc(l.source || "") + "</b>, " + (l.wall_clock_s || 0) + " s.";
+  var band = (100 * (Math.max.apply(null, vals) - Math.min.apply(null, vals))).toFixed(1);
+  $("#ladder-verdict").innerHTML = '<div class="note"><b>No reversal at the cap once the pixels are laid out correctly.</b> GO-LDA minus classic LDA at the cap is '
+    + r.map(function(x){ return (100*x.paired_diff).toFixed(1); }).join(", ")
+    + " points as cap/M falls from " + capM[0].toFixed(1) + " % to " + capM[3].toFixed(1)
+    + " %. The deficit seen on the frozen features does not appear in raw pixels, so this ladder neither breaks nor clears the cap/M against M/N confound — with no deficit at any rung there is nothing for the ratio to explain.</div>"
+    + '<ul class="tight"><li>All five arms sit inside a ' + band + '-point band at every rung and no-projection never drops below '
+    + pc(Math.min.apply(null, r.map(function(x){ return x.no_proj; })))
+    + " %, so the rungs compress the task rather than separate the methods.</li>"
+    + "<li>Parity at M = 512 survives the fix: ten folds tied and the two subspaces agree to 2e-6° (certification defect 4e-16), against a control pair at 62°.</li>"
+    + "<li><b>Superseded:</b> the first run of this ladder box-averaged a <b>transposed</b> pixel grid — <code>IMG_H</code> and <code>IMG_W</code> were swapped in <code>src/orl.py</code> — and reported a −11.8, −8.3, −0.5, 0.0 point reversal that tracked cap/M. That reversal was an artefact of the reshape and is withdrawn; the numbers here come from the re-run.</li>"
+    + "<li>What it still cannot separate: cap/M against M/N, which are both functions of M here. Splitting them needs N varied at fixed M.</li></ul>";
+  $("#ladder-table").innerHTML = "<table><thead><tr><th>arm</th>"
+    + r.map(function(x){ return '<th class="n">M=' + x.M + "</th>"; }).join("") + "</tr></thead><tbody>"
+    + [["GO-LDA","go"],["classic-shrinkage-LDA","shrunk"],["classic-ridge-LDA","classic"],["PCA-then-LDA","pca"],["no-projection","no_proj"]]
+      .map(function(cfg){ return "<tr><td><span class='dot' style='background:" + (HEX[cfg[0]]||"#64748b") + "'></span>"
+        + esc(SHORT[cfg[0]]||cfg[0]) + "</td>" + r.map(function(x){ return "<td class='n'>" + pc(x[cfg[1]],1) + "</td>"; }).join("") + "</tr>"; }).join("")
+    + "<tr><td><b>paired GO − classic</b></td>" + r.map(function(x){ return "<td class='n'><b>" + (100*x.paired_diff).toFixed(2) + "</b></td>"; }).join("") + "</tr>"
+    + "<tr><td>span between the two subspaces</td>" + r.map(function(x){ return "<td class='n'>" + (x.span_deg>1 ? x.span_deg.toFixed(1)+"°" : x.span_deg.toExponential(0)+"°") + "</td>"; }).join("") + "</tr>"
+    + "</tbody></table><div class='cap'>Ten-fold mean accuracy at K = C − 1 = 39, 1-NN head, δ = 5e-3 on both pencil arms.</div>";
+}
+
+function drawNumbers(){
+  if(!REP){ $("#tbl-selection").innerHTML = '<div class="note">data.js is missing — run src/export_results.py.</div>'; return; }
+  var fm = REP.results.feature_matrix, keys = Object.keys(fm), html = "";
+  keys.forEach(function(k){
+    var p = fm[k];
+    html += "<tr><td colspan='7'><b>" + esc(blockName(k)) + "</b> · " + p.feature_dim + "-d · C = " + p.C
+      + " · cap " + p.cap_C_minus_1 + "</td></tr>";
+    ARMS_ORDER.forEach(function(m){
+      var x = null; p.per_method.forEach(function(y){ if(y.method===m) x=y; });
+      if(!x) return;
+      html += "<tr><td></td><td><span class='dot' style='background:" + HEX[m] + "'></span>" + esc(SHORT[m]) + "</td>"
+        + "<td class='n'>" + x.selected_delta + "</td><td class='n'>" + x.selected_K + "</td>"
+        + "<td class='n'>" + (x.realized_dim===x.selected_K ? "—" : x.realized_dim) + "</td>"
+        + "<td class='n'>" + pc(x.holdout_at_selection) + "</td><td class='n'>" + pc(x.test_at_selection) + "</td></tr>";
+    });
+  });
+  $("#tbl-selection").innerHTML = "<table><thead><tr><th>pair</th><th>method</th><th class='n'>δ</th><th class='n'>K</th>"
+    + "<th class='n'>realized</th><th class='n'>hold-out</th><th class='n'>test</th></tr></thead><tbody>" + html + "</tbody></table>"
+    + "<div class='cap'>“realized” is shown only where it differs from K: PCA-then-LDA asks for a wide PCA and still has only C − 1 discriminant directions. "
+    + "The <span class='tag test'>test</span> column is the official split, spent once per method after refitting on all of train.</div>";
+
+  var cvh = "";
+  keys.forEach(function(k){
+    var cv = fm[k].cv || {};
+    if(cv.status !== "complete") return;
+    cvh += "<h3 style='font-size:.78rem;margin:.7rem 0 .2rem'>" + esc(blockName(k)) + "</h3><table><thead><tr><th>method</th>"
+      + "<th class='n'>mean</th><th class='n'>SD</th><th class='n'>min–max</th></tr></thead><tbody>"
+      + cv.rows.map(function(r){ return "<tr><td><span class='dot' style='background:" + HEX[r.method] + "'></span>"
+          + esc(SHORT[r.method]) + "</td><td class='n'>" + pc(r.mean) + "</td><td class='n'>" + (100*r.sd).toFixed(2)
+          + "</td><td class='n'>" + pc(r.min) + "–" + pc(r.max) + "</td></tr>"; }).join("") + "</tbody></table>";
+  });
+  $("#tbl-cv").innerHTML = cvh + "<div class='cap'>Only mean / SD / min / max are stored, so no per-fold sign test is available anywhere in this study; the strongest claim is whether fold ranges separate.</div>";
+
+  var g = REP.results.parity_gate || {}, ex = REP.meta.export_gate || {};
+  $("#tbl-gates").innerHTML = "<div class='kv' style='line-height:1.9'>parity suite: <b>" + g.gated + "</b> gated + <b>"
+    + g.diagnostic + "</b> diagnostic of " + (g.checks||[]).length + " measured · all gated passing <b>"
+    + (g.gated_all_ok ? "yes" : "NO") + "</b><br>export gate: <b>" + (ex.passed||0) + "/" + (ex.total||0)
+    + "</b> publishability checks — it refuses to write <code>data.js</code> on any failure<br>seed <b>"
+    + REP.meta.seed + "</b> · δ restricted to the certified range (≥ 1e-4)</div>"
+    + "<details><summary>parity checks, one line each</summary><ul class='tight'>"
+    + (g.checks||[]).map(function(c){ return "<li>" + (c.ok ? "✅" : "❌") + (c.gated ? "" : " <i>diagnostic</i> ") + esc(c.check) + "</li>"; }).join("")
+    + "</ul></details>";
+
+  var pr = (REP.results.probes) || {};
+  var hc = (pr.head_control && pr.head_control.rows) || [];
+  var ctl = hc.length ? "<table><thead><tr><th>arm at the cap</th><th class='n'>study head</th>"
+      + "<th class='n'>paper 1-NN</th><th class='n'>1-NN scaled</th></tr></thead><tbody>"
+    + hc.map(function(r){ return "<tr><td>" + esc(r.arm) + "</td><td class='n'>" + pc(r.logistic,1)
+        + "</td><td class='n'>" + pc(r.knn1_raw,1) + "</td><td class='n'>" + pc(r.knn1_scaled,1) + "</td></tr>"; }).join("")
+    + "</tbody></table>" : "";
+  var diff = (pr.head_control && pr.head_control.differences) || {};
+  var dl = Object.keys(diff).map(function(k){ return "<li>" + esc(k) + ": logistic " + (100*diff[k].logistic).toFixed(2)
+      + " pt, 1-NN " + (100*diff[k].knn1_raw).toFixed(2) + " pt, 1-NN scaled " + (100*diff[k].knn1_scaled).toFixed(2) + " pt</li>"; });
+  $("#tbl-controls").innerHTML = ctl
+    + "<div class='cap'>Same subspaces, three classifiers (CIFAR-100 × ResNet-18, K = C − 1). The paper's own 1-NN is "
+    + "<b>harder</b> on GO-LDA than our logistic head, so the gap is not a head artefact.</div>"
+    + "<ul class='tight'>" + dl.join("")
+    + "<li>solver: <code>eig</code> against symmetric-definite <code>eigh</code> — eigenvalues to 1.2e-14, spans to 1.9e-6°</li>"
+    + "<li>route: dense against span-reduced — same accuracy 0.6045, span 2.1e-6°</li>"
+    + "<li>coordinates: QR-orthonormalise both bases — gap moves −6.54 → −6.49 points</li>"
+    + "<li>regularisation: δ pinned to GO-LDA's own value for every arm — gap unchanged at 6.56 points</li>"
+    + "<li>sample/fold structure: 5-fold CV on all four pairs — GO-LDA stays below the best baseline on every pair</li>"
+    + "<li>representation: the ORL dimension ladder — raw pixels at the same cap/M show <b>no</b> such gap (−0.5, 0.0, +3.0, 0.0 points), so the deficit is established only in the feature regime</li>"
+    + "<li>shift: the noise control — GO-LDA is last on both backbones after corruption</li></ul>"
+    + "<div class='cap'>Seven controls in all: five candidate explanations for the gap, the sample/fold control, and the two released afterwards.</div>";
+
+  $("#tbl-sources").innerHTML = "<table><thead><tr><th>artefact</th><th class='n'>rows</th><th>sha-256 (12)</th><th>what it feeds</th></tr></thead><tbody>"
+    + (REP.sources||[]).map(function(s){ return "<tr><td><code>" + esc(s.path) + "</code></td><td class='n'>"
+        + (s.rows!==undefined?s.rows:"—") + "</td><td><code>" + esc(s.sha256_12||"") + "</code></td><td class='kv'>"
+        + esc(s.note||"") + "</td></tr>"; }).join("") + "</tbody></table>"
+    + "<div class='kv' style='margin-top:.5rem'>Interactive data: <code>webapp/demo.js</code>, refit in "
+    + DEMO.total_seconds + " s by <code>src/export_demo.py</code> (directions, projections and ranks are recomputed from the same solvers the study used, not stored from it). Report tables: <code>webapp/data.js</code> from <code>src/export_results.py</code>. Stage records: "
+    + (REP.meta.stage_docs||[]).map(function(d){ return "<code>" + esc(d) + "</code>"; }).join(" ") + "</div>";
+}
+
+boot();
+</script>
+</body>
+</html>
