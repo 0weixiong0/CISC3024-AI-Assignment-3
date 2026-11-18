@@ -7,16 +7,25 @@ formatting traps and the citation block; the prose is written only after it is a
 ## 1. What the brief requires, and which section answers it
 
 The brief's six numbered items are the report's spine — the outline's stage 5 says the same thing in
-different words, so the brief wins where they differ.
+different words, so the brief wins where they differ. **Seven sections, not six (U018 reconciliation):**
+the shell built in §10 has seven content H1 because A1 and A2 both open with an Introduction, and U017
+put the AI-use and responsibility statement there. Introduction is therefore a section of its own that
+answers no single brief item; the six items map onto sections 2–7.
 
-| § | Report section | Answers brief item | Built from | Draft budget |
-| --- | --- | --- | --- | --- |
-| 1 | How the AI found the algorithm | (1) | `stage_01_search_protocol.md` §1–§11 (20 screened candidates, the weights, the 16-row correction table, the wave-1/wave-2 source ledger), `stage_01_candidate_scoring.md` §5 | ~900 words + 1 table |
-| 2 | The algorithm | (2) | `research_records/sources/golda_arXiv2305.14568_notes.md` (eq. (23), (37)–(41) verbatim), `wp7` §2 | ~700 words + 2 display equations |
-| 3 | How the AI implemented it | (3) | `stage_02_design_and_plan.md` (the nine-step loop, H1–H3 fixed first, the risk table), `stage_03a` §5–§6 (deviations), `stage_04_front_end.md` §1–§3, `webapp/data.js` `commands` | ~1,100 words + 1 code-path table |
-| 4 | Experiment settings and results | (4) | `stage_03a` (raw-pixel scale), `stage_03b` §2–§5 and §8–§8.1 (feature scale, the two released controls), `wp7` §3–§7 | ~1,400 words + 4 tables + 2 figures |
-| 5 | What we learnt | (5) | `wp7` §8's three sentences, plus the two process lessons in §4 below | ~600 words |
-| 6 | Webpage link to the source code | (6) | the live Pages URL and the commits in §3 below | short block, not prose |
+| Report section | Answers | Built from | Draft budget (prose words, see §9) |
+| --- | --- | --- | --- |
+| 1. Introduction and Human-AI Workflow | the outline's stage-5 framing, plus U017's AI-responsibility placement | `stage_00_preflight.md`, `stage_02_design_and_plan.md` §1–§4, `stage_04_front_end.md` §1 | ~350 |
+| 2. AI-Assisted Literature Search and Algorithm Selection | brief (1) | `stage_01_search_protocol.md` §1–§11 (20 screened candidates, the weights, the 16-row correction table, the wave-1/wave-2 source ledger), `stage_01_candidate_scoring.md` §5 | ~900 + 1 table |
+| 3. Algorithm Description and Task Adaptation | brief (2) | `research_records/sources/golda_arXiv2305.14568_notes.md` (eq. (23), (37)–(41) verbatim), `wp7` §2 | ~700 + 2 display equations |
+| 4. AI-Assisted Implementation and Verification | brief (3) | `stage_02_design_and_plan.md` (the nine-step loop, H1–H3 fixed first, the risk table), `stage_03a` §5–§6 (deviations), `stage_04_front_end.md` §1–§3, `webapp/data.js` `commands` | ~1,100 + 1 code-path table |
+| 5. Experimental Settings, Results and Discussion | brief (4) | `stage_03a` (raw-pixel scale), `stage_03b` §2–§5 and §8–§8.1 (feature scale, the two released controls), `wp7` §3–§7 | ~1,400 + 4 tables + 2 figures |
+| 6. Interactive Visualisation and Source-Code Availability | brief (5) framing and (6) | `stage_04_front_end.md` §1–§3, the live URL and the commits in §3 below | ~250 + the link block |
+| 7. Lessons Learned and Conclusion | brief (5) | `wp7` §8's three sentences, plus the two process lessons in §4 below | ~600 |
+| References | APA 7 | the entries in `stage_01_search_protocol.md` and the sources cited above | 14–16 entries |
+
+Total ≈ **5,300 prose words** including the Introduction; the 4,700 ceiling U017 accepted is measured on
+sections 2–7, so the Introduction is the first thing to trim if the whole runs long — after that §2 and
+§4, and never §5 or §7.
 
 ## 2. Formatting requirements, with the traps already known
 
@@ -121,7 +130,7 @@ Measured from the two delivered documents, not from memory:
 | --- | --- | --- | --- |
 | File at project root | `CISC3024_AI_Assignment_1_Report.docx` + same-name PDF (25 pp) | `CISC3024_AI_Assignment_2_Report.docx` + PDF (54 pp) | `CISC3024_AI_Assignment_3_Report.docx` + PDF |
 | Structure | cover → TOC (Heading 1) → 7 unnumbered H1 → References | same skeleton | same, mapped in §1 |
-| Body words | ~2,906 | ~8,011 | ~4,700 |
+| Body words | see the unit table below | see the unit table below | ~4,700 prose words over sections 2–7 |
 | AI-use statement | disclaimer sentence inside the workflow section | §1.2 "Human Supervision and AI Responsibilities", opening "The student acted as supervisor and the agent as researcher, implementer and experimenter." | §1, A2's placement with A3's own evidence |
 | Link block | "Source code:" + "Live demo:" lines | "The source page is …" + "The live page is …" | A2's wording |
 | References | APA 7, `EndNote Bibliography` style, plain paragraphs (no fields), 6 entries | same, 14 entries | APA 7 plain paragraphs, `EndNote Bibliography` |
@@ -129,7 +138,26 @@ Measured from the two delivered documents, not from memory:
 | Equations | — | `wordify_equations.py` abandoned: Word's LaTeX-to-math fires on typing, not on programmatic `BuildUp()`, so command names stayed literal | real Unicode symbols in plain text (μ, Σ, ‖·‖), as accepted for A2 |
 | Report in the public repo | no | no | **no** — the docx/pdf are UMMoodle submissions, so they are gitignored |
 
-## 10. Shell status (step 1 of §7, done 2026-11-19)
+**Word counts in four units, all measured on 2026-11-19 rather than quoted from memory** (U018). The
+figures this file first carried — ~2,906 for A1 and ~8,011 for A2 — were labelled "body words" but did not
+match any of the four measurements below, so they are withdrawn.
+
+| Unit | How it is counted | A1 | A2 | A3 shell now |
+| --- | --- | --- | --- | --- |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 353 |
+| PDF full-text words | pymupdf over the exported PDF — includes tables, the contents page and the cover | 3,528 | 9,792 | 384 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 178 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4) | 3,024 | 8,286 | — |
+| table words alone | `python-docx` over table cells | 187 | 1,107 | 0 |
+
+**The 4,700 budget is in prose words**, because that is the unit A2's record reported and it is the closest
+to "text the reader reads" — it excludes tables, the contents page and the cover. The observed ratios are
+Word count ≈ 1.15 × prose words (A1 3,474/3,024 = 1.149; A2 9,593/8,286 = 1.158) and PDF full-text ≈ 1.18 ×
+prose words, so the target corresponds to roughly **5,400 by Word's counter** and about 30–35 pages at A2's
+density. `src/export_pdf.py` prints Word's count on every build, so the check is mechanical rather than a
+guess, and the pass that reports the unit always names it.
+
+## 10. Shell status (step 1 of §7, done 2026-11-19) and step 2 (done the same day)
 
 `src/build_report.py` builds the shell from `Report Template.docx` by cloning the template's own example
 paragraphs as formatting prototypes, so the headings carry the direct Times New Roman 12 pt run properties
@@ -143,18 +171,33 @@ untouched; everything after the TOC control is deleted and re-emitted.
   Two findings remain and both are expected at this step: the cover's own template placeholders
   (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`) and "no URL anywhere" — the URL arrives with §6.
 * `src/audit_layout.py`: passes (no exhibits yet).
-* **Open with the supervisor:** the cover placeholders are his to fill — the ruling says the cover is not
-  to be changed, so the name and student number need either to be entered by him in Word or explicitly
-  released to this builder. A2 left the same item open.
+* **Cover fill (U018 item 1).** `Builder.fill_cover()` reads `report_assets/cover_values.json` —
+  gitignored, so the values the supervisor supplies never enter the repository. It is inert while the file
+  is absent; the audit's placeholder finding is the visible signal that the values are still outstanding.
+
+**Step 2 of §7 — §2 and §4 drafted.** The prose lives in `src/report_content.py` in two functions
+(`search_sections` for §2, `implementation_sections` for §4), keyed by the builder's exact H1 titles; every
+digit in the sentences is interpolated at build time from the run artefacts (`probe_cap_gap.json`,
+`diagnostics.json`, the MVP `timing/manifest/diagnostics`, `probe_ood.json`,
+`orl512_fix/orl512_ladder.json`, `parity_report.json`) and from the stage records (the ledger row count,
+the gate and rubric table rows, the wave counts, the corrections count). §2 drafted at **1,134 prose words**
+(budget ~900 — trim ~230 before submission), §4 at **1,428** (budget ~1,100 — trim ~330). The built
+document: 7 H1 / 23 H2 = 30 headings, 13 PDF pages, Word 2,977, docx paragraph 2,771, non-heading prose
+2,597. Both audits re-ran on that pass: `audit_docx` matched 30 headings to 30 TOC entries with no
+font/jargon/exhibit findings; `audit_layout` passed (no exhibits yet). The remaining findings are the
+expected ones: cover placeholders pending the values (U018 item 1), no URL until §6, no tables until step
+3 of §7.
 
 ## 11. What is still open
 
-The three questions this file used to ask are answered in §8 (framework approved, both addresses in the
-link block, ~4,700 words with §1/§3 compressing first). What remains:
-
-* **The cover placeholders** (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`, the date) — the ruling
-  says the cover is not to be changed, so these are either filled by him in Word or explicitly released to
-  this builder. A2 closed the same item by hand.
-* **Figure assets** — the page images listed in §5 still have to be rendered from the paper and the C4
-  README, and each one needs a `report_assets/` file plus the two-line label the audit expects.
-* **The prose itself** — §2 and §4 first, per §7 step 2.
+* **Cover values** — awaiting the supervisor's name / student number / date; once supplied they go into
+  `report_assets/cover_values.json` and the next build fills the cover (that file is gitignored).
+* **Page images** — rendering the §5 figures into `report_assets/` with two-line captions needs the source
+  PDFs: eq. (37) / Sec. VI-B / Table II of GO-LDA (arXiv:2305.14568v1), the σ table of ImageNet-C
+  (arXiv:1903.12261) and the disputed C4 cell (arXiv:2604.03928). Only the DLR manuscript and the PLOS ONE
+  PNG are in `retrieval_cache/`; those three sources are not on the released download list, so they need an
+  explicit release — or the supervisor can hand over the PDFs.
+* **Tables and figures** (step 3) — §2's candidate table, §4's code-path table, §5's four tables and two
+  figures, with caption and cross-reference fields, not typed numbers.
+* **Trim pass** — the 230/330-word overages above; then the Introduction, and finally the 4,700-ceiling
+  check against §9's units.
