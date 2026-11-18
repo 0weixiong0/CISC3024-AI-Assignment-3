@@ -71,6 +71,16 @@ def resolve(docx_path: Path, pdf_path: Path) -> int:
         word.Quit()
     temp_docx.replace(docx_path)
     temp_pdf.replace(pdf_path)
+    # Word re-splits runs when it resolves the fields, and the split runs inherit their size from the
+    # style instead of carrying it, so the font census would read them as "Times New Roman, no size".
+    # Writing the resolved size back is invisible on the page and keeps the census a real check.
+    sys.path.insert(0, str(ROOT / "src"))
+    from build_report import explicit_sizes
+    from docx import Document
+    document = Document(str(docx_path))
+    written = explicit_sizes(document)
+    document.save(str(docx_path))
+    print(f"run sizes made explicit after field resolution: {written}")
     print(f"docx: {docx_path}")
     print(f"pdf : {pdf_path}")
     return pages

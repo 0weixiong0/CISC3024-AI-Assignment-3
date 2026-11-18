@@ -83,7 +83,27 @@ item (the supervisor's standing rule). The list is fixed now so the drafting doe
 | Sec. VI-B claims GO-LDA outperforms classic LDA at `Ω4 = C − 1` | same | that page |
 | Table II rows quoted (ORL, LFW, BrainTumor, DeepDrid) | same | the Table II page |
 | README-vs-paper cell differences (14 of 18 PCA, 19 of 72 overall) | C4 repository README + paper Tables I/II/III | both, side by side for at least one disputed cell |
-| ImageNet-C gaussian severity 1 ⇒ σ = 0.08 | Hendrycks & Dietterich 2019, arXiv:1903.12261 + `corruptions.py` | the corruptions table and the code line |
+| ImageNet-C gaussian severity 1 ⇒ σ = 0.08 | Hendrycks & Dietterich 2019, arXiv:1903.12261 + `corruptions.py` | the corruptions table and the code line — **the paper carries no σ-versus-severity table** (read from the downloaded PDF: its only "Gaussian Noise" numbers are mCE percentages), so `figure_04` renders p4, the paper's own description of the corruption, and the code line stays outstanding until `corruptions.py` is released |
+
+**Delivered 2026-11-19** (U019 release of the three sources). `src/render_page_images.py` writes six PNGs
+at 200 dpi into `report_assets/` plus `figure_manifest.json`, which records for each figure the source file,
+the page, the region clipped and the two caption lines the builder will place above it:
+
+| Figure | From | What it shows |
+| --- | --- | --- |
+| figure_01 | GO-LDA p6, full page | equations (37) and (38) - the Euclidean-orthogonality constraint and the deflated pencil |
+| figure_02 | GO-LDA p11, full page | the accuracy claim ahead of Table 2: after the third direction GO-LDA directions "achieve significantly better results" |
+| figure_03 | GO-LDA p12, caption + table crop | Table 2, the nine-data-set subspace MCA rows including ORL 40/400/10304 at Ω39 and Ω50 |
+| figure_04 | ImageNet-C p4, full page | the Gaussian-noise corruption description; the σ value itself is in the code, not the paper |
+| figure_05 | C4 paper p6, caption + table crop | Table I, CIFAR-100 per backbone at d = 99 - the paper side of the diff (PCA row 65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60) |
+| figure_06 | cached `c4_README.md`, lines 77-83 rendered with their own line numbers | the README side of the same six configurations (PCA row 65.07 / 69.14 / 64.65 / 69.77 / 78.05 / 81.55) |
+
+The four disagreeing cells are readable across figures 05 and 06 without re-typing them. Sources live in
+`research_records/retrieval_cache/`, which `.gitignore` now covers as a directory - the previous rule named
+only the DLR manuscript, so a `git add -A` would have published the three newly released PDFs and the
+README. **One discrepancy to settle:** `research_records/retrieval_cache/rsspca_plosone2025_table3.png` is
+still tracked from an earlier commit, so ignoring the directory does not remove it from the published set;
+deleting it from `main` is the supervisor's call, not a silent change.
 
 Report figures from our own runs: the growth curve per feature pair (hold-out curves plus test markers,
 split-labelled), and the ORL direction images at `K = 1` versus the classic pencil's first direction.
@@ -142,13 +162,18 @@ Measured from the two delivered documents, not from memory:
 figures this file first carried — ~2,906 for A1 and ~8,011 for A2 — were labelled "body words" but did not
 match any of the four measurements below, so they are withdrawn.
 
-| Unit | How it is counted | A1 | A2 | A3 shell now |
+| Unit | How it is counted | A1 | A2 | A3, drafted §2+§4 (2026-11-19) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 353 |
-| PDF full-text words | pymupdf over the exported PDF — includes tables, the contents page and the cover | 3,528 | 9,792 | 384 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 178 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4) | 3,024 | 8,286 | — |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 2,995 |
+| PDF full-text words | pymupdf over the exported PDF — includes tables, the contents page and the cover | 3,528 | 9,792 | 3,037 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 2,779 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4) | 3,024 | 8,286 | **2,562** |
 | table words alone | `python-docx` over table cells | 187 | 1,107 | 0 |
+
+The A3 column was measured on the 2026-11-19 build that carries the drafted §2 and §4: 13 PDF pages,
+31 headings (8 H1 including References, 23 H2), no tables yet, so the table-word row is 0 by construction.
+The prose count is the same 2,562 the two drafted sections report individually (1,134 + 1,428), which is
+the cross-check that nothing else on the page is being counted as prose.
 
 **The 4,700 budget is in prose words**, because that is the unit A2's record reported and it is the closest
 to "text the reader reads" — it excludes tables, the contents page and the cover. The observed ratios are
@@ -164,10 +189,20 @@ paragraphs as formatting prototypes, so the headings carry the direct Times New 
 that the style definitions alone would not give — the trap in §2. The cover and the TOC content control are
 untouched; everything after the TOC control is deleted and re-emitted.
 
-* Shell: 7 H1 + 21 H2 + References = 29 headings; 6 pages, 353 words after `src/export_pdf.py` resolved the
-  TOC field through a private Word instance.
-* `src/audit_docx.py`: **29 headings matched by 29 contents entries** (the stale-entry flags are gone),
-  font census `'Times New Roman' 12.0pt: 27`, no Chinese, no jargon, no exhibit-integrity findings.
+* Shell: 7 content H1 + 21 H2 + References = 29 headings; 6 pages, 353 words after `src/export_pdf.py`
+  resolved the TOC field through a private Word instance. **Corrected in the U019 round:** the References
+  heading had been emitted from the template's `EndNote Bibliography` prototype, so it was not a heading at
+  all and the built document had no References section - the audit's "29 headings matched by 29 contents
+  entries" only proved the contents page agreed with itself, not that the section list was covered.
+  References now uses the Heading 1 prototype; the bibliography prototype is reserved for the entries
+  themselves, which are step 4.
+* `src/audit_docx.py`: 31 headings matched by 31 contents entries (8 H1 including References, 23 H2), and
+  the font census is now `'Times New Roman' 12.0pt: 52` with **no size-less runs**. The 25 "Times New Roman,
+  no size" entries the U018 pass reported were runs that inherit their size from the style rather than
+  carrying it, and Word re-splits runs when it resolves fields, so `explicit_sizes()` writes the resolved
+  value back - in the builder and again after field resolution in `src/export_pdf.py` (88 runs on this
+  build). Nothing on the page moved; the census is now a check that can fail. No Chinese, no jargon, no
+  exhibit-integrity findings.
   Two findings remain and both are expected at this step: the cover's own template placeholders
   (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`) and "no URL anywhere" — the URL arrives with §6.
 * `src/audit_layout.py`: passes (no exhibits yet).
@@ -175,7 +210,7 @@ untouched; everything after the TOC control is deleted and re-emitted.
   gitignored, so the values the supervisor supplies never enter the repository. It is inert while the file
   is absent; the audit's placeholder finding is the visible signal that the values are still outstanding.
 
-**Step 2 of §7 — §2 and §4 drafted.** The prose lives in `src/report_content.py` in two functions
+**Step 2 of §7 — §2 and §4 drafted (U019 accepted, with the overage deferred to the trim pass).** The prose lives in `src/report_content.py` in two functions
 (`search_sections` for §2, `implementation_sections` for §4), keyed by the builder's exact H1 titles; every
 digit in the sentences is interpolated at build time from the run artefacts (`probe_cap_gap.json`,
 `diagnostics.json`, the MVP `timing/manifest/diagnostics`, `probe_ood.json`,
@@ -192,12 +227,13 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 
 * **Cover values** — awaiting the supervisor's name / student number / date; once supplied they go into
   `report_assets/cover_values.json` and the next build fills the cover (that file is gitignored).
-* **Page images** — rendering the §5 figures into `report_assets/` with two-line captions needs the source
-  PDFs: eq. (37) / Sec. VI-B / Table II of GO-LDA (arXiv:2305.14568v1), the σ table of ImageNet-C
-  (arXiv:1903.12261) and the disputed C4 cell (arXiv:2604.03928). Only the DLR manuscript and the PLOS ONE
-  PNG are in `retrieval_cache/`; those three sources are not on the released download list, so they need an
-  explicit release — or the supervisor can hand over the PDFs.
+* **The `corruptions.py` line** for the σ = 0.08 claim — the paper has no σ-versus-severity table, so the
+  code file (or the supervisor's word that severity 1 is the right reading) is needed before that figure
+  is complete.
 * **Tables and figures** (step 3) — §2's candidate table, §4's code-path table, §5's four tables and two
-  figures, with caption and cross-reference fields, not typed numbers.
-* **Trim pass** — the 230/330-word overages above; then the Introduction, and finally the 4,700-ceiling
-  check against §9's units.
+  own-run figures, plus the six page images now on disk, each with its two-line caption and a cross-
+  reference field rather than a typed number.
+* **Trim pass** — the 234/328-word overages U019 accepted (§2 at 1,134 against ~900, §4 at 1,428 against
+  ~1,100); then the Introduction, and finally the 4,700-ceiling check against §9's units.
+* **Placing the six page images** (step 3) — the PNGs and their caption lines exist; they enter the document
+  as `Figure N` plus the italic description with a caption field, next to the claims they support.

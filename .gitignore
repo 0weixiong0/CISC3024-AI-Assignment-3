@@ -24,9 +24,10 @@ runs/_*
 __pycache__/
 *.py[cod]
 nohup.out
-# Publisher-accepted manuscript of a third-party IEEE paper: local retrieval cache only,
-# not redistributed from this repository (the citation and arXiv/DOI pointers are in stage_01).
-research_records/retrieval_cache/dlr_2dpca_tce2025_accepted_manuscript.pdf
+# Third-party sources read for evidence, kept locally and not redistributed from this repository
+# (the citations and arXiv/DOI pointers are in stage_01). Downloaded under the supervisor's U019 release:
+# the GO-LDA and ImageNet-C PDFs, the C4 paper PDF, and the C4 README raw file.
+research_records/retrieval_cache/
 
 # The report itself is a UMMoodle submission, not repository content - same as A1 and A2
 CISC3024_AI_Assignment_3_Report.docx

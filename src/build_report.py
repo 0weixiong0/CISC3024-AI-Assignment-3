@@ -103,6 +103,65 @@ def _set_text(el, text: str):
         r.getparent().remove(r)
 
 
+def _style_sizes(doc) -> dict:
+    """Half-point size per style name, resolved through based_on and docDefaults."""
+    styles = doc.styles.element
+    direct, by_name = {}, {}
+    for st in styles.findall(qn("w:style")):
+        name_el = st.find(qn("w:name"))
+        if name_el is None:
+            continue
+        name = name_el.get(qn("w:val"))
+        by_name[name] = st
+        rPr = st.find(qn("w:rPr"))
+        sz = rPr.find(qn("w:sz")) if rPr is not None else None
+        direct[name] = int(sz.get(qn("w:val"))) if sz is not None else None
+    base = 24
+    defaults = styles.find(qn("w:docDefaults"))
+    if defaults is not None:
+        rPrDefault = defaults.find(qn("w:rPrDefault"))
+        rPr = rPrDefault.find(qn("w:rPr")) if rPrDefault is not None else None
+        sz = rPr.find(qn("w:sz")) if rPr is not None else None
+        if sz is not None:
+            base = int(sz.get(qn("w:val")))
+
+    def resolve(name, seen=()):
+        if not name or name in seen:
+            return base
+        if direct.get(name):
+            return direct[name]
+        st = by_name.get(name)
+        based = st.find(qn("w:basedOn")) if st is not None else None
+        return resolve(based.get(qn("w:val")) if based is not None else None, seen + (name,))
+
+    return {name: resolve(name) for name in by_name}
+
+
+def explicit_sizes(doc) -> int:
+    """Write each run's already-resolved size into the run, so the font census has no None entries.
+
+    The template's example paragraphs inherit their size from the style instead of carrying it, and Word
+    re-splits runs when it resolves fields, so the audit reads a run as "Times New Roman, no size" even
+    though it renders at 12 pt. Recording the resolved value changes nothing on the page and turns the
+    census into a check that can actually fail.
+    """
+    sizes = _style_sizes(doc)
+    written = 0
+    for para in doc.paragraphs:
+        size = sizes.get((para.style.name or "") if para.style is not None else "Normal", 24)
+        for run in para._p.iter(qn("w:r")):
+            rPr = run.find(qn("w:rPr"))
+            if rPr is None:
+                rPr = run.makeelement(qn("w:rPr"), {})
+                run.insert(0, rPr)
+            if rPr.find(qn("w:sz")) is not None:
+                continue
+            for tag in ("w:sz", "w:szCs"):
+                rPr.append(rPr.makeelement(qn(tag), {qn("w:val"): str(size)}))
+                written += 1
+    return written
+
+
 class Builder:
     def __init__(self, doc, protos):
         self.doc, self.protos = doc, protos
@@ -152,8 +211,7 @@ class Builder:
 
         builder = cls(doc, protos)
         for title, subs, drafted in SECTIONS:
-            proto = protos["reference"] if title == "References" else protos["h1"]
-            el = copy.deepcopy(proto)
+            el = copy.deepcopy(protos["h1"])
             _set_text(el, title)
             if tail is not None:
                 tail.addprevious(el)
@@ -167,6 +225,10 @@ class Builder:
                 prev.addnext(e2)
                 prev = e2
         return builder
+
+    def make_sizes_explicit(self) -> int:
+        """Give every run the size it already resolves to, so the font census has no None entries."""
+        return explicit_sizes(self.doc)
 
     # -- content -------------------------------------------------------------
     def blocks(self) -> dict:
@@ -263,13 +325,14 @@ def main() -> int:
     builder = Builder.new()
     cover = builder.fill_cover()
     prose = builder.insert_prose()
+    sized = builder.make_sizes_explicit()
     path = builder.save()
     stats = builder.summarize()
     print(f"built {path.name}: {stats['headings']} headings ({len(stats['h1'])} H1 / "
           f"{len(stats['h2'])} H2), {stats['tables']} tables, {stats['prose_words']} prose words")
     print(f"cover fields filled: {len(cover)}"
           f"{'  (pending: report_assets/cover_values.json absent)' if not cover else ''}")
-    print(f"prose blocks inserted: {len(prose)}")
+    print(f"prose blocks inserted: {len(prose)}, run sizes made explicit: {sized}")
     for h1 in stats["h1"]:
         print("  H1:", h1)
     tokens = [t for t in stats["h1"] + stats["h2"] if PLACEHOLDER.search(t)]
