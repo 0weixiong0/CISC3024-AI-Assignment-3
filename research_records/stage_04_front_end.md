@@ -109,7 +109,7 @@ tabs, served from the `gh-pages` branch.
 | What | Value |
 | --- | --- |
 | Repository | `0weixiong0/CISC3024-AI-Assignment-3`, **public** (U015) |
-| Source branch | `main`, HEAD `23e52160fefaf9b88d57f9bcf683914f9f6e35f6` (initial `e43edfa` + the README) |
+| Source branch | `main`. `e43edfa` (the 132-file initial commit) + `23e5216` (README) + `5bcd940` (this record plus the parity README). A section cannot contain the hash of the commit that carries it, so **Stage 5 re-reads `git rev-parse main` at submission time and cites that**, together with `e43edfa` as the commit holding the code |
 | Site branch | `gh-pages`, HEAD `a48a97bf324bc9416240587d65405b7733377f5f` — `index.html`, `data.js`, `demo.js`, `demo_meta.json` at the root |
 | Tracked | `src/` 24 files, `tests/` 2, `webapp/` 4, `research_records/` 16, `runs/` small artefacts, README, `.gitignore`, `.gitattributes` (LF pinned) — 132 files, largest blob 4.5 MB |
 | Not tracked (U015) | course files (`AIassign3.pdf`, `Agent_coding.pptx`, `Report Template.docx`), `_rev.py`, `research_records/conversation_log.md`, `runs/conversation_log_backup_before_dedup.md`, `data/` (986 MB) |
