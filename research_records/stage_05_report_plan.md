@@ -455,6 +455,15 @@ a line and a plain string search would then miss it.
   and U026 replaced the cover's 34 words of placeholder text with the 30 words of real values. Six words of
   headroom. Any further addition has to pay for itself inside §2, §6 or §7, the way the citation sentences and
   the prose pass did.
+* **Table column widths** - open, and deliberately not acted on (U028, 2026-11-20). The instruction was
+  "tables could go left-aligned, because centring pushes some characters down to the next line". The first half
+  is already true and measured: all five tables run from x=90.3 to x=521.9 inside a text column of 90.0 to 522.0,
+  so nothing is centred. The second half is not a centring effect: `table_element` gives every column
+  6.0in divided by the number of columns, so a header like "Gates not cleared" in Table 1 wraps because it was
+  allotted one-seventh of the line. Widening the narrow columns and shrinking the wide ones would fix the
+  wrapping, but it re-lays all five tables, can move pages, and would need both audits and the package re-run -
+  so it waits for a word from the supervisor rather than being done on the side of an instruction that asked
+  for something else.
 * **Submission package** - assembled 2026-11-20 (U026). `submission/` holds the report docx, the report pdf and
   the dialogue record as markdown, each byte-identical to the file it was copied from;
   `CISC3024_AI_Assignment_3_submission.zip` carries those three and nothing else. Both are gitignored, along with
