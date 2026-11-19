@@ -354,7 +354,7 @@ def search_sections(s: dict) -> dict:
 
              "families stayed in the pool - principal-component analysis, linear discriminant analysis and "
 
-             "hybrids of the two - and the choice between them was left to the evidence instead of being made "
+             "hybrids - and the choice between them was left to the evidence instead of being made "
 
              "in advance. The target did not have to be a neural network, but it did have to be evaluated as a "
 
@@ -374,9 +374,11 @@ def search_sections(s: dict) -> dict:
 
              "local environment was measured before searching rather than assumed: a 14-core i9-13900H, "
 
-             "32 GB RAM, an RTX 4060 laptop GPU with 8 GB, and Python 3.12 with NumPy, scikit-learn and a "
+             "32 GB RAM, an RTX 4060 laptop GPU with 8 GB, and Python 3.12 with NumPy (Harris et al., 2020), "
+             "scikit-learn (Pedregosa et al., 2011) and a "
 
-             "CUDA-enabled PyTorch. That measurement set the feasibility gate - no large-scale retraining, but "
+             "CUDA-enabled PyTorch (Paszke et al., 2019). That measurement set the feasibility gate - no "
+             "large-scale retraining, but "
 
              "frozen-backbone inference and closed-form eigensolves - and it is why every cost figure at this "
 
@@ -394,7 +396,7 @@ def search_sections(s: dict) -> dict:
 
              "recognizer; the second covered the discriminant-analysis family, including regularised and "
 
-             "shrinkage forms, orthogonal and uncorrelated variants, multilinear and graph-embedded variants, "
+             "shrinkage forms, orthogonal, uncorrelated, multilinear and graph-embedded variants, "
 
              "and marginal Fisher analysis. The third looked for either method used inside or on top of deep "
 
@@ -416,7 +418,7 @@ def search_sections(s: dict) -> dict:
 
              "meaning evaluation as a classifier on images; recoverability of the equations from an openly "
 
-             "readable source or of readable official code; local feasibility within the measured memory and "
+             "readable source or of official code; local feasibility within the measured memory and "
 
              f"the remaining days; and demonstrability in a browser. {s['candidates']} candidates then carried "
 
@@ -439,11 +441,12 @@ def search_sections(s: dict) -> dict:
 
              "wave-1 reports are archived, so the counts are checkable from primary "
 
-             "material. Two findings shaped the shortlist more than any single "
+             "material. Two findings shaped the shortlist more than any "
 
              "score. The recent literature that proposes a new principal-component variant and evaluates it on "
 
-             "images lives almost entirely in journals - IEEE Transactions on Consumer Electronics, PLOS ONE, "
+             "images lives almost entirely in journals - IEEE Transactions on Consumer Electronics "
+             "(Bi et al., 2025), PLOS ONE (Wang et al., 2025), "
 
              "Pattern Recognition, Sensors, Multimedia Tools and Applications, and small ACM proceedings - and "
 
@@ -463,7 +466,7 @@ def search_sections(s: dict) -> dict:
 
              f"Decisive claims were re-read by the lead agent rather than accepted from a subagent's summary: "
 
-             f"{s['verified']} verification items, the first of them raised during wave 1 and the rest after "
+             f"{s['verified']} verification items, the first raised during wave 1, the rest after "
 
              "the supervisor's fact-checks. All resolved as supported, and no fabricated identifier, author, "
 
@@ -485,13 +488,13 @@ def search_sections(s: dict) -> dict:
 
             ("body",
 
-             "What this stage teaches about using an AI tool for a literature search is narrow and worth "
+             "What this stage teaches about an AI literature search is narrow and worth "
 
              "stating plainly: the retrieval is fast and wide, and it is also fluent enough to make a wrong "
 
-             "count sound final. Every number that survived did so because something on disk - a report, a "
+             "count sound final. Every number survived because something on disk - a report, a "
 
-             "ledger row, a page of a PDF - said it independently of the sentence that quoted it."),
+             "ledger row, a page of a PDF - said it independently of the sentence quoting it."),
 
             ("h2", "The selection, and what it committed us to"),
 
@@ -528,7 +531,7 @@ def search_sections(s: dict) -> dict:
 
              "the paper exists only as a preprint, with no journal reference and no official implementation to "
 
-             "diff against. That is why verification in this project took the form of internal checks - two "
+             "diff against. That is why verification here took the form of internal checks - two "
 
              "independent solver routes, agreement with scikit-learn's own covariance estimates, and a "
 
@@ -1001,7 +1004,8 @@ def results_sections(f: dict) -> dict:
              f"CIFAR-100 (Krizhevsky, 2009), {f['classes']['cifar100']} classes and "
              f"{f['rows']['cifar100']:,} training rows, and "
              f"Tiny ImageNet ({f['classes']['tiny_imagenet']} classes, {f['rows']['tiny_imagenet']:,}) scored through two backbones whose "
-             "weights were never touched: ResNet-18 giving 512-dimensional vectors, and DINOv2 ViT-S/14 "
+             "weights were never touched: ResNet-18 (He et al., 2015) giving 512-dimensional vectors, and DINOv2 "
+             "ViT-S/14 (Oquab et al., 2023) "
              "giving 384 at 224 by 224 input. Extraction was measured once before the matrix, at 18.2 "
              "minutes for all four pairs, and the input resolution was settled by that measurement rather "
              "than by the model registry's default, which ran eight times slower on this GPU."),

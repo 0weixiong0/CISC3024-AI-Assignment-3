@@ -126,8 +126,10 @@ def main() -> int:
             flag("hygiene", f"double space in paragraph {index}: {text[:70]!r}")
         # A space before . , or ; is a typo, except when the punctuation starts a decimal: quoted
         # source lines such as `c = [.08, .12, 0.18, 0.26, 0.38][severity - 1]` are legitimate text and
-        # the earlier form of this rule flagged them.
-        if re.search(r"\s[.,;](?!\d)", text):
+        # the earlier form of this rule flagged them. APA 7 also writes a long author list's omission as
+        # ", ... Lastname", where the space before the three dots is the style rather than a typo, so that
+        # exact sequence is folded away before the check instead of loosening the rule for real typos.
+        if re.search(r"\s[.,;](?!\d)", text.replace(", ... ", ",")):
             flag("hygiene", f"space before punctuation in paragraph {index}: {text[:70]!r}")
     internal = [term for term in ("D-1", "option b", "Gate 0", "Gate 1", "Gate 2", "Gate 3", "Gate 4",
                                   "Gate 5", "milestone", "SECTION_")

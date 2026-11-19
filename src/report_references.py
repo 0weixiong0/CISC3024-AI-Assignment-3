@@ -51,6 +51,45 @@ ENTRIES = [
      "AT&T Laboratories Cambridge (2002)",
      "AT&T Laboratories Cambridge. (2002). *The database of faces* [Dataset]. "
      "http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html"),
+    ("harris-2020",
+     "Harris et al. (2020)",
+     "Harris, C. R., Millman, K. J., van der Walt, S. J., Gommers, R., Virtanen, P., Cournapeau, D., Wieser, "
+     "E., Taylor, J., Berg, S., Smith, N. J., Kern, R., Picus, M., Hoyer, S., van Kerkwijk, M. H., Brett, M., "
+     "Haldane, A., del Rio, J. F., Wiebe, M., Peterson, P., ... Oliphant, T. E. (2020). *Array programming "
+     "with NumPy*. *Nature, 585*(7825), 357-362. https://doi.org/10.1038/s41586-020-2649-2"),
+    ("he-2015",
+     "He et al. (2015)",
+     "He, K., Zhang, X., Ren, S., & Sun, J. (2015). *Deep residual learning for image recognition* "
+     "(arXiv:1512.03385) [Preprint]. arXiv. https://arxiv.org/abs/1512.03385"),
+    ("bi-2025",
+     "Bi et al. (2025)",
+     "Bi, P., Chen, M., Du, X., Sohrab, F., & Gabbouj, M. (2025). Double layer robust 2DPCA: Joint flexible "
+     "cut norm and adaptive weighted learning for small sample size image recognition. *IEEE Transactions on "
+     "Consumer Electronics, 71*(4), 10491-10506. https://doi.org/10.1109/TCE.2025.3602258"),
+    ("oquab-2023",
+     "Oquab et al. (2023)",
+     "Oquab, M., Darcet, T., Moutakanni, T., Vo, H., Szafraniec, M., Khalidov, V., Fernandez, P., Haziza, D., "
+     "Massa, F., El-Nouby, A., Assran, M., Ballas, N., Galuba, W., Howes, R., Huang, P., Li, S., Misra, I., "
+     "Rabbat, M., Sharma, V., ... Bojanowski, P. (2023). *DINOv2: Learning robust visual features without "
+     "supervision* (Version 2; arXiv:2304.07193) [Preprint]. arXiv. https://arxiv.org/abs/2304.07193"),
+    ("paszke-2019",
+     "Paszke et al. (2019)",
+     "Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., "
+     "Gimelshein, N., Antiga, L., Desmaison, A., Kopf, A., Yang, E., DeVito, Z., Raison, M., Tejani, A., "
+     "Chilamkurthy, S., Steiner, B., Fang, L., ... Chintala, S. (2019). *PyTorch: An imperative style, "
+     "high-performance deep learning library* (arXiv:1912.01703) [Preprint]. arXiv. "
+     "https://arxiv.org/abs/1912.01703"),
+    ("pedregosa-2011",
+     "Pedregosa et al. (2011)",
+     "Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., "
+     "Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., "
+     "Perrot, M., & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine "
+     "Learning Research, 12*, 2825-2830."),
+    ("wang-2025",
+     "Wang et al. (2025)",
+     "Wang, J., Xie, X., Zhang, L., Li, J., Cai, H., & Feng, Y. (2025). Robust sparse smooth principal "
+     "component analysis for face reconstruction and recognition. *PLOS ONE, 20*(5), e0323281. "
+     "https://doi.org/10.1371/journal.pone.0323281"),
 ]
 
 
@@ -65,6 +104,13 @@ IN_TEXT = {
     "liu-2023": "(Liu et al., 2023)",
     "krizhevsky-2009": "(Krizhevsky, 2009)",
     "att-2002": "(AT&T Laboratories Cambridge, 2002)",
+    "harris-2020": "(Harris et al., 2020)",
+    "he-2015": "(He et al., 2015)",
+    "bi-2025": "(Bi et al., 2025)",
+    "oquab-2023": "(Oquab et al., 2023)",
+    "paszke-2019": "(Paszke et al., 2019)",
+    "pedregosa-2011": "(Pedregosa et al., 2011)",
+    "wang-2025": "(Wang et al., 2025)",
 }
 
 

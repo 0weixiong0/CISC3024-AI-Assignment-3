@@ -206,7 +206,7 @@ match any of the four measurements below, so they are withdrawn.
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 step-4/5 build, which carries exhibits and a reference list: 43 PDF pages,
+The A3 column was re-measured on the 2026-11-20 step-4/5 build, which carries exhibits and a 14-entry reference list: 44 PDF pages,
 31 headings (8 H1 including References, 23 H2), 4 tables, 9 figures, and §1 through §7 all drafted. The prose
 figure is now taken with the caption lines excluded, because step 3 made them a large block of text that is
 not argument: 14 captions carry 428 words, and Word's own counter, which sees everything, reads 8,566.
@@ -281,10 +281,10 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 ## 10.1 Step 3, delivered 2026-11-20
 
 Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
-§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 43
-PDF pages, 8,679 words by Word's counter, 8,846 by PDF extraction, 7,220 docx paragraph words, 6,500 prose words
-excluding captions and the reference list, 428 caption words, 133 reference words, 1,243 table words over 415 cells,
-5 tables, 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
+§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 44
+PDF pages, 9,010 words by PDF extraction and 7,551 docx paragraph words, with 6,500 prose words excluding captions
+and the reference list, 428 caption words, 440 reference words over 14 entries, and 1,243 table words across
+415 cells in 5 tables, plus 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
 cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); two new gates came with them, one
 that re-checks every citation and entry on the rendered text and one that bands the rendered body word count. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
 code-path table is withdrawn, because U022 ruled that its prose already covers brief item (3).
@@ -306,62 +306,49 @@ Pages are where each H1 starts in the exported PDF, read from the rendered file 
 | (2) What the algorithm does and how it was adapted to the task | §3 | 11-17 |
 | (3) How it was implemented and verified with AI assistance | §4 | 18-22 |
 | (4) Experimental settings, results, and discussion | §5, Tables 2-5 and Figures 4-9 | 23-37 |
-| (5) What was learned from using the AI tool | §7 (and §1 states the division of labour) | 39-42 |
+| (5) What was learned from using the AI tool | §7 (and §1 states the division of labour) | 39-41 |
 | (6) Source-code availability, as a webpage link | §6's citation block: the repository line and the Pages line, each on its own line | 38 |
 | No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
 
-Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p43. Contents
+Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p42 to p44. Contents
 occupies pages 2-3, and the body begins on page 4 under the page-break rule recorded in §10.
 
-### Bibliography: what is cited, and what is deliberately absent
+### Bibliography: 14 entries, and the one work that could not be verified
 
-Five works are in the reference list, and each is cited in the prose: the GO-LDA paper (Liu et al., 2023), the
-comparison study (Kumar et al., 2026a) and its repository README (Kumar et al., 2026b), the corruption benchmark
-(Hendrycks & Dietterich, 2019a) and its pinned code (Hendrycks & Dietterich, 2019b). Every one of them was
-transcribed from a file already in `research_records/retrieval_cache/`, so author names, titles and dates are
-readings rather than recollections. `src/build_report.py` stops the build if an entry is not cited or a citation
-has no entry, and `audit_layout.py` re-checks the same pair on the rendered text, because Word re-wraps a
-citation across a line and a plain search would then miss it.
+Every entry was transcribed from a source record rather than written from memory, and the two long-author
+entries follow APA 7's rule for more than twenty names (first nineteen, ellipsis, last author).
 
-The works the study **uses** but does not argue with are absent from both the list and the prose, because no
-bibliographic record for them is on disk and APA initials cannot be written from memory: the ORL/AT&T data set,
-CIFAR-100, Tiny ImageNet, ResNet-18, DINOv2 ViT-S/14, NumPy, scikit-learn, PyTorch, and the two runner-up
-candidates in the screening ledger (RSSPCA, DLR-2DPCA). **Release request:** fetching the eight bibliographic
-records for these would let the list reach the 14 entries the outline expects. Each is a metadata page or a
-DOI landing page - no dataset, weight or code download. Until then the prose names them descriptively, which is
-consistent but thinner than a marker would expect for materials.
+| Entry | In-text | Where the metadata came from |
+| --- | --- | --- |
+| GO-LDA (Liu, Cai & Niranjan 2023) | (Liu et al., 2023), §2 and §3 | cached PDF title page |
+| Comparison study (Kumar et al. 2026) | (Kumar et al., 2026a), §5 | cached PDF title page |
+| Its repository README | (Kumar et al., 2026b), §5 | cached README |
+| ImageNet-C benchmark (Hendrycks & Dietterich 2019) | (Hendrycks & Dietterich, 2019a), §5 | cached PDF, ICLR 2019 header |
+| The pinned corruption code | (Hendrycks & Dietterich, 2019b), §5 | commit 712bfcd, recorded in the figure manifest |
+| CIFAR technical report (Krizhevsky 2009) | (Krizhevsky, 2009), §5 | the dataset's official page, fetched 2026-11-20 |
+| Face database | (AT&T Laboratories Cambridge, 2002), §5 | the distributor's official page, fetched 2026-11-20 |
+| ResNet (He et al. 2015) | (He et al., 2015), §5 | arXiv listing, cross-checked against the arXiv API |
+| DINOv2 (Oquab et al. 2023) | (Oquab et al., 2023), §5 | arXiv listing, cross-checked against the arXiv API |
+| PyTorch (Paszke et al. 2019) | (Paszke et al., 2019), §2 | arXiv listing, cross-checked against the arXiv API |
+| NumPy (Harris et al. 2020) | (Harris et al., 2020), §2 | Nature DOI, read through the Crossref record |
+| scikit-learn (Pedregosa et al. 2011) | (Pedregosa et al., 2011), §2 | the JMLR page (volume 12, 2825-2830); the page prints no DOI |
+| RSSPCA (Wang et al. 2025) | (Wang et al., 2025), §2 | PLOS ONE page and its own citation line, plus the Crossref record |
+| DLR-2DPCA (Bi et al. 2025) | (Bi et al., 2025), §2 | Crossref registered metadata: the IEEE page renders nothing to a fetch, and the cached accepted manuscript has no author block in its text layer |
 
-## 13. The prose pass on sections 6 and 7 (step 5, 2026-11-20)
+**One gap remains.** Tiny ImageNet has no verifiable citation: the CS231n landing page the dataset is normally
+cited from returns 404 over both http and https, and the Internet Archive holds no capture of any page at that
+path - only the dataset archive itself. The report therefore names Tiny ImageNet descriptively in §5 and in
+Table 2, with no entry and no in-text citation, rather than citing a paper whose authorship and date could only
+be guessed. If a live official record turns up before submission, the entry goes in and the prose gains four
+words, which would have to be paid for inside §2, §6 or §7.
 
-Sections 6 and 7 were written this round, so they were read as prose rather than as output. The engine is the
-project's standing English de-AI pass; no author style profile exists for it, which means the result carries the
-engine's own habits as well as the removals below - worth saying once, because calibration needs three to five
-texts the student wrote without assistance.
+Two provenance notes a marker could reasonably ask about. The DLR-2DPCA entry is registered publisher metadata
+(Crossref), not a rendered IEEE page, so its page range and issue come from the deposit rather than from the
+publisher's HTML. The scikit-learn entry carries no DOI because the JMLR page does not print one.
 
-What was removed, and why it was an AI tell rather than a stylistic preference:
-
-* **"A negative result of that size is not one run; it is the matrix, two controls, a head sweep and a ten-fold
-  reading."** A negative parallelism followed by a pile of four, which is the shape a model reaches for when it
-  wants a sentence to sound firm. Now: the result does not rest on a single run, and the list stays.
-* **The three-habits paragraph**, which had become three parallel imperatives each followed by a colon - "Gate
-  the artefact and not the claim: ... Keep provenance beside the asset: ... And run the audit before reporting,
-  ...". The habits are real and are kept, but they are now told unevenly, and the weakest of the three says so.
-* **"The lesson is about evidence rather than about the algorithm."** The record's own sentence is "about
-  evidence, not about the algorithm", so the phrasing was both a tell and a drift from the source. Restored.
-* **A self-summary close** - "which is the evidence for that sentence" - deleted, since the ledger reference is
-  the evidence and does not need to announce itself.
-* **A six-item list of demo read-outs** folded into one sentence with the specimen scatter shortened, so the
-  paragraph no longer reads as a feature table in prose clothing.
-
-What was deliberately kept: the three-part order of WP7 section 8, because the supervisor set it; one aphoristic
-close ("The tool is fast at producing text and slow to doubt it"), because the budget allows one; and the flat
-statement "Both are public.", which is the kind of slack sentence a person writes at half pressure.
-
-Length discipline: the pass added 29 words, so 40 were cut back inside the same two sections, and the citation
-insertions for the reference list were paid for the same way. The drafted prose is **6,500 words, exactly at the
-ceiling**, with exhibit captions (428) and the reference list (133) outside that unit. `src/build_report.py` now
-excludes the reference list from the prose figure, because a citation growing longer is not an essay growing
-longer.
+`src/build_report.py` refuses to build if an entry is uncited or a citation has no entry, and
+`src/audit_layout.py` re-checks both directions on the rendered text, because Word wraps a long citation across
+a line and a plain string search would then miss it.
 
 ## 11. What is still open
 
@@ -370,8 +357,8 @@ longer.
   finding is expected until that moment.
 * **Final read-through** - done on 2026-11-20: the coverage map is §12, and the prose pass over §6 and §7 is
   §13. Outside those two sections only words were touched, per U023.
-* **Bibliographic release** - the eight works listed in §12 that have no record on disk; awaiting a release to
-  fetch metadata only.
+* **Tiny ImageNet citation** - the only work still without a verifiable record: its official landing page 404s
+  and the Internet Archive has no capture of it. Everything else on the release list is in the reference list.
 * **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is exactly
   6,500, so no headroom is left. Any further addition has to pay for itself inside §2, §6 or §7, the way the
   citation sentences and the prose pass did.

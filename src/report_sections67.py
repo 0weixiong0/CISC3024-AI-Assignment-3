@@ -28,7 +28,7 @@ def visualisation_sections() -> dict:
             ("h2", "The live demo and what the visitor does"),
             ("body",
              "The front end is one static page with four tabs, and nothing on it is fitted in the browser. "
-             "What the visitor sees was computed by the code the study ran and written into the page as data. The first tab is an instrument: pick a regime and a method, drag K, or click a row of "
+             "What the visitor sees was computed by the code the study ran and written into the page as data. The first tab is an instrument: pick a regime and method, drag K, or click a row of "
              "faces, and the accuracy read-out moves with the growth curve, the per-direction Fisher ratios, "
              "the orthogonality corner of the accepted basis, the specimen scatter and the class ranks by K. "
              "In the raw-pixel regime the directions themselves appear as pictures at the raster's own size. The second tab replays the corruption control arm by arm, the third plots "
@@ -39,7 +39,7 @@ def visualisation_sections() -> dict:
             ("h2", "The repository and the Pages site"),
             ("body",
              "Both are public. The repository holds the project's modules, the three audit "
-             "scripts and the parity test, the front-end assets, the run tables and diagnostics as csv and "
+             "the three audit scripts and the parity test, the front-end assets, the run tables and diagnostics as "
              "json, the stage records and the requirements file. The Pages site is built from that same "
              "repository, so the demo an examiner opens is generated from the artefacts this report quotes "
              "rather than from a copy. The dialogue record travels with the submission as a separate "
@@ -89,14 +89,14 @@ def lessons_sections(f: dict, r: dict) -> dict:
              f"that away: the paired difference against the ridge pencil was {ladder}. What the paper "
              "measured where the cap is small does not transfer to where it is large, and the honest way to "
              "find that out is to look for the coincidence's precondition instead of assuming a "
-             "theorem. The construction is sound and cheap; what does not follow is that its accuracy in a "
-             "feature regime can be taken from the paper instead of measured."),
+             "theorem. The construction is sound and cheap; its accuracy in a "
+             "feature regime still has to be measured, not taken from the paper."),
             ("h2", "What the AI collaboration taught us"),
             ("body",
              "The division of labour was fixed before it started and it held. The AI tool searched and "
              "scored the literature, wrote every line of the implementation and the audits, ran "
              "the experiments, drafted the figures, the tables and this text, and built the page. The "
-             "student set the constraints, ruled on every question the tool could not settle from the brief, "
+             "student set the constraints, ruled on what the tool could not settle from the brief, "
              "and approved each download and release. Thirteen rulings and sixteen "
              "corrections are in the appendix ledger."),
             ("body",
@@ -107,7 +107,7 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "direction. A probe that reported a classical basis as orthogonal to fourteen decimal places "
              "had measured a different object than its label named. The sharpest case was a "
              "self-written gate that accepted a first direction identical to the classical one to one decimal "
-             "place and then read that as evidence for the hypothesis it existed to test; the remedy was an "
+             "place and read it as evidence for the hypothesis it existed to test; the remedy was an "
              "arm that must fail the same assertion. A withdrawn run, where transposed loader constants made "
              "a reduction look like a reversal, surfaced only because the numbers were checked against the "
              "raster they came from."),
