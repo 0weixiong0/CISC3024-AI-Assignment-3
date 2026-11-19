@@ -48,10 +48,13 @@ def visualisation_sections() -> dict:
              "attachment and is not linked from the public page."),
             ("h2", "Citation block for brief item (6)"),
             ("body",
-             f"The sentence the brief asks for, in the form it is submitted: All codes and the raw "
-             f"experiment logs can be found at {repo}. The published demo, generated from those same logs, "
-             f"is {pages}. The algorithm's own implementation by its authors, and the two comparison "
-             f"sources this study follows, are listed in the references with their repository addresses."),
+             "The sentence the brief asks for, in the form it is submitted, with each address on a line of "
+             "its own so that copying it cannot pick up a line break:"),
+            ("body", f"All codes and the raw experiment logs can be found at {repo}."),
+            ("body", f"The published demo, generated from those same logs, is at {pages}"),
+            ("body",
+             "The algorithm's own implementation by its authors, and the two comparison sources this study "
+             "follows, are listed in the references with their repository addresses."),
         ],
     }
 

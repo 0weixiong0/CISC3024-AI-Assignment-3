@@ -197,24 +197,24 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,085 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,085 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,052 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions** | 3,024 | 8,286 | **6,478** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,105 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,105 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,072 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions** | 3,024 | 8,286 | **6,498** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 391 |
 | table words alone | `python-docx` over table cells | 187 | 1,107 | 817 |
 
 The A3 column was re-measured on the 2026-11-20 build, which is the first build with exhibits: 40 PDF pages,
 31 headings (8 H1 including References, 23 H2), 4 tables, 9 figures, and §1 through §7 all drafted. The prose
 figure is now taken with the caption lines excluded, because step 3 made them a large block of text that is
-not argument: 13 captions carry 391 words, and Word's own counter, which sees everything, reads 8,085.
+not argument: 13 captions carry 391 words, and Word's own counter, which sees everything, reads 8,105.
 
 **The ceiling question is open again.** U021 set 5,900 prose words from the arithmetic 5,017 drafted + 850 for
 §6/§7 = 5,867. Step 3 then added the C4 comparison paragraph U020 asked for, and §6/§7 came in over their
 budget. The drafted prose, measured section by section on this build: §1 300, §2 1,134, §3 742, §4 1,428, §5
-1,743, §6 317, §7 780 - **6,444 words**, and 6,478 as the builder reports it because the unit counts the 34
-words of the cover line as well. That is 578 over the ceiling, and the three additions since U021's arithmetic
-account for it exactly: §6/§7 at 1,097 against a budget of 850 (+247), the C4 paragraph (200), and the thirteen
+1,743, §6 337, §7 780 - **6,464 words**, and 6,498 as the builder reports it because the unit counts the 34
+words of the cover line as well. That is 598 over the ceiling, and the three additions since U021's arithmetic
+account for it exactly: §6/§7 at 1,117 against a budget of 850 (+267), the C4 paragraph (200), and the thirteen
 sentences that cite the exhibits (130: §3 gained 56 words, §5 74).
 
 A2 shipped 8,286 prose words over 54 pages, so the report is not long in absolute terms; what is out of date is
@@ -283,7 +283,7 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 
 Four tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
 §7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 40
-PDF pages, 8,085 words by Word's counter, 6,478 prose words excluding captions, 817 table words, 391 caption
+PDF pages, 8,105 words by Word's counter, 6,498 prose words excluding captions, 817 table words, 391 caption
 words, 31 headings and 31 contents entries. `audit_docx` finds one issue, the expected one: the cover still
 carries the template's placeholders because the values have not arrived. `audit_layout` passes every check,
 including TOC pagination, the caption-adjacency rules and exhibit image placement. Two provenance corrections
@@ -295,7 +295,7 @@ figure manifest no longer claims report numbers for itself.
 
 * **Cover values** - the student's name, student number and date. `src/build_report.py` fills them from
   `report_assets/cover_values.json` the moment that file exists; nothing else waits on it.
-* **The 578-word overage** (§9) - either the ceiling moves to about 6,500 prose words, or §1 and §3 are cut to
+* **The 598-word overage** (§9) - either the ceiling moves to about 6,500 prose words, or §1 and §3 are cut to
   roughly half their length with §2's 234 taken as well. U021's 5,900 was arithmetic on a draft that did not yet
   contain §6/§7, the C4 paragraph, the citation sentences or any captions. Awaiting a ruling; nothing was cut
   unilaterally.
