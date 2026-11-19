@@ -33,7 +33,11 @@ contradicted the ruling it claimed to summarise.
 
 ## 2. Formatting requirements, with the traps already known
 
-* **Cover page unchanged** — every placeholder on the template's first page stays exactly as shipped.
+* **Cover carries the student's own values** (U026, superseding the rule that the placeholders stay as
+  shipped): course line and report line, name with student number, and the submission date, read from
+  `report_assets/cover_values.json`, which is gitignored. The name line is four Word `ASK` fields in this
+  template, so the fill deletes them and writes literal text — writing into a field leaves the value in the XML
+  and off the page.
 * **TOC and heading formatting identical to A1/A2** — but the template trap applies: assigning the
   paragraph style is not enough, because the template's own example headings carry **direct run
   formatting** (Times New Roman 12 pt) that overrides the style definitions (Calibri Light 16/20 pt).
@@ -199,18 +203,20 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 9,024 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,190 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,565 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,498** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 9,021 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,187 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,561 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,494** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 U025 build, which carries exhibits and a 15-entry reference
-list filed as one alphabet: 44 PDF pages, 31 headings (8 H1 including References, 23 H2), 5 tables, 9 figures, and
-§1 through §7 all drafted. The prose figure is taken with the caption lines excluded, because step 3 made them a
-large block of text that is not argument: 14 captions carry 428 words, and Word's own counter, which sees
-everything, reads 9,024 against 9,190 from the PDF text layer.
+The A3 column was re-measured on the 2026-11-20 U026 build, which carries exhibits, a 15-entry reference list
+filed as one alphabet, and a cover filled with the student's own values: 44 PDF pages, 31 headings (8 H1
+including References, 23 H2), 5 tables, 9 figures, and §1 through §7 all drafted. The prose figure is taken with
+the caption lines excluded, because step 3 made them a large block of text that is not argument: 14 captions carry
+428 words, and Word's own counter, which sees everything, reads 9,021 against 9,187 from the PDF text layer.
+The prose unit also contains the 30 words of the cover block, which is where it has always been; filling the cover
+from U026's values moved the figure by four words, placeholders to values, and nothing in the sections changed.
 
 **The ceiling question is closed (U022).** It was reopened on this plan's own arithmetic: U021's 5,900 came
 from 5,017 drafted + 850 for §6/§7, and step 3 then added the C4 comparison paragraph (200 words), thirteen
@@ -220,9 +226,10 @@ moves and this is the last time it moves. The overage was then paid for inside �
 touching §4 or §5: the screening citation costs 15 words and two clauses of §2's wave paragraph were compressed
 by 16, which left the drafted prose at the ceiling exactly. Step 4 then moved the same way: the six in-text
 citations cost 28 words, and 28 were cut back inside §6 and §7, so **the drafted prose is 6,500 words with no
-headroom left**. The U025 round spent seven words on the Tiny ImageNet citation and took nine back
-in §6 and §7, so the drafted prose is now **6,498**, with the caption, reference and cell counts
-recorded below. Exhibit captions (428 words), the reference list (456 words over 15 entries) and
+headroom**. The U025 round spent seven words on the Tiny ImageNet citation and took nine back
+in §6 and §7; U026 filled the cover, which moved the figure by four more words because the cover sits inside this
+unit, so the drafted prose is now **6,494** against 6,500 - six words of headroom, with the caption, reference and
+cell counts recorded below. Exhibit captions (428 words), the reference list (456 words over 15 entries) and
 table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
 **The 6,500 budget is in prose words**, because that is the unit A2's record reported and it is the closest
@@ -253,8 +260,9 @@ untouched; everything after the TOC control is deleted and re-emitted.
   value back - in the builder and again after field resolution in `src/export_pdf.py` (88 runs on this
   build). Nothing on the page moved; the census is now a check that can fail. No Chinese, no jargon, no
   exhibit-integrity findings.
-  Two findings remain and both are expected at this step: the cover's own template placeholders
-  (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`) and "no URL anywhere" — the URL arrives with §6.
+  Two findings remained at this step and both were expected: the cover's own template placeholders
+  (`CISCXXXX YYYY`, `Your NameXXX, Student No: DDxxxxxx`), closed by U026 on 2026-11-20, and "no URL anywhere" —
+  the URL arrived with §6.
 * `src/audit_layout.py`: passes (no exhibits yet). **Extended in the U020 round**, because it had no
   opinion about the contents page: `toc_checks()` now finds the pages carrying dot-leader lines and the
   page where the first section heading starts, and fails if they are the same page or if the body starts
@@ -263,9 +271,16 @@ untouched; everything after the TOC control is deleted and re-emitted.
   onto page 3 and §1 began underneath its last entry. The fix is `w:pageBreakBefore` on the first content
   H1 rather than a break paragraph after the content control - the paragraph version was counted by
   `audit_docx` as a 32nd contents entry, which is how the mismatch surfaced.
-* **Cover fill (U018 item 1).** `Builder.fill_cover()` reads `report_assets/cover_values.json` —
-  gitignored, so the values the supervisor supplies never enter the repository. It is inert while the file
-  is absent; the audit's placeholder finding is the visible signal that the values are still outstanding.
+* **Cover fill (U018 item 1, values released by U026 on 2026-11-20).** `Builder.fill_cover()` reads
+  `report_assets/cover_values.json` — gitignored, so the values the supervisor supplies never enter the
+  repository. It was inert while that file was absent; the cover is now filled from it. Paragraphs are matched
+  by role rather than by literal token text, because the template splits each token across runs ("C" + "ISC" +
+  "XXXX") and builds the name line from ASK fields; the date paragraph carries a real example date ("06 Apr
+  2026") instead of a token, so it would never have surfaced as stale. The file properties are written in the
+  same pass, because the template ships with somebody else's name in `author`. Two gates hold the result:
+  `audit_docx` compares the built paragraphs with the released JSON and fails if a prompting field survives,
+  and `audit_layout` compares page 1 of the exported PDF with the same JSON, which is the check that catches a
+  value present in the XML and absent from the page. Both were run against a tampered byline to prove they fire.
 
 **Step 2 of §7 — §2 and §4 drafted (U019), then §1, §3 and §5 (U020). §6 and §7 are still shells, and step 3 also owes §5's two own-run figures, not only
 the seven page images.** The prose lives in `src/report_content.py` in two functions
@@ -278,15 +293,15 @@ the gate and rubric table rows, the wave counts, the corrections count). Drafted
 U017/U020), §5 **1,469** (~1,400, not to be trimmed). The built document: 8 H1 / 23 H2 = 31 headings,
 22 PDF pages, Word 5,450, prose 5,017. Both audits re-ran on that pass: `audit_docx` matched 30 headings to 30 TOC entries with no
 font/jargon/exhibit findings; `audit_layout` passed (no exhibits yet). The remaining findings are the
-expected ones: cover placeholders pending the values (U018 item 1), no URL until §6, no tables until step
-3 of §7.
+expected ones: cover placeholders pending the values (U018 item 1, since released by U026), no URL until §6,
+no tables until step 3 of §7.
 
 ## 10.1 Step 3, delivered 2026-11-20
 
 Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
 §7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The U025 round brought
 the reference list to 15 entries, sorted as one alphabet, and added the Tiny ImageNet citation to §5. The build
-reports 44 PDF pages, 9,024 words by Word's own counter (9,190 from the PDF text layer) and 7,565 docx paragraph words, with 6,498 prose words excluding
+reports 44 PDF pages, 9,021 words by Word's own counter (9,187 from the PDF text layer) and 7,561 docx paragraph words, with 6,494 prose words excluding
 captions and the reference list, 428 caption words, 456 reference words over 15 entries, and 1,243 table words across
 415 cells in 5 tables, plus 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
 cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); three gates came with them and steps 4
@@ -294,8 +309,8 @@ and 5, one that re-checks every citation and entry on the rendered text, one tha
 and one added in the U025 round that files the whole bibliography as a single alphabet. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
 code-path table is withdrawn, because U022 ruled that its prose already covers brief item (3).
 
-`audit_docx` finds one issue, the expected one: the cover still
-carries the template's placeholders, which U022 will fill by hand at submission. `audit_layout` passes every check,
+`audit_docx` found one issue, the expected one at that step: the cover still
+carried the template's placeholders, released and filled two rounds later (U026). `audit_layout` passes every check,
 including TOC pagination, the caption-adjacency rules and exhibit image placement. Two provenance corrections
 came out of wiring the exhibits: the README figure's line numbers were being derived from an offset across a
 blank line, so the picker now carries each line's own number (the block is lines 75-82, not 77-83), and the
@@ -368,9 +383,10 @@ a line and a plain string search would then miss it.
 
 ## 11. What is still open
 
-* **Cover** - U022 will write the name, student number and date onto the template by hand at submission, so the
-  `report_assets/cover_values.json` path in `src/build_report.py` stays inert and `audit_docx`'s placeholder
-  finding is expected until that moment.
+* **Cover** - closed on 2026-11-20 (U026). The three values arrived, went into `report_assets/cover_values.json`
+  (gitignored, so they stay out of the repository), and the build fills the cover from them: LI WAI HONG,
+  UC425821, dated 21 Nov 2026 because he does not expect to hand it in before then. `audit_docx`'s placeholder
+  finding is gone; the file has no findings at all now.
 * **Final read-through** - done on 2026-11-20: the coverage map is §12, and the prose pass over §6 and §7 is
   §13. Outside those two sections only words were touched, per U023. The §6 splice it left behind - "the three audit
   the three audit scripts" - was found in the U025 round while paying for the citation, which is the second time a
@@ -379,5 +395,14 @@ a line and a plain string search would then miss it.
   [Data set], addressed to the archive rather than to the 404 landing page, and its seven words are paid for
   inside §6 and §7, which gave up nine.
 * **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is
-  6,498 after the U025 round spent seven words on the Tiny ImageNet citation and took nine back out of §6 and §7. Any further addition has to pay for itself inside §2, §6 or §7, the way the
-  citation sentences and the prose pass did.
+  6,494 after the U025 round spent seven words on the Tiny ImageNet citation, took nine back out of §6 and §7,
+  and U026 replaced the cover's 34 words of placeholder text with the 30 words of real values. Six words of
+  headroom. Any further addition has to pay for itself inside §2, §6 or §7, the way the citation sentences and
+  the prose pass did.
+* **Submission package** - assembled 2026-11-20 (U026). `submission/` holds the report docx, the report pdf and
+  the dialogue record as markdown, each byte-identical to the file it was copied from;
+  `CISC3024_AI_Assignment_3_submission.zip` carries those three and nothing else. Both are gitignored, along with
+  the report files themselves, because the submission is not repository content. Uploading it is the supervisor's
+  act, and `git rev-parse main` is still to be written into §3 at that moment.
+* **Cover** - closed by U026: `report_assets/cover_values.json` exists, the cover fills from it, and the two
+  cover gates (one on the docx, one on page 1 of the rendered PDF) are what say so.

@@ -79,6 +79,15 @@ def resolve(docx_path: Path, pdf_path: Path) -> int:
     from docx import Document
     document = Document(str(docx_path))
     written = explicit_sizes(document)
+    # Word also rewrites the file's author as whoever's machine ran the save, which is how a docx whose cover
+    # says LI WAI HONG ends up reporting somebody else in its properties. The released values are the only
+    # source, so the same pass that fixes the run sizes puts them back.
+    values = ROOT / "report_assets" / "cover_values.json"
+    if values.exists():
+        name = json.loads(values.read_text(encoding="utf-8")).get("author", "")
+        if name:
+            document.core_properties.author = name
+            document.core_properties.last_modified_by = name
     document.save(str(docx_path))
     print(f"run sizes made explicit after field resolution: {written}")
     print(f"docx: {docx_path}")

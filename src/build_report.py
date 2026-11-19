@@ -79,6 +79,34 @@ def _runs(el):
     return [r for r in el.findall(qn("w:r")) if r.find(qn("w:t")) is not None]
 
 
+def _set_plain_text(el, text: str):
+    """Replace a whole paragraph with literal lines, deleting any field it contained.
+
+    The template's cover name is not text: it is four `ASK` fields (one AuthorName, three StudentNo) that Word
+    fills by prompting the person who opens the file. Writing into such a paragraph leaves the field instructions
+    alive, so the value disappears the next time Word updates fields, which is exactly what the first filled cover
+    did - the examiner's export rendered an empty name line. A submission carries literal values, so the fields
+    and their bookmarks come out and the text goes in, in the paragraph's own formatting.
+    """
+    for child in list(el):
+        if child.tag != qn("w:pPr"):
+            el.remove(child)
+    run = el.makeelement(qn("w:r"), {})
+    rpr = run.makeelement(qn("w:rPr"), {})
+    lang = rpr.makeelement(qn("w:lang"), {})
+    lang.set(qn("w:val"), "en-GB")
+    rpr.append(lang)
+    run.append(rpr)
+    for i, line in enumerate(text.split("\n")):
+        if i:
+            run.append(run.makeelement(qn("w:br"), {}))
+        t = run.makeelement(qn("w:t"), {})
+        t.set(qn("xml:space"), "preserve")
+        t.text = line
+        run.append(t)
+    el.find(qn("w:pPr")).addnext(run)
+
+
 def _set_text(el, text: str):
     runs = _runs(el)
     if not runs:
@@ -354,26 +382,38 @@ class Builder:
         return len(ref.entries())
 
     def fill_cover(self, cover: dict | None = None) -> list[str]:
-        """Write the student's values onto the template's cover; a no-op until the JSON exists."""
+        """Write the student's values onto the template's cover; a no-op until the JSON exists.
+
+        Matched by paragraph role rather than by literal placeholder text, because the template splits each token
+        across runs ("C" + "ISC" + "XXXX") and builds the name line out of ASK fields, so all three lines are
+        replaced whole. The name block is three identical lines for a three-person group; one student means one
+        line, not three blanks under it. The date needs the same treatment because the template carries a real
+        example date, "06 Apr 2026", rather than a token: nothing would mark it stale if it were left behind.
+        """
         if cover is None and COVER_VALUES.exists():
             cover = json.loads(COVER_VALUES.read_text(encoding="utf-8"))
         if not cover:
             return []
-        mapping = {
-            "CISCXXXX YYYY": TITLE,
-            "Your NameXXX, Student No: DDxxxxxx": cover.get("byline", ""),
-            "YYYY/MM/DD": cover.get("date", ""),
-        }
         done = []
-        for para in self.doc.paragraphs:
-            text, hit = para.text, False
-            for token, value in mapping.items():
-                if value and token in text:
-                    text = text.replace(token, value)
-                    hit = True
-                    done.append(token)
-            if hit:
-                _set_text(para._p, text)
+        for para in self.doc.paragraphs[:12]:
+            text = para.text
+            if "CISCXXXX" in text:
+                new = cover.get("title", "")
+            elif "Your Name" in text or "ASK" in text:
+                new = cover.get("byline", "")
+            elif re.fullmatch(r"\s*\d{2} [A-Za-z]{3} \d{4}\s*", text or " "):
+                new = cover.get("date", "")
+            else:
+                continue
+            if new and new != text:
+                _set_plain_text(para._p, new)
+                done.append(new.split(chr(10))[0])
+        if cover.get("author"):
+            # the template carries another person's name in its file properties, and a submission checker
+            # reads those as readily as the cover
+            self.doc.core_properties.author = cover["author"]
+            self.doc.core_properties.last_modified_by = cover["author"]
+            self.doc.core_properties.title = TITLE
         return done
 
     def update_toc_and_fields(self) -> None:

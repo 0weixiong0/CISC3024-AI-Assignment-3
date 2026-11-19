@@ -97,8 +97,7 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "scored the literature, wrote every line of the implementation and the audits, ran "
              "the experiments, drafted the figures, the tables and this text, and built the page. The "
              "student set the constraints, ruled on what the tool could not settle from the brief, "
-             "and approved each download and release. Thirteen rulings and sixteen "
-             "corrections are in the appendix ledger."),
+             "and approved each download and release. Every ruling and correction is in the attached dialogue record."),
             ("body",
              "What the collaboration got wrong is the more useful part of the record: every failure was caught "
              "by a check, not by reading. The first drift measure compared the new "

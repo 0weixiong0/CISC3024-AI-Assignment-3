@@ -105,6 +105,33 @@ def reference_checks(pages) -> list[str]:
     return problems
 
 
+def cover_checks(pages) -> list[str]:
+    """Page one must carry the released cover values, and no template token may survive anywhere.
+
+    The docx audit checks the same strings in the element tree; this checks them where they are read. The
+    distinction matters because the template's name line is built from Word ASK fields: text placed inside one
+    is present in the XML and absent from the page, and the first filled cover did exactly that. The released
+    values live in a gitignored JSON, so this reads them instead of restating them.
+    """
+    import json
+
+    values = ROOT / "report_assets" / "cover_values.json"
+    if not values.exists() or not pages:
+        return []
+    released = json.loads(values.read_text(encoding="utf-8"))
+    first = " ".join(pages[0].get_text().split())
+    problems = []
+    for field in ("title", "byline", "date"):
+        for line in str(released.get(field, "")).split(chr(10)):
+            if line and " ".join(line.split()) not in first:
+                problems.append(f"cover {field} never renders on page 1: {line!r}")
+    body = " ".join(" ".join(page.get_text().split()) for page in pages)
+    for token in ("CISCXXXX", "DDxxxxxx", "CYYYYYY", "Your Name", "Please enter your"):
+        if token in body:
+            problems.append(f"template token still on the page: {token!r}")
+    return problems
+
+
 def word_band_checks(pages) -> list[str]:
     """A rendered sanity band around the prose figure the builder measures exactly.
 
@@ -172,6 +199,7 @@ def main(pdf: Path) -> int:
         # The contents field is resolved by Word, so this is checked on the rendered pages.
         problems += toc_checks(pages)
         problems += reference_checks(pages)
+        problems += cover_checks(pages)
         problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.

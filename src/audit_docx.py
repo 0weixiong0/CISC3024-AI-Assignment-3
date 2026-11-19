@@ -7,6 +7,7 @@ text hygiene, repeated words, font drift, table integrity and bibliography filin
 from __future__ import annotations
 
 import io
+import json
 import re
 import sys
 from collections import Counter
@@ -250,6 +251,32 @@ def main() -> int:
                            f"follows {reference_paragraphs[first_wrong - 1][:40]!r}")
     print(f"reference entries: {len(reference_paragraphs)}; filing "
           f"{'alphabetical' if keys == sorted(keys) else 'NOT alphabetical'}")
+
+    # ---- 9. the cover ---------------------------------------------------------------------------
+    # The template's name line is four ASK fields and its date is a real example date, so a fill can fail in
+    # three different ways and look finished each time: text written into the field runs disappears the next
+    # time Word updates fields, the group template's spare name lines collapse into blank ones, and "06 Apr
+    # 2026" stays on the page unnoticed. The values live in a gitignored JSON, so the audit compares against
+    # what was released rather than against a copy of it typed here.
+    cover_values = ROOT / "report_assets" / "cover_values.json"
+    if cover_values.exists():
+        released = json.loads(cover_values.read_text(encoding="utf-8"))
+        cover_text = " ".join(texts[:12])
+        for field in ("title", "byline", "date"):
+            for line in str(released.get(field, "")).split(chr(10)):
+                if line and line not in cover_text:
+                    flag("cover", f"cover field {field!r} did not survive the build: {line!r} is not on the page")
+        instructions = [node.text.strip() for node in doc.element.body.iter(qn("w:instrText"))
+                        if node.text and re.match(r"\s*(ASK|FORMTEXT|FORMCHECKBOX)\b", node.text)]
+        if instructions:
+            flag("cover", f"{len(instructions)} prompting field(s) left on the cover, e.g. {instructions[0]!r} "
+                          "- Word re-evaluates these on open and renders them empty, so a value written into "
+                          "one is not a value on the page")
+        if re.search(r"\d{2} [A-Za-z]{3} 2026", cover_text) and released.get("date", "") not in cover_text:
+            flag("cover", "a date is on the cover but it is not the released one")
+        print(f"cover: checked against the released values ({len(released)} keys)")
+    else:
+        print("cover: report_assets/cover_values.json absent, nothing to check the cover against")
 
     print()
     if not FLAGS:
