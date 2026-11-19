@@ -43,6 +43,11 @@ TEMPLATE = ROOT / "Report Template.docx"
 OUT_DOCX = ROOT / "CISC3024_AI_Assignment_3_Report.docx"
 COVER_VALUES = ROOT / "report_assets" / "cover_values.json"
 
+# The smallest gap worth writing between two figures, in points. The gap itself comes from the block heights
+# (`report_fields.figure_block_pt`) and the text area, so it is whatever the page has left; below this size
+# there is no empty middle to speak of, and the pair is left to run one under the other.
+FIGURE_PAGE_STRUT_MIN_PT = 40.0
+
 TITLE = ("CISC3024 Assignment 3: Apply a Principal Component Analysis or Linear Discriminant "
          "Analysis Algorithm in Computer Vision or Pattern Recognition")
 
@@ -61,6 +66,19 @@ SECTIONS = [
 
 # Sections whose prose comes from `report_content.py`.
 DRAFTED = {t for t, _, drafted in SECTIONS if drafted}
+
+def _starts_new_page(el) -> bool:
+    """Whether the element after an exhibit block already begins a page.
+
+    The blank line that separates an exhibit from what follows is only wanted when something does follow on the
+    same page. If the next paragraph carries its own page break, the blank would end up at the top of the new
+    page instead of under the exhibit, which is the case U028 excluded.
+    """
+    if el is None or el.tag != qn("w:p"):
+        return False
+    pPr = el.find(qn("w:pPr"))
+    return pPr is not None and pPr.find(qn("w:pageBreakBefore")) is not None
+
 
 PLACEHOLDER = re.compile(r"CISCXXXX|DDxxxxxx|YYYY/MM/DD|Your NameXXX|\[T[AB1]\]")
 
@@ -333,14 +351,23 @@ class Builder:
         The anchor is the heading's final paragraph, recorded while the prose went in, so an exhibit can never
         drift away from the claim it supports when the text around it is edited: if the heading disappears the
         build stops instead of dropping the exhibit silently.
+
+        U028 asked for the gap an exhibit needs on both sides. A blank body line goes in after every exhibit
+        block, because a table's ruled edge running straight into the next heading is what the supervisor's
+        screenshot of Table 1 showed - except where the element that follows already starts a new page, where
+        the blank would sit at the top of that page instead. Two figures sharing a page get a strut rather than a
+        blank line: the first stays at the top, the second is pushed to the bottom, and the middle is deliberately
+        empty, which is the arrangement U028 asked for and `audit_layout` now measures.
         """
         placed = []
         self.caption_words = 0
+        self.struts = []
         for (h1, h2), keys in rex.PLACEMENT:
             cursor = self.last.get((h1, h2))
             if cursor is None:
                 raise SystemExit(f"exhibit anchor not found: {h1} / {h2}")
-            for key in keys:
+            following = cursor.getnext()          # whatever the block will end up in front of
+            for index, key in enumerate(keys):
                 if key in rex.TABLES:
                     caption, builder = rex.TABLES[key]
                     elements = rf.caption_paragraphs(
@@ -351,16 +378,41 @@ class Builder:
                     pPr = elements[0].get_or_add_pPr()
                     pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
                     elements.append(rf.table_element(self.protos, *builder()))
+                    is_figure = False
                 else:
                     elements = rf.caption_paragraphs(
                         self.doc, self.protos, "Figure", r" SEQ Figure \* ARABIC ",
                         str(self.numbers[key]), "_Ref_figure_" + key, rex.figure_caption(key))
                     elements.append(rf.figure_paragraph(self.doc, rex.figure_asset(key))._p)
+                    is_figure = True
+                if index and not _starts_new_page(elements[0]):
+                    previous = keys[index - 1]
+                    previous_is_figure = previous not in rex.TABLES
+                    if is_figure and previous_is_figure:
+                        # Two figures on one page hold the page to themselves: the first at the top, the second
+                        # at the bottom, the middle empty (U028). Whether that is possible is arithmetic, not
+                        # pagination: the two blocks plus the gap have to fit the text area, and when they do
+                        # not, no gap is written and Word moves the second figure to the top of the next page.
+                        # Writing a gap anyway is what left Figure 9's caption 160pt down an empty page.
+                        gap = (rf.TEXT_AREA_PT - rf.PAGE_SLACK_PT - rf.PICTURE_UNDER_PT
+                               - rf.figure_block_pt(rex.figure_caption(previous), rex.figure_asset(previous))
+                               - rf.figure_block_pt(rex.figure_caption(key), rex.figure_asset(key)))
+                        if gap >= FIGURE_PAGE_STRUT_MIN_PT:
+                            separator = rf.strut_paragraph(self.doc, self.protos, gap)
+                            cursor.addnext(separator)
+                            cursor = separator
+                            self.struts.append((previous, key, round(gap, 1)))
+                    else:
+                        separator = rf.spacer_paragraph(self.doc, self.protos)
+                        cursor.addnext(separator)
+                        cursor = separator
                 for el in elements:
                     cursor.addnext(el)
                     cursor = el
                 self.caption_words += sum(len(_para_text(el).split()) for el in elements[:2])
                 placed.append(f"{key} = {self.numbers[key]}")
+            if not _starts_new_page(following):
+                cursor.addnext(rf.spacer_paragraph(self.doc, self.protos))
         return placed
 
     def insert_references(self) -> int:
@@ -477,6 +529,8 @@ def main() -> int:
           f"{len(stats['h2'])} H2), {stats['tables']} tables, {stats['figures']} figures, "
           f"{stats['prose_words']} prose words")
     print("exhibit numbering: " + ", ".join(exhibits))
+    print("figure pairs held on one page, gap written: "
+          + (", ".join(f"{a}+{b}={points}pt" for a, b, points in builder.struts) or "none"))
     print(f"reference entries: {entries}, each one cited in the text")
     print(f"prose without exhibit captions: {stats['prose_words'] - builder.caption_words}, "
           f"caption words: {builder.caption_words}")

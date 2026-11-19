@@ -33,6 +33,35 @@ contradicted the ruling it claimed to summarise.
 
 ## 2. Formatting requirements, with the traps already known
 
+* **A blank line after an exhibit, except when the page ends there** (U028, 2026-11-20). The supervisor's
+  screenshot showed Table 1's last ruled edge running into the bold H2 under it, and the rule he set is a gap
+  after a table or figure *unless nothing follows it on that page*. An empty body line is written after each
+  exhibit block, which renders 46.1 to 46.3pt from the exhibit's bottom edge to the next line, and it is
+  suppressed when the block that follows carries its own `w:pageBreakBefore`. Both halves of the rule took a
+  wrong version first: writing the gap unconditionally stranded it at the *top* of the following page, and
+  deciding "page-final" from the source rather than the page cannot work, because pagination is Word's
+  decision. So the gap is asserted on the rendered page, where `exhibit_gap_checks()` measures it and where a
+  page that opens more than 2pt below the text top is reported as a stranded separator.
+* **Caption lines are 1.5-spaced, as the template's own caption pair is** (U028). The body prototype the
+  captions were cloned from is double-spaced (`w:line=480`); the template's `Table 1` / `Table text` pair is
+  `w:line=360`, and exported through Word it renders the label at y=72.5 over the description at y=105.1.
+  Those two numbers are the gate's constants - 32.6pt from label to description, 20.7pt between wrapped
+  description lines - because the arithmetic of 1.5 on 12pt Times gives 20.7 for the first step too, and the
+  template does not render that way.
+* **Exhibit labels are bold** (U028): `Figure 1` and `Table 1` render in `TimesNewRomanPS-BoldMT`, including
+  the SEQ field that carries the number, so a bold label never shows a plain digit beside it. Tables needed
+  no change: they already ran flush with the text edge at x=90.3 to x=521.9, full block width; the character
+  drops the supervisor saw are column widths taken from the caption's wording rather than from the cells, and
+  that is a separate decision, not one made silently here.
+* **Two figures on one page hold that page to themselves** (U028): the first at the top, the second at the
+  bottom, the middle deliberately empty. The size of the empty middle is arithmetic, not tuning. A figure block
+  is its caption lines (45.9pt plus 20.7pt for each extra wrapped description line, counted with the document's
+  own typeface), 18.8pt above the picture, and the picture at the height `figure_paragraph` places it at; two
+  blocks and a gap fit the 648pt text area only when their total leaves room, with 36pt reserved because a
+  190pt gap in the trial put Figure 5's picture at 723.4 and Word moved the figure to the next page. So
+  Figure 4 and Figure 5 share page 26 with a written gap of 151.4pt - the pair measures 442.4pt against the
+  593pt available - while Figure 8 and Figure 9, whose blocks come to 703.7pt, get no gap at all and Word breaks
+  between them. Writing the gap anyway was what left Figure 9's caption 162pt down an otherwise empty page 35.
 * **Exhibits sit flush with the text block** (U027, 2026-11-20). The template's own caption lines carry no
   `w:ind` and its figure paragraph is left-aligned with no space above or below, while its body prose is indented
   half an inch. Cloning the body prototype for captions therefore pushed all fourteen exhibit labels half a column
@@ -328,6 +357,19 @@ including TOC pagination, the caption-adjacency rules and exhibit image placemen
 came out of wiring the exhibits: the README figure's line numbers were being derived from an offset across a
 blank line, so the picker now carries each line's own number (the block is lines 75-82, not 77-83), and the
 figure manifest no longer claims report numbers for itself.
+
+**The U028 round added three rendered checks and proved all four against tampered copies** (a copy of the built
+docx, broken on purpose, exported and audited; nothing below survives on disk, the files were deleted after the
+run). Removing the bold from Figure 3's label gave `page 17: the label 'Figure 3' is not bold
+(['TimesNewRomanPSMT'])`; deleting the blank line under Table 1's last row gave `page 9: an exhibit ends at 524.1
+and the next line starts 34.3pt below it`; setting Table 2's caption pair back to the body's double spacing gave
+both `description starts 39.6pt under the label` and `description lines advance 27.6pt`; shrinking the written gap
+from 151.4pt to 20pt gave `page 26 holds two figures but only 38.6pt separates them` and `its second figure ends
+166.6pt above the text bottom`. The page-top rule needed no tampering to prove: it fired on the live build, on the
+stranded gap above Figure 9, before the geometry fix removed the cause. None of this moved a count - the build after
+the changes is the same 45 pages, 9,021 words by Word's counter, 9,187 from the PDF text layer, 7,561 docx paragraph
+words, 6,494 prose words, 428 caption words, 456 reference words over 15 entries and 1,243 table words over 415
+cells, because a gap, a line-spacing value and a bold flag carry no words.
 
 ## 12. Brief-item coverage, measured on the 2026-11-20 build (step 4)
 

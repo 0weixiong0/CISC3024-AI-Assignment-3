@@ -26,6 +26,11 @@ PDF = ROOT / "CISC3024_AI_Assignment_3_Report.pdf"
 TOP_LIMIT = 200      # a first exhibit on a page must start above this y
 BOTTOM_LIMIT = 320   # a second exhibit on the same page must start below this y
 PAGE_BOTTOM = 700    # nothing may start below this and still be on the page
+# The caption pair as the template itself renders it: "Table 1" at y=72.5 over "Table text" at y=105.1, and
+# wrapped description lines 20.7pt apart, which is 1.5 spacing on 12pt Times. Read from the template exported
+# through Word, not assumed, because the template's pair is also 32.6 rather than the 20.7 the arithmetic gives.
+TEMPLATE_CAPTION_STEP = 32.6
+TEMPLATE_CAPTION_PITCH = 20.7
 BAND_LOW = 7800      # rendered body words, see word_band_checks
 BAND_HIGH = 9200     # the ceiling on the prose unit itself lives in src/build_report.py
 
@@ -204,6 +209,122 @@ def geometry_checks(pages) -> list[str]:
     return problems
 
 
+def _rows(page) -> list[tuple[float, float, str, set]]:
+    """Text rows on a page: top, bottom, joined text, and the fonts that render it.
+
+    Rows are rebuilt from rendered lines rather than taken from the block structure, because Word's PDF output
+    puts a caption label in one block and its description in another, and a paragraph that merely starts with
+    the word "Table" is otherwise indistinguishable from the caption of Table N.
+    """
+    buckets: dict[float, dict] = {}
+    for block in page.get_text("dict")["blocks"]:
+        if block["type"] != 0:
+            continue
+        for line in block["lines"]:
+            text = " ".join(span["text"] for span in line["spans"] if span["text"].strip()).strip()
+            if not text:
+                continue
+            key = round(line["bbox"][1], 1)
+            row = buckets.setdefault(key, {"bottom": line["bbox"][1], "parts": [], "fonts": set()})
+            row["bottom"] = max(row["bottom"], line["bbox"][3])
+            row["parts"].append((line["bbox"][0], text))
+            row["fonts"].update(span["font"] for span in line["spans"] if span["text"].strip())
+    return [(y, row["bottom"], " ".join(t for _, t in sorted(row["parts"])), row["fonts"])
+            for y, row in sorted(buckets.items())]
+
+
+def caption_typography_checks(pages) -> list[str]:
+    """The caption block must look the way the template's own caption pair looks.
+
+    Three properties U028 named, each measured on the rendered page: the label is bold, the label-to-description
+    step and the wrapped-description line pitch are the template's 1.5-spaced values rather than the body's
+    double spacing, and the description is italic. The three constants were read off `Report Template.docx`
+    exported through Word - the template's "Table 1" / "Table text" pair renders at the same 72.5 and 105.1 -
+    so the check compares against the template rather than against a preference.
+    """
+    problems = []
+    for number, page in enumerate(pages, start=1):
+        if number == 1:
+            continue
+        rows = _rows(page)
+        for index, (y, bottom, text, fonts) in enumerate(rows):
+            match = re.fullmatch(r"(Figure|Table)\s+\d+", text)
+            if not match:
+                continue
+            if not all("Bold" in font for font in fonts):
+                problems.append(f"page {number}: the label {text!r} is not bold ({sorted(fonts)})")
+            following = [row for row in rows[index + 1:index + 4] if row[2]]
+            if not following:
+                problems.append(f"page {number}: {text} has no description line under the label")
+                continue
+            step = round(following[0][0] - y, 1)
+            if abs(step - TEMPLATE_CAPTION_STEP) > 1.5:
+                problems.append(f"page {number}: {text}'s description starts {step}pt under the label, "
+                                f"the template's caption pair measures {TEMPLATE_CAPTION_STEP}pt")
+            if not all("Italic" in font for font in following[0][3]):
+                problems.append(f"page {number}: {text}'s description is not italic ({sorted(following[0][3])})")
+            previous = following[0][0]
+            for row in following[1:]:
+                if not all("Italic" in font for font in row[3]):
+                    break        # the description ended; whatever follows is the exhibit or the prose
+                pitch = round(row[0] - previous, 1)
+                if abs(pitch - TEMPLATE_CAPTION_PITCH) > 1.2:
+                    problems.append(f"page {number}: {text}'s description lines advance {pitch}pt, "
+                                    f"1.5 spacing is {TEMPLATE_CAPTION_PITCH}pt")
+                previous = row[0]
+    return problems
+
+
+def exhibit_gap_checks(pages) -> list[str]:
+    """A blank line after an exhibit when the page continues, and none when it does not (U028).
+
+    The gap is asserted where it is read, because whether one is wanted depends on Word's pagination, not on
+    the source: the same spacer paragraph that separates Table 1 from the heading under it would sit at the top
+    of the following page if that heading had broken there instead. Both halves are checked - the measured
+    distance from the exhibit's bottom edge to the next row, and the top of every page, which catches a gap
+    stranded where it does not belong.
+    """
+    problems = []
+    for number, page in enumerate(pages, start=1):
+        if number == 1:
+            continue
+        rows = [row for row in _rows(page) if row[0] > 55 and not row[2].isdigit()]
+        images = [b["bbox"] for b in page.get_text("dict")["blocks"]
+                  if b["type"] == 1 and b["bbox"][0] < 100]
+        bottoms = [b[3] for b in images] + [t.bbox[3] for t in page.find_tables().tables]
+        for bottom in bottoms:
+            following = [row for row in rows if row[0] > bottom + 1]
+            if not following:
+                continue                      # nothing after it on this page, which is the excluded case
+            gap = round(following[0][0] - bottom, 1)
+            if len(images) == 2 and re.fullmatch(r"(Figure|Table)\s+\d+", following[0][2]):
+                if gap < 100:                 # the deliberate empty middle of a two-figure page
+                    problems.append(f"page {number} holds two figures but only {gap}pt separates them")
+                continue
+            if not 44.0 <= gap <= 48.0:
+                problems.append(f"page {number}: an exhibit ends at {bottom:.1f} and the next line starts "
+                                f"{gap}pt below it; the blank line after an exhibit measures 46pt")
+        if rows and rows[0][0] - 72.5 > 2.0:
+            problems.append(f"page {number} opens {rows[0][0] - 72.5:.1f}pt below the text top with "
+                            f"{rows[0][2][:40]!r}: a separator has been stranded at the top of the page")
+        if len(images) == 2:
+            # A two-figure page holds nothing else. Caption descriptions are excluded by their italic runs:
+            # without that the check read Figure 4's own caption as prose sitting above the pair and reported
+            # the page it was written to protect as broken.
+            prose = [row for row in rows
+                     if not re.fullmatch(r"(Figure|Table)\s+\d+", row[2])
+                     and not all("Italic" in font for font in row[3])
+                     and row[1] < images[0][1] - 1]
+            if prose:
+                problems.append(f"page {number} is meant to hold two figures only, but prose renders above "
+                                f"them: {prose[0][2][:40]!r}")
+            shortfall = round(720.0 - images[1][3], 1)
+            if shortfall > 45:
+                problems.append(f"page {number}: its second figure ends {shortfall}pt above the text bottom, "
+                                f"so it is not sitting at the foot of the page")
+    return problems
+
+
 def word_band_checks(pages) -> list[str]:
     """A rendered sanity band around the prose figure the builder measures exactly.
 
@@ -211,7 +332,7 @@ def word_band_checks(pages) -> list[str]:
     headings, exhibit captions and reference entries. The audit cannot recompute that unit from a page: table
     cells and caption descriptions are indistinguishable from prose once they are rendered. So this asserts the
     weaker thing it can see - that the whole rendered body, contents page and section titles excluded, sits
-    inside a band around the current 8,472. The band is wide on purpose; it is a drift detector for a section
+    inside a band around the current 8,811. The band is wide on purpose; it is a drift detector for a section
     appearing or disappearing, not a second opinion on the ceiling.
     """
     from build_report import SECTIONS
@@ -273,6 +394,8 @@ def main(pdf: Path) -> int:
         problems += reference_checks(pages)
         problems += cover_checks(pages)
         problems += geometry_checks(pages)
+        problems += caption_typography_checks(pages)
+        problems += exhibit_gap_checks(pages)
         problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.
