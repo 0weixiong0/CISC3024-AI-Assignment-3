@@ -33,6 +33,14 @@ contradicted the ruling it claimed to summarise.
 
 ## 2. Formatting requirements, with the traps already known
 
+* **Exhibits sit flush with the text block** (U027, 2026-11-20). The template's own caption lines carry no
+  `w:ind` and its figure paragraph is left-aligned with no space above or below, while its body prose is indented
+  half an inch. Cloning the body prototype for captions therefore pushed all fourteen exhibit labels half a column
+  right, and centring the pictures left them attached to neither margin. Labels, descriptions and pictures now all
+  start at the text edge, x=90 in the rendered page.
+* **References opens its own page** (U027): `w:pageBreakBefore` on the heading. Section 7 used to run to mid-page
+  42 and leave the heading with three entries squeezed in above it. The break is carried by the heading rather than
+  by a separate paragraph, because a break paragraph reads as another contents entry to `audit_docx`.
 * **Cover carries the student's own values** (U026, superseding the rule that the placeholders stay as
   shipped): course line and report line, name with student number, and the submission date, read from
   `report_assets/cover_values.json`, which is gitignored. The name line is four Word `ASK` fields in this
@@ -215,8 +223,8 @@ match any of the four measurements below, so they are withdrawn.
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 U026 build, which carries exhibits, a 15-entry reference list
-filed as one alphabet, and a cover filled with the student's own values: 44 PDF pages, 31 headings (8 H1
+The A3 column was re-measured on the 2026-11-20 U027 build, which carries exhibits, a 15-entry reference list
+filed as one alphabet, and a cover filled with the student's own values: 45 PDF pages, 31 headings (8 H1
 including References, 23 H2), 5 tables, 9 figures, and §1 through §7 all drafted. The prose figure is taken with
 the caption lines excluded, because step 3 made them a large block of text that is not argument: 14 captions carry
 428 words, and Word's own counter, which sees everything, reads 9,021 against 9,187 from the PDF text layer.
@@ -306,7 +314,7 @@ no tables until step 3 of §7.
 Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
 §7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The U025 round brought
 the reference list to 15 entries, sorted as one alphabet, and added the Tiny ImageNet citation to §5. The build
-reports 44 PDF pages, 9,021 words by Word's own counter (9,187 from the PDF text layer) and 7,561 docx paragraph words, with 6,494 prose words excluding
+reports 45 PDF pages, 9,021 words by Word's own counter (9,187 from the PDF text layer) and 7,561 docx paragraph words, with 6,494 prose words excluding
 captions and the reference list, 428 caption words, 456 reference words over 15 entries, and 1,243 table words across
 415 cells in 5 tables, plus 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
 cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); three gates came with them and steps 4
@@ -335,7 +343,8 @@ Pages are where each H1 starts in the exported PDF, read from the rendered file 
 | (6) Source-code availability, as a webpage link | §6's citation block: the repository line and the Pages line, each on its own line | 38 |
 | No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
 
-Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p42 to p43. Contents
+Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p43 to p45
+(the bibliography opens its own page from U027; the break moved it one page later and the entries run to p45). Contents
 occupies pages 2-3, and the body begins on page 4 under the page-break rule recorded in §10.
 
 ### Bibliography: 15 entries, filed as one alphabet, each one traced to a record

@@ -243,6 +243,13 @@ def main() -> int:
         return plain(head), (year.group(1) if year else ""), plain(tail)
 
     reference_paragraphs = [p.text.strip() for p in paragraphs if p.style.style_id == "EndNoteBibliography"]
+    order = [(i, p.style.style_id, p.text.strip()) for i, p in enumerate(paragraphs)]
+    heads = [i for i, _s, text in order if text == "References"]
+    entries = [i for i, style, _t in order if style == "EndNoteBibliography"]
+    if heads and entries and min(entries) < max(heads):
+        flag("references", f"reference entries precede the References heading: entry paragraph "
+                           f"{min(entries)} against heading paragraph {max(heads)} - the list must follow "
+                           f"its own heading in document order")
     keys = [filing_key(entry) for entry in reference_paragraphs]
     if keys != sorted(keys):
         first_wrong = next(i for i in range(1, len(keys)) if keys[i] < keys[i - 1])

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 import pymupdf
@@ -132,6 +133,77 @@ def cover_checks(pages) -> list[str]:
     return problems
 
 
+def geometry_checks(pages) -> list[str]:
+    """Exhibits sit flush with the text block, and the bibliography opens its own page.
+
+    Two faults the text checks cannot see. A caption can carry the body paragraph's half-inch first-line indent
+    and still read correctly in every string search, which is what the first exhibit pass did - the labels were
+    half a column right of the prose. And a picture can be centred while the template's own figure paragraph is
+    left-aligned, which makes the exhibit look attached to neither margin. The picture rule is a partial net on
+    its own: an image scaled to the full text width sits at the margin whether it is centred or left, so only the
+    narrower ones move, and the caption rule is what catches the indent on every exhibit. Both are measured here
+    against the
+    page's own text edge rather than against a typed number: the margin comes from where the long prose lines on
+    that page start.
+
+    The References rule is U026's: the heading has to open a page. It used to sit mid-page under the last
+    paragraph of section 7, so a reader met three entries before meeting the heading.
+    """
+    problems = []
+    # The text edge is taken once for the document, from every long rendered line below the heading band. It
+    # cannot be taken page by page: a page holding an indented caption and two lines of indented description has
+    # those lines as its longest text, so the faulty indent becomes the reference and the page looks compliant.
+    spans = [round(s["bbox"][0], 1) for page in pages for b in page.get_text("dict")["blocks"] if b["type"] == 0
+             for l in b["lines"] for s in l["spans"] if len(s["text"].strip()) > 40 and s["bbox"][0] < 200]
+    if not spans:
+        return ["no body text found to measure the exhibits against"]
+    left = Counter(spans).most_common(1)[0][0]
+    print(f"text block left edge, measured across the document: x={left}")
+    for number, page in enumerate(pages, start=1):
+        blocks = page.get_text("dict")["blocks"]
+        for b in blocks:
+            if b["type"] != 0:
+                continue
+            for line in b["lines"]:
+                text = "".join(s["text"] for s in line["spans"]).strip()
+                if re.fullmatch(r"(Figure|Table)\s+\d+", text):
+                    x = round(line["bbox"][0], 1)
+                    if abs(x - left) > 1.0:
+                        problems.append(f"{text} on page {number} starts at x={x}, indented from the "
+                                        f"text edge at x={left}")
+        for b in blocks:
+            if b["type"] == 1 and number > 1:          # page 1 carries the template's own centred logo
+                x0, x1 = round(b["bbox"][0], 1), round(b["bbox"][2], 1)
+                if abs(x0 - left) > 1.0:
+                    problems.append(f"the figure on page {number} starts at x={x0}, not flush with the "
+                                    f"text edge at x={left} (it runs to {x1})")
+
+    head_page = None
+    for number, page in enumerate(pages, start=1):
+        for b in page.get_text("dict")["blocks"]:
+            if b["type"] != 0:
+                continue
+            for line in b["lines"]:
+                if "".join(s["text"] for s in line["spans"]).strip() == "References":
+                    head_page = number if head_page is None else min(head_page, number)
+    if head_page is None:
+        problems.append("no References heading found in the rendered document")
+        return problems
+
+    lines = [
+        "".join(s["text"] for s in line["spans"]).strip()
+        for b in pages[head_page - 1].get_text("dict")["blocks"] if b["type"] == 0
+        for line in b["lines"]
+    ]
+    content = [t for t in lines if t and not re.fullmatch(r"\d+", t)]
+    if content and content[0] != "References":
+        problems.append(f"References does not open page {head_page}: {content[0][:48]!r} renders above it")
+    # The order of entries and heading is asserted structurally in audit_docx, where paragraph sequence is
+    # exact; a substring test here matched the prose citation "(AT&T Laboratories Cambridge, 2002)" in section 5
+    # and reported it as an entry sitting before the heading.
+    return problems
+
+
 def word_band_checks(pages) -> list[str]:
     """A rendered sanity band around the prose figure the builder measures exactly.
 
@@ -200,6 +272,7 @@ def main(pdf: Path) -> int:
         problems += toc_checks(pages)
         problems += reference_checks(pages)
         problems += cover_checks(pages)
+        problems += geometry_checks(pages)
         problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.

@@ -262,6 +262,12 @@ class Builder:
                 # the heading itself, which keeps the contents region a single block for the audit.
                 pPr = el.get_or_add_pPr()
                 pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
+            if title == "References":
+                # U027: the bibliography opens its own page. Section 7 ran to mid-page 42 and left the heading
+                # with three entries squeezed in under it. The break is carried by the heading for the reason
+                # given just above - a separate break paragraph reads as another contents entry to the audit.
+                pPr = el.get_or_add_pPr()
+                pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
             if tail is not None:
                 tail.addprevious(el)
             else:

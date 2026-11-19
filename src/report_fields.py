@@ -168,6 +168,19 @@ def styled_paragraph(proto_el, text: str) -> "object":
     return el
 
 
+def _flush(paragraph) -> None:
+    """Drop the body prototype's first-line indent, because exhibit labels do not carry one.
+
+    The template's own caption lines have no `w:ind` at all, and its body paragraphs are indented half an inch,
+    so cloning the body prototype for a caption put `Table 7` and `Figure 1` half a column right of where the
+    template puts them. The delivered A2 has the same structure: exhibit labels flush, prose indented.
+    """
+    pPr = paragraph.find(qn("w:pPr"))
+    if pPr is not None:
+        for ind in pPr.findall(qn("w:ind")):
+            pPr.remove(ind)
+
+
 def caption_paragraphs(doc, protos, label: str, instr: str, cached: str, bookmark: str,
                        description: str) -> list:
     """The two lines above an exhibit: `Table N` as a labelled SEQ field, then the italic description."""
@@ -188,6 +201,8 @@ def caption_paragraphs(doc, protos, label: str, instr: str, cached: str, bookmar
     for r in [n for n in desc_para.findall(qn("w:r")) if n.find(qn("w:t")) is not None]:
         r.getparent().remove(r)
     desc_para.append(_text_run(desc_run, description, italic=True))
+    _flush(label_para)
+    _flush(desc_para)
     return _keep_with_next([label_para, desc_para])
 
 
@@ -248,11 +263,17 @@ def png_size(path: Path) -> tuple[int, int]:
 
 
 def figure_paragraph(doc, path: Path, dpi: int = 200):
-    """A centred picture paragraph, scaled to the text block and to one page."""
+    """A picture paragraph flush with the text block, scaled to the block and to one page.
+
+    The template's own figure paragraph is left-aligned and carries no space above or below, and its caption
+    lines start at that same edge; centring the picture leaves the exhibit attached to neither margin.
+    """
     px_w, px_h = png_size(path)
     width_in, height_in = px_w / dpi, px_h / dpi
     scale = min(TEXT_WIDTH_IN / width_in, MAX_FIGURE_HEIGHT_IN / height_in, 1.0)
     para = doc.add_paragraph()
-    para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    pPr = para._p.get_or_add_pPr()
+    pPr.append(_el("w:spacing", before=0, after=0))
     para.add_run().add_picture(str(path), width=Inches(width_in * scale))
     return para
