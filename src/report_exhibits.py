@@ -145,9 +145,42 @@ def _manifest() -> dict:
 
 
 # --------------------------------------------------------------------------- registry
+def build_screening() -> tuple[list[str], list[list[str]]]:
+    """The screening ledger as kept: every candidate, the gates it did not clear, its score, its fate.
+
+    The ledger records PASS, PARTIAL, FAIL and UNKNOWN per gate, and those four are not the same finding: a
+    PARTIAL means the evidence was reached but not completely, and an UNKNOWN means the date could not be read
+    at all. Collapsing them into "failed" would misstate the record, so each verdict is carried through.
+    """
+    rows_in = list(csv.DictReader(
+        (ROOT / "research_records" / "stage_01_screening_ledger.csv").open(encoding="utf-8")))
+    names = {"g1_recency": "recency", "g2_image_task": "image task", "g3_recoverable": "full text",
+             "g4_local_feasible": "local cost", "g5_browser_demo": "demo"}
+    header = ["ID", "Algorithm", "Family", "Published", "Weighted score of 5",
+              "Gates not cleared", "Disposition"]
+    rows = []
+    for r in rows_in:
+        uncleared = [f"{label}: {r[key]}" for key, label in names.items()
+                     if r[key].strip().upper() != "PASS"]
+        outcome = "all five cleared" if not uncleared else "; ".join(uncleared)
+        disposition = (r["disposition"].replace("RECOMMENDED (primary)", "selected as the primary")
+                       .replace("RECOMMENDED", "selected").replace("REJECTED on", "rejected")
+                       .replace("SHORTLIST", "runner-up"))
+        for code, label in (("G1", "recency"), ("G2", "image task"), ("G3", "full text"),
+                            ("G4", "local cost"), ("G5", "demo")):
+            disposition = disposition.replace(code, label)
+        rows.append([r["id"], r["algorithm"], r["family"], r["venue_year"], r["weighted"], outcome,
+                    disposition])
+    return header, rows
+
+
 # key -> (caption above the table, builder). Captions name the artefact the rows were read from, so a reader
 # can re-derive any cell.
 TABLES = {
+    "screening": ("The screening ledger as kept: all twenty candidates, any gate each one did not clear "
+                  "(PASS, PARTIAL, FAIL and UNKNOWN are different findings and are not collapsed), the "
+                  "weighted score, and the disposition. Source: "
+                  "research_records/stage_01_screening_ledger.csv.", build_screening),
     "settings": ("Experiment settings for the two regimes: the data each arm was fitted on, its head, and "
                  "the grids the hold-out searched. Sources: runs/mvp_orl/diagnostics.json and "
                  "runs/m2_matrix/diagnostics.json.", build_settings),
@@ -173,6 +206,8 @@ FIGURES = {
 # (H1, H2) -> exhibit keys, in the order the reader meets them. Each anchor is the heading whose prose cites
 # the exhibit, and the exhibit is emitted after that heading's last paragraph.
 PLACEMENT: list[tuple[tuple[str, str], list[str]]] = [
+    (("AI-Assisted Literature Search and Algorithm Selection",
+      "What was searched, and how the candidates were screened"), ["screening"]),
     (("Algorithm Description and Task Adaptation", "GO-LDA's deflated eigensolve"), ["eq37"]),
     (("Algorithm Description and Task Adaptation", "Baselines and the protocol adapted to this study"),
      ["table2"]),

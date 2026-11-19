@@ -15,20 +15,21 @@ answers no single brief item; the six items map onto sections 2–7.
 | Report section | Answers | Built from | Draft budget (prose words, see §9) |
 | --- | --- | --- | --- |
 | 1. Introduction and Human-AI Workflow | the outline's stage-5 framing, plus U017's AI-responsibility placement | `stage_00_preflight.md`, `stage_02_design_and_plan.md` §1–§4, `stage_04_front_end.md` §1 | ~350 |
-| 2. AI-Assisted Literature Search and Algorithm Selection | brief (1) | `stage_01_search_protocol.md` §1–§11 (20 screened candidates, the weights, the 16-row correction table, the wave-1/wave-2 source ledger), `stage_01_candidate_scoring.md` §5 | ~900 + 1 table |
+| 2. AI-Assisted Literature Search and Algorithm Selection (the screening table is built) | brief (1) | `stage_01_search_protocol.md` §1–§11 (20 screened candidates, the weights, the 16-row correction table, the wave-1/wave-2 source ledger), `stage_01_candidate_scoring.md` §5 | ~900 + 1 table |
 | 3. Algorithm Description and Task Adaptation | brief (2) | `research_records/sources/golda_arXiv2305.14568_notes.md` (eq. (23), (37)–(41) verbatim), `wp7` §2 | ~700 + 2 display equations |
-| 4. AI-Assisted Implementation and Verification | brief (3) | `stage_02_design_and_plan.md` (the nine-step loop, H1–H3 fixed first, the risk table), `stage_03a` §5–§6 (deviations), `stage_04_front_end.md` §1–§3, `webapp/data.js` `commands` | ~1,100 + 1 code-path table |
+| 4. AI-Assisted Implementation and Verification (no code-path table: U022 withdrew it, the prose covers brief (3)) | brief (3) | `stage_02_design_and_plan.md` (the nine-step loop, H1–H3 fixed first, the risk table), `stage_03a` §5–§6 (deviations), `stage_04_front_end.md` §1–§3, `webapp/data.js` `commands` | ~1,100 + no table |
 | 5. Experimental Settings, Results and Discussion | brief (4) | `stage_03a` (raw-pixel scale), `stage_03b` §2–§5 and §8–§8.1 (feature scale, the two released controls), `wp7` §3–§7 | ~1,400 + 4 tables + 2 figures |
 | 6. Interactive Visualisation and Source-Code Availability | brief (5) framing and (6) | `stage_04_front_end.md` §1–§3, the live URL and the commits in §3 below | ~250 + the link block |
 | 7. Lessons Learned and Conclusion | brief (5) | `wp7` §8's three sentences, plus the two process lessons in §4 below | ~600 |
 | References | APA 7 | the entries in `stage_01_search_protocol.md` and the sources cited above | 14–16 entries |
 
-Total ≈ **5,300 prose words** including the Introduction. **The ceiling is 5,900 prose words (U021):**
-the brief sets no page or word limit, so 4,700 was this project's own number, and U021 restates it as
-5,900 — the 5,017 already drafted plus §6 and §7 at 850, leaving 33 words of headroom, about 6,400 by
-Word's counter against A2's delivered 9,593 in 54 pages. **Trim order stays as U020 restated U017:**
-compress §1 and §3 first, §2's 234-word overage is optional, and **§4 and §5 are not touched** — the
-sentence that put §4 next in line is withdrawn because it contradicted the ruling it summarised.
+Total ≈ **5,300 prose words** including the Introduction. **The ceiling is 6,500 prose words (U022, replacing U021's 5,900):**
+the brief sets no page or word limit, so 4,700 was this project's own number. U021 moved it to 5,900 and U022
+to **6,500 prose words**, measured with exhibit captions and table cells counted separately, and U022 ruled that
+this is the last restatement: if the report runs over again the trim runs on **§2, §6 and §7 first, and §4 and
+§5 are not touched**. A2 delivered 8,286 prose words over 54 pages, so 6,500 is not a high ceiling - about 6,900
+by Word's counter. The earlier sentence that put §4 next in line for trimming is withdrawn, because it
+contradicted the ruling it claimed to summarise.
 
 ## 2. Formatting requirements, with the traps already known
 
@@ -129,10 +130,11 @@ caption. The manifest's own `report_label` says explicitly that the asset names 
 | Figure 7 | figure_08.png, own run: growth curves and test points | §5, Main results and the hypothesis verdicts |
 | Figure 8 | figure_04.png, ImageNet-C p4 (the Gaussian description) | §5, Two controls |
 | Figure 9 | figure_07.png, corruption source lines 122-126 at commit 712bfcd | §5, Two controls |
-| Table 1 | experiment settings per regime, from the two diagnostics files | §5, Datasets, features and the evaluation protocol |
-| Table 2 | test accuracy, selection and five-fold spread, from selection.csv and cv_summary.csv | §5, Main results |
-| Table 3 | the corruption control arm by arm, from probe_ood.json | §5, Two controls |
-| Table 4 | the pixel-dimension ladder, from orl512_ladder.json | §5, Two controls |
+| Table 1 | the screening ledger: 20 candidates, gates not cleared, weighted score, disposition | §2, What was searched, and how the candidates were screened |
+| Table 2 | experiment settings per regime, from the two diagnostics files | §5, Datasets, features and the evaluation protocol |
+| Table 3 | test accuracy, selection and five-fold spread, from selection.csv and cv_summary.csv | §5, Main results |
+| Table 4 | the corruption control arm by arm, from probe_ood.json | §5, Two controls |
+| Table 5 | the pixel-dimension ladder, from orl512_ladder.json | §5, Two controls |
 
 Three layout rules came out of the first pass and are now enforced by the build rather than by hand: caption
 paragraphs carry keepNext so a caption cannot be left behind by its object; table captions carry a page break so
@@ -159,13 +161,13 @@ estimate appears only as the correction, never as the cost.
 6. Final pass: the audit scripts, the brief-item coverage check against this table, and a Turnitin-aware
    read of the wording.
 
-## 8. Rulings recorded (U017, 2026-11-19) — framework approved
+## 8. Rulings recorded (U017 2026-11-19, U022 2026-11-20) — framework approved
 
 * **Framework passes** as written.
 * **§6 link block follows A2's form — both addresses**, in A2's own wording pattern:
   "The source page is `https://github.com/0weixiong0/CISC3024-AI-Assignment-3`" and
   "The live page is `https://0weixiong0.github.io/CISC3024-AI-Assignment-3/`".
-* **~4,700 words accepted.** If it runs long, compress §1 and §3 first; **§4 and §5 are not touched.** (The number, not the trim order, was superseded by U021: the ceiling is now 5,900 prose words.)
+* **~4,700 words accepted.** If it runs long, compress §1 and §3 first; **§4 and §5 are not touched.** (The number, not the trim order, has since been superseded twice: U021 moved it to 5,900 and U022 to 6,500, and U022 also moved the first place the knife falls, from §1/§3 to §2/§6/§7.)
 * **A2's four lessons are execution rules, not advice** — see §2 and §5 above, and §7 below:
   `audit_docx.py` and `audit_layout.py` run after *every* editing pass; layout is judged by reading the
   exported PDF; every number points back to an artefact; anything cited by paper page number carries that
@@ -183,7 +185,7 @@ Measured from the two delivered documents, not from memory:
 | --- | --- | --- | --- |
 | File at project root | `CISC3024_AI_Assignment_1_Report.docx` + same-name PDF (25 pp) | `CISC3024_AI_Assignment_2_Report.docx` + PDF (54 pp) | `CISC3024_AI_Assignment_3_Report.docx` + PDF |
 | Structure | cover → TOC (Heading 1) → 7 unnumbered H1 → References | same skeleton | same, mapped in §1 |
-| Body words | see the unit table below | see the unit table below | 5,900 prose words over sections 1–7, captions counted separately |
+| Body words | see the unit table below | see the unit table below | 6,500 prose words over sections 1–7, captions and table cells counted separately |
 | AI-use statement | disclaimer sentence inside the workflow section | §1.2 "Human Supervision and AI Responsibilities", opening "The student acted as supervisor and the agent as researcher, implementer and experimenter." | §1, A2's placement with A3's own evidence |
 | Link block | "Source code:" + "Live demo:" lines | "The source page is …" + "The live page is …" | A2's wording |
 | References | APA 7, `EndNote Bibliography` style, plain paragraphs (no fields), 6 entries | same, 14 entries | APA 7 plain paragraphs, `EndNote Bibliography` |
@@ -197,33 +199,28 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,105 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,105 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,072 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions** | 3,024 | 8,286 | **6,498** |
-| exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 391 |
-| table words alone | `python-docx` over table cells | 187 | 1,107 | 817 |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,566 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,731 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,107 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions** | 3,024 | 8,286 | **6,496** |
+| exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
+| table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
 The A3 column was re-measured on the 2026-11-20 build, which is the first build with exhibits: 40 PDF pages,
 31 headings (8 H1 including References, 23 H2), 4 tables, 9 figures, and §1 through §7 all drafted. The prose
 figure is now taken with the caption lines excluded, because step 3 made them a large block of text that is
-not argument: 13 captions carry 391 words, and Word's own counter, which sees everything, reads 8,105.
+not argument: 14 captions carry 428 words, and Word's own counter, which sees everything, reads 8,566.
 
-**The ceiling question is open again.** U021 set 5,900 prose words from the arithmetic 5,017 drafted + 850 for
-§6/§7 = 5,867. Step 3 then added the C4 comparison paragraph U020 asked for, and §6/§7 came in over their
-budget. The drafted prose, measured section by section on this build: §1 300, §2 1,134, §3 742, §4 1,428, §5
-1,743, §6 337, §7 780 - **6,464 words**, and 6,498 as the builder reports it because the unit counts the 34
-words of the cover line as well. That is 598 over the ceiling, and the three additions since U021's arithmetic
-account for it exactly: §6/§7 at 1,117 against a budget of 850 (+267), the C4 paragraph (200), and the thirteen
-sentences that cite the exhibits (130: §3 gained 56 words, §5 74).
+**The ceiling question is closed (U022).** It was reopened on this plan's own arithmetic: U021's 5,900 came
+from 5,017 drafted + 850 for §6/§7, and step 3 then added the C4 comparison paragraph (200 words), thirteen
+sentences citing the exhibits (130), and §6/§7 came in at 1,117 against 850. The supervisor's ruling is that the
+brief sets no limit, A2 shipped 8,286 prose words over 54 pages, and 6,500 is not a high ceiling - so the number
+moves and this is the last time it moves. The overage was then paid for inside §2's own budget rather than by
+touching §4 or §5: the screening citation costs 15 words and two clauses of §2's wave paragraph were compressed
+by 16, which leaves the drafted prose at **6,496 words, 4 inside the ceiling**. Exhibit captions (428 words) and
+table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
-A2 shipped 8,286 prose words over 54 pages, so the report is not long in absolute terms; what is out of date is
-the number rather than the text. Either the ceiling moves to about 6,500, or the trim runs on §1 and §3, which
-together are 1,042 words and would have to lose more than half of both, with §2's 234-word overage taken as
-well. Nothing was trimmed on this pass: U021 said §4 and §5 are not touched, and did not authorise cutting §1
-and §3 down that far to hit a figure that predates the exhibits. See §11.
-
-**The 5,900 budget is in prose words**, because that is the unit A2's record reported and it is the closest
+**The 6,500 budget is in prose words**, because that is the unit A2's record reported and it is the closest
 to "text the reader reads" — it excludes tables, the contents page and the cover. The observed ratios are
 Word count ≈ 1.15 × prose words (A1 3,474/3,024 = 1.149; A2 9,593/8,286 = 1.158) and PDF full-text ≈ 1.18 ×
 prose words, so the target corresponds to roughly **5,400 by Word's counter** and about 30–35 pages at A2's
@@ -281,11 +278,14 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 
 ## 10.1 Step 3, delivered 2026-11-20
 
-Four tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
-§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 40
-PDF pages, 8,105 words by Word's counter, 6,498 prose words excluding captions, 817 table words, 391 caption
-words, 31 headings and 31 contents entries. `audit_docx` finds one issue, the expected one: the cover still
-carries the template's placeholders because the values have not arrived. `audit_layout` passes every check,
+Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
+§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 42
+PDF pages, 8,566 words by Word's counter, 8,731 by PDF extraction, 6,496 prose words excluding captions, 428
+caption words, 1,243 table words over 415 cells, 31 headings and 31 contents entries. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
+code-path table is withdrawn, because U022 ruled that its prose already covers brief item (3).
+
+`audit_docx` finds one issue, the expected one: the cover still
+carries the template's placeholders, which U022 will fill by hand at submission. `audit_layout` passes every check,
 including TOC pagination, the caption-adjacency rules and exhibit image placement. Two provenance corrections
 came out of wiring the exhibits: the README figure's line numbers were being derived from an offset across a
 blank line, so the picker now carries each line's own number (the block is lines 75-82, not 77-83), and the
@@ -293,16 +293,10 @@ figure manifest no longer claims report numbers for itself.
 
 ## 11. What is still open
 
-* **Cover values** - the student's name, student number and date. `src/build_report.py` fills them from
-  `report_assets/cover_values.json` the moment that file exists; nothing else waits on it.
-* **The 598-word overage** (§9) - either the ceiling moves to about 6,500 prose words, or §1 and §3 are cut to
-  roughly half their length with §2's 234 taken as well. U021's 5,900 was arithmetic on a draft that did not yet
-  contain §6/§7, the C4 paragraph, the citation sentences or any captions. Awaiting a ruling; nothing was cut
-  unilaterally.
-* **Two tables this pass did not build** - plan §1 also budgets one table in §2 (the candidate scoring table) and
-  a code-path table in §4. U021 named "four tables", which is §5's count, so those two are still open. Both can
-  be read from artefacts already on disk: §2's from `stage_01_candidate_scoring.md` §5, §4's from the module list
-  in `stage_02_design_and_plan.md`.
-* **Trim of §2's 234-word overage** - optional under U021, and now entangled with the ceiling question above.
-* **Final read-through** - the brief-item coverage check against §2 of this plan, and a Turnitin-aware pass on
-  §6/§7, which have not been read as prose yet.
+* **Cover** - U022 will write the name, student number and date onto the template by hand at submission, so the
+  `report_assets/cover_values.json` path in `src/build_report.py` stays inert and `audit_docx`'s placeholder
+  finding is expected until that moment.
+* **Final read-through** - the brief-item coverage check against §2 of this plan, and a Turnitin-aware pass over
+  §6 and §7, which have not yet been read as prose.
+* **Trim** - closed by U022: the ceiling is 6,500 prose words, the drafted prose is 6,496, and no section needs
+  cutting. §2's 234-word overage was absorbed by the compression recorded in §9 rather than taken separately.

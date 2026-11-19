@@ -428,7 +428,8 @@ def search_sections(s: dict) -> dict:
 
              "A cell was filled only from a source that had actually been opened; where the evidence could not "
 
-             "be read, the ledger says so rather than guessing."),
+             "be read, the ledger says so rather than guessing. Table {{Table:screening}} is that ledger in full, "
+             "including what each rejection was for."),
 
             ("body",
 
@@ -436,9 +437,9 @@ def search_sections(s: dict) -> dict:
 
              f"added {s['wave2_sources']} gap-fill sources for {s['total_sources']} in total. The {s['wave_reports']} "
 
-             "wave-1 retrieval reports are archived verbatim, so the counts are checkable from the primary "
+             "wave-1 reports are archived, so the counts are checkable from primary "
 
-             "material rather than from a summary. Two findings shaped the shortlist more than any single "
+             "material. Two findings shaped the shortlist more than any single "
 
              "score. The recent literature that proposes a new principal-component variant and evaluates it on "
 
@@ -446,9 +447,9 @@ def search_sections(s: dict) -> dict:
 
              "Pattern Recognition, Sensors, Multimedia Tools and Applications, and small ACM proceedings - and "
 
-             "no paper from the leading computer-vision or machine-intelligence venues proposing such an "
+             "nothing from the leading computer-vision or machine-intelligence venues "
 
-             "algorithm for recognition surfaced at all. Meanwhile the recent discriminant-analysis work that "
+             "surfaced at all. Meanwhile the recent discriminant-analysis work that "
 
              "was both new and image-evaluated had moved to LDA as a closed-form stage attached to frozen "
 
