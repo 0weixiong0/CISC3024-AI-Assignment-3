@@ -39,15 +39,15 @@ def visualisation_sections() -> dict:
             ("h2", "The repository and the Pages site"),
             ("body",
              "Both are public. The repository holds the project's modules, the three audit "
-             "the three audit scripts and the parity test, the front-end assets, the run tables and diagnostics as "
+             "scripts and the parity test, the front-end assets, the run tables and diagnostics as "
              "json, the stage records and the requirements file. The Pages site is built from that same "
              "repository, so the demo an examiner opens is generated from the artefacts this report quotes "
              "rather than from a copy. The dialogue record travels with the submission as a separate "
              "attachment, not on the public page."),
             ("h2", "Citation block for brief item (6)"),
             ("body",
-             "The sentence the brief asks for, with each address on a line of "
-             "its own so that copying it cannot pick up a line break:"),
+             "The sentence the brief asks for, with each address on its own line so copying it cannot pick "
+             "up a line break:"),
             ("body", f"All codes and the raw experiment logs can be found at {repo}."),
             ("body", f"The published demo, generated from those same logs, is at {pages}"),
             ("body",
@@ -117,7 +117,7 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "document is built, so a table that disagrees with a run stops the build. Keeping provenance "
              "beside the asset did the same for the figures, since each records the page or the fit behind it "
              "- that is how four wrong captions went away in one pass. The third habit is the weakest "
-             "of the three, because it is about attention rather than code: run the audit before "
+             "because it is about attention rather than code: run the audit before "
              "reporting. The two defects that kept coming back were invisible on the page, a heading the "
              "contents field listed although the document did not have it and runs carrying a font with no "
              "recorded size. The tool is fast at producing text and slow to doubt it, and almost every entry "

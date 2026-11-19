@@ -2,7 +2,7 @@
 
 Run:  python src/audit_docx.py
 Reports stale embedded figures, exhibit-numbering integrity, unresolved cross-references,
-text hygiene, repeated words, font drift and table integrity. Writes nothing.
+text hygiene, repeated words, font drift, table integrity and bibliography filing order. Writes nothing.
 """
 from __future__ import annotations
 
@@ -229,6 +229,27 @@ def main() -> int:
         flag("brief", "no URL anywhere in the document — the brief asks for the source-code web link")
     words = sum(len(t.split()) for t in texts)
     print(f"body words (paragraph text only): {words:,}")
+
+    # ---- 8. bibliography filing ---------------------------------------------------------------
+    # APA 7 files the whole reference list as one alphabet, letter by letter, and a list assembled by
+    # appending a second batch to the first reads as two sorted runs. The source module owns the order
+    # this document was built from, so the filing is asserted on the rendered paragraphs instead.
+    def filing_key(entry: str) -> tuple:
+        """(author, year with its disambiguating letter, remainder), each stripped to lowercase alphanumerics."""
+        year = re.search(r"\((\d{4}([a-z]?))\)", entry)
+        head, tail = (entry[:year.start()], entry[year.end():]) if year else (entry, "")
+        plain = lambda value: re.sub(r"[^a-z0-9]", "", value.lower())
+        return plain(head), (year.group(1) if year else ""), plain(tail)
+
+    reference_paragraphs = [p.text.strip() for p in paragraphs if p.style.style_id == "EndNoteBibliography"]
+    keys = [filing_key(entry) for entry in reference_paragraphs]
+    if keys != sorted(keys):
+        first_wrong = next(i for i in range(1, len(keys)) if keys[i] < keys[i - 1])
+        flag("references", f"reference list is not filed alphabetically as a whole: {first_wrong + 1} of "
+                           f"{len(keys)} breaks the order - {reference_paragraphs[first_wrong][:40]!r} "
+                           f"follows {reference_paragraphs[first_wrong - 1][:40]!r}")
+    print(f"reference entries: {len(reference_paragraphs)}; filing "
+          f"{'alphabetical' if keys == sorted(keys) else 'NOT alphabetical'}")
 
     print()
     if not FLAGS:

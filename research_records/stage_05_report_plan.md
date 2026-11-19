@@ -188,7 +188,7 @@ Measured from the two delivered documents, not from memory:
 | Body words | see the unit table below | see the unit table below | 6,500 prose words over sections 1–7, captions and table cells counted separately |
 | AI-use statement | disclaimer sentence inside the workflow section | §1.2 "Human Supervision and AI Responsibilities", opening "The student acted as supervisor and the agent as researcher, implementer and experimenter." | §1, A2's placement with A3's own evidence |
 | Link block | "Source code:" + "Live demo:" lines | "The source page is …" + "The live page is …" | A2's wording |
-| References | APA 7, `EndNote Bibliography` style, plain paragraphs (no fields), 6 entries | same, 14 entries | APA 7 plain paragraphs, `EndNote Bibliography` |
+| References | APA 7, `EndNote Bibliography` style, plain paragraphs (no fields), 6 entries | same, 15 entries, one alphabet | APA 7 plain paragraphs, `EndNote Bibliography` |
 | Exhibit labels | two typed lines above the object: `Figure N` then the italic description | same (17 figures, 11 tables) | same two-line form — `audit_docx.py`'s caption regex depends on it |
 | Equations | — | `wordify_equations.py` abandoned: Word's LaTeX-to-math fires on typing, not on programmatic `BuildUp()`, so command names stayed literal | real Unicode symbols in plain text (μ, Σ, ‖·‖), as accepted for A2 |
 | Report in the public repo | no | no | **no** — the docx/pdf are UMMoodle submissions, so they are gitignored |
@@ -199,17 +199,18 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,679 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,846 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,220 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,500** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 9,024 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,190 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,565 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,498** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 step-4/5 build, which carries exhibits and a 14-entry reference list: 44 PDF pages,
-31 headings (8 H1 including References, 23 H2), 4 tables, 9 figures, and §1 through §7 all drafted. The prose
-figure is now taken with the caption lines excluded, because step 3 made them a large block of text that is
-not argument: 14 captions carry 428 words, and Word's own counter, which sees everything, reads 8,566.
+The A3 column was re-measured on the 2026-11-20 U025 build, which carries exhibits and a 15-entry reference
+list filed as one alphabet: 44 PDF pages, 31 headings (8 H1 including References, 23 H2), 5 tables, 9 figures, and
+§1 through §7 all drafted. The prose figure is taken with the caption lines excluded, because step 3 made them a
+large block of text that is not argument: 14 captions carry 428 words, and Word's own counter, which sees
+everything, reads 9,024 against 9,190 from the PDF text layer.
 
 **The ceiling question is closed (U022).** It was reopened on this plan's own arithmetic: U021's 5,900 came
 from 5,017 drafted + 850 for §6/§7, and step 3 then added the C4 comparison paragraph (200 words), thirteen
@@ -219,7 +220,9 @@ moves and this is the last time it moves. The overage was then paid for inside �
 touching §4 or §5: the screening citation costs 15 words and two clauses of §2's wave paragraph were compressed
 by 16, which left the drafted prose at the ceiling exactly. Step 4 then moved the same way: the six in-text
 citations cost 28 words, and 28 were cut back inside §6 and §7, so **the drafted prose is 6,500 words with no
-headroom left**. Exhibit captions (428 words), the reference list (133 words) and
+headroom left**. The U025 round spent seven words on the Tiny ImageNet citation and took nine back
+in §6 and §7, so the drafted prose is now **6,498**, with the caption, reference and cell counts
+recorded below. Exhibit captions (428 words), the reference list (456 words over 15 entries) and
 table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
 **The 6,500 budget is in prose words**, because that is the unit A2's record reported and it is the closest
@@ -281,12 +284,14 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 ## 10.1 Step 3, delivered 2026-11-20
 
 Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
-§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 44
-PDF pages, 9,010 words by PDF extraction and 7,551 docx paragraph words, with 6,500 prose words excluding captions
-and the reference list, 428 caption words, 440 reference words over 14 entries, and 1,243 table words across
+§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The U025 round brought
+the reference list to 15 entries, sorted as one alphabet, and added the Tiny ImageNet citation to §5. The build
+reports 44 PDF pages, 9,024 words by Word's own counter (9,190 from the PDF text layer) and 7,565 docx paragraph words, with 6,498 prose words excluding
+captions and the reference list, 428 caption words, 456 reference words over 15 entries, and 1,243 table words across
 415 cells in 5 tables, plus 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
-cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); two new gates came with them, one
-that re-checks every citation and entry on the rendered text and one that bands the rendered body word count. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
+cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); three gates came with them and steps 4
+and 5, one that re-checks every citation and entry on the rendered text, one that bands the rendered body word count,
+and one added in the U025 round that files the whole bibliography as a single alphabet. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
 code-path table is withdrawn, because U022 ruled that its prose already covers brief item (3).
 
 `audit_docx` finds one issue, the expected one: the cover still
@@ -310,37 +315,48 @@ Pages are where each H1 starts in the exported PDF, read from the rendered file 
 | (6) Source-code availability, as a webpage link | §6's citation block: the repository line and the Pages line, each on its own line | 38 |
 | No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
 
-Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p42 to p44. Contents
+Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p42 to p43. Contents
 occupies pages 2-3, and the body begins on page 4 under the page-break rule recorded in §10.
 
-### Bibliography: 14 entries, and the one work that could not be verified
+### Bibliography: 15 entries, filed as one alphabet, each one traced to a record
 
 Every entry was transcribed from a source record rather than written from memory, and the two long-author
-entries follow APA 7's rule for more than twenty names (first nineteen, ellipsis, last author).
+entries follow APA 7's rule for more than twenty names (first nineteen, ellipsis, last author). The list is sorted
+as a whole, letter by letter through the surnames, which is what APA 7 filing means; `src/audit_docx.py` now
+asserts that on the rendered paragraphs, because a list built by appending a released batch to an accepted one
+reads as two sorted runs rather than one.
 
 | Entry | In-text | Where the metadata came from |
 | --- | --- | --- |
-| GO-LDA (Liu, Cai & Niranjan 2023) | (Liu et al., 2023), §2 and §3 | cached PDF title page |
-| Comparison study (Kumar et al. 2026) | (Kumar et al., 2026a), §5 | cached PDF title page |
-| Its repository README | (Kumar et al., 2026b), §5 | cached README |
+| Face database | (AT&T Laboratories Cambridge, 2002), §5 | the distributor's official page, fetched 2026-11-20 |
+| DLR-2DPCA (Bi et al. 2025) | (Bi et al., 2025), §2 | Crossref registered metadata: the IEEE page renders nothing to a fetch, and the cached accepted manuscript has no author block in its text layer |
+| NumPy (Harris et al. 2020) | (Harris et al., 2020), §2 | Nature DOI, read through the Crossref record |
+| ResNet (He et al. 2015) | (He et al., 2015), §5 | arXiv listing, cross-checked against the arXiv API |
 | ImageNet-C benchmark (Hendrycks & Dietterich 2019) | (Hendrycks & Dietterich, 2019a), §5 | cached PDF, ICLR 2019 header |
 | The pinned corruption code | (Hendrycks & Dietterich, 2019b), §5 | commit 712bfcd, recorded in the figure manifest |
 | CIFAR technical report (Krizhevsky 2009) | (Krizhevsky, 2009), §5 | the dataset's official page, fetched 2026-11-20 |
-| Face database | (AT&T Laboratories Cambridge, 2002), §5 | the distributor's official page, fetched 2026-11-20 |
-| ResNet (He et al. 2015) | (He et al., 2015), §5 | arXiv listing, cross-checked against the arXiv API |
+| Comparison study (Kumar et al. 2026) | (Kumar et al., 2026a), §5 | cached PDF title page |
+| Its repository README | (Kumar et al., 2026b), §5 | cached README |
+| Tiny ImageNet (Le & Yang 2015) | (Le & Yang, 2015), §5 | the CS231n 2015 course-report PDF, whose title block names Ya Le (Department of Statistics) and Xuan Yang (Department of Electrical Engineering); the entry's own address is the dataset archive, which answers 200 with 248,100,043 bytes, `application/zip`, `Last-Modified: Mon, 09 Feb 2015` |
+| GO-LDA (Liu, Cai & Niranjan 2023) | (Liu et al., 2023), §2 and §3 | cached PDF title page |
 | DINOv2 (Oquab et al. 2023) | (Oquab et al., 2023), §5 | arXiv listing, cross-checked against the arXiv API |
 | PyTorch (Paszke et al. 2019) | (Paszke et al., 2019), §2 | arXiv listing, cross-checked against the arXiv API |
-| NumPy (Harris et al. 2020) | (Harris et al., 2020), §2 | Nature DOI, read through the Crossref record |
 | scikit-learn (Pedregosa et al. 2011) | (Pedregosa et al., 2011), §2 | the JMLR page (volume 12, 2825-2830); the page prints no DOI |
 | RSSPCA (Wang et al. 2025) | (Wang et al., 2025), §2 | PLOS ONE page and its own citation line, plus the Crossref record |
-| DLR-2DPCA (Bi et al. 2025) | (Bi et al., 2025), §2 | Crossref registered metadata: the IEEE page renders nothing to a fetch, and the cached accepted manuscript has no author block in its text layer |
 
-**One gap remains.** Tiny ImageNet has no verifiable citation: the CS231n landing page the dataset is normally
-cited from returns 404 over both http and https, and the Internet Archive holds no capture of any page at that
-path - only the dataset archive itself. The report therefore names Tiny ImageNet descriptively in §5 and in
-Table 2, with no entry and no in-text citation, rather than citing a paper whose authorship and date could only
-be guessed. If a live official record turns up before submission, the entry goes in and the prose gains four
-words, which would have to be paid for inside §2, §6 or §7.
+**The Tiny ImageNet gap is closed, and the two accounts of it are now one.** What the plan said - and what was
+true - is that §5 names the data set descriptively, "Tiny ImageNet (200 classes, 100,000)", with no entry and
+no in-text citation. The chat note that it was absent from the prose altogether was the wrong version of that
+sentence, and it is withdrawn here. U025 released the citation on condition that the locator be the dataset
+archive rather than the 404 landing page, so the entry points at `https://cs231n.stanford.edu/tiny-imagenet-200.zip`.
+Two judgment calls came with it. The corporate, undated form the plan had sketched - "Stanford University,
+(n.d.)" - was dropped once the primary record turned up, because a dated, authored source outranks a guess with
+no date; and the entry is typed **[Data set]** rather than as the course report, since what the study read is the
+archive, while the report is the description that carries the two names.
+
+**Nothing inside the archive cites it.** Its 120,609 entries are `train/`, `val/` and `test/` with no README, no
+`.tex` and no `leivo.tar.gz`, which is also why the comment in `src/extract_features.py` about a `leivo.tar.gz`
+holding `reference_tex/tinyimagenet.tex` does not describe the archive this study downloaded.
 
 Two provenance notes a marker could reasonably ask about. The DLR-2DPCA entry is registered publisher metadata
 (Crossref), not a rendered IEEE page, so its page range and issue come from the deposit rather than from the
@@ -356,9 +372,12 @@ a line and a plain string search would then miss it.
   `report_assets/cover_values.json` path in `src/build_report.py` stays inert and `audit_docx`'s placeholder
   finding is expected until that moment.
 * **Final read-through** - done on 2026-11-20: the coverage map is §12, and the prose pass over §6 and §7 is
-  §13. Outside those two sections only words were touched, per U023.
-* **Tiny ImageNet citation** - the only work still without a verifiable record: its official landing page 404s
-  and the Internet Archive has no capture of it. Everything else on the release list is in the reference list.
-* **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is exactly
-  6,500, so no headroom is left. Any further addition has to pay for itself inside §2, §6 or §7, the way the
+  §13. Outside those two sections only words were touched, per U023. The §6 splice it left behind - "the three audit
+  the three audit scripts" - was found in the U025 round while paying for the citation, which is the second time a
+  defect of that shape surfaced only because a script read the assembled text rather than a person reading the page.
+* **Tiny ImageNet citation** - closed on 2026-11-20. §12 has the record: the entry is Le and Yang (2015), typed
+  [Data set], addressed to the archive rather than to the 404 landing page, and its seven words are paid for
+  inside §6 and §7, which gave up nine.
+* **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is
+  6,498 after the U025 round spent seven words on the Tiny ImageNet citation and took nine back out of §6 and §7. Any further addition has to pay for itself inside §2, §6 or §7, the way the
   citation sentences and the prose pass did.
