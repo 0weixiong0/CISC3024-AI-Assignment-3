@@ -83,7 +83,12 @@ contradicted the ruling it claimed to summarise.
 ## 5. Figures, and the page-image rule for anything cited by page number
 
 Every claim that quotes a page of the paper carries that page's rendered image as a figure or appendix
-item (the supervisor's standing rule). The list is fixed now so the drafting does not discover it later:
+item (the supervisor's standing rule). The A1/A2 skeleton this report follows has no appendix, so every one of
+them landed as a numbered figure: five clips of PDF pages (which carry the clipped region as well as the source
+and page), two text renders of the companion README and the pinned corruption code (which record line ranges
+instead of a region, because they were drawn rather than clipped), and two plots from this study's own run tables
+(which record the artefact or the fresh fit behind them). All nine are listed with those fields in
+`report_assets/figure_manifest.json`. The list is fixed now so the drafting does not discover it later:
 
 | Claim to be cited | Source | Page image needed |
 | --- | --- | --- |
