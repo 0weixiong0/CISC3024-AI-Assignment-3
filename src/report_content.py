@@ -914,7 +914,7 @@ def algorithm_sections(f: dict) -> dict:
              f"still different, with a median principal angle of {f['span_median']:.1f} degrees and only "
              f"{f['span_under_1deg']:.1f} per cent of the angles below one degree. The divergence begins at "
              f"the third direction: the second differs by {f['drift2']:.3f} degrees, the third by "
-             f"{f['drift3']:.1f}."),
+             f"{f['drift3']:.1f}. Its equation (37) and the deflated pencil of equation (38) are the lines the implementation was written from, and the page that carries them is Figure {{Figure:eq37}}."),
             ("h2", "Baselines and the protocol adapted to this study"),
             ("body",
              "Three classical comparators run on the same pencil and the same folds: the ridge-regularised "
@@ -928,7 +928,7 @@ def algorithm_sections(f: dict) -> dict:
              f"{100 * f['val']:.0f} per cent stratified hold-out of the training split under seed "
              f"{f['seed']}, and the official test split is scored exactly once per method after refitting on "
              f"all of training. The regularisation grid is delta = {', '.join(f'{d:g}' for d in f['deltas'])} "
-             f"and the dimension grid crosses the rank cap C - 1 = {f['rank_cap']} in both directions."),
+             f"and the dimension grid crosses the rank cap C - 1 = {f['rank_cap']} in both directions. The head for those rows is the paper's own, and the table it is taken from is Figure {{Figure:table2}}."),
             ("body",
              "Two adaptations were forced by arithmetic rather than chosen. The pencil is singular whenever "
              "the feature dimension exceeds the rows available per class, which is the everyday case in raw "
@@ -948,7 +948,7 @@ def algorithm_sections(f: dict) -> dict:
              "constrains ordinary Euclidean orthogonality, not conjugacy in the pencil, so agreement with "
              "the classical subspace at the cap was never a theorem of the paper - what its own results "
              "section asserts at that point is superiority. Parity at the cap is therefore a property of a "
-             "regime, and the study was built to find out which one."),
+             "regime, and the study was built to find out which one. The claim as its authors state it is Figure {{Figure:claim}}."),
         ],
     }
 
@@ -1009,7 +1009,21 @@ def results_sections(f: dict) -> dict:
              "that it crosses the rank cap in both directions. Two readings of the same quantity are kept "
              "apart in this section and labelled on every table: hold-out values are what selection saw, "
              "test values are what the report concludes from, and the no-projection arm exists only as a "
-             "hold-out number in the run tables."),
+             "hold-out number in the run tables. Table {{Table:settings}} puts the settings of both regimes in one place."),
+            ("body",
+             "The benchmark this protocol follows is a published comparison study rather than one of the "
+             "candidate algorithms, and its two published versions disagree with each other. On the same "
+             "six feature configurations for CIFAR-100, its paper's Table I reports a PCA accuracy of "
+             "65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60 while its repository README reports 65.07 / "
+             "69.14 / 64.65 / 69.77 / 78.05 / 81.55 - four of the six cells differ, by up to 1.45 points. "
+             "The comparison ran both and quotes the README figure, so the disagreement is settled here in "
+             "favour of the README: this report's protocol, its per-backbone comparison and the front-end "
+             "numbers all come from that side of the pair, while the paper's table is cited as the "
+             "published record. Across all three of its data-set tables the two versions disagree in 19 of "
+             "72 comparable cells, which is why the rule was written as a rule rather than applied case by "
+             "case. Both pages are reproduced: Figure {{Figure:c4_paper}} is the paper's Table I, where "
+             "every reduction projects to d = 99 except the two random-discriminant variants, which use "
+             "99 + k, and Figure {{Figure:c4_readme}} is the README's CIFAR-100 block."),
             ("h2", "Small-scale feasibility run"),
             ("body",
              "At the raw-pixel scale the two methods are identical at the cap, fold for fold: GO-LDA and the "
@@ -1020,7 +1034,7 @@ def results_sections(f: dict) -> dict:
              "H2 both held here, and H3 held in the geometry: the deflated basis is orthogonal to about "
              f"1e-14 where the classical basis's largest off-diagonal reaches "
              f"{max(f['offdiag_classic']):.2f}. The run cost 1,061 s at 2,901 MB peak and wrote 2,880 "
-             "per-fold rows, which is what made the full matrix look affordable."),
+             "per-fold rows, which is what made the full matrix look affordable. The two leading directions behind that parity are Figure {{Figure:directions}}."),
             ("body",
              "One supplementary variant argued against H2 before the matrix ran. At four training images per "
              f"subject - same raster, same cap - the two methods again tie at the cap ({f['small']['39']:.4f} "
@@ -1039,14 +1053,14 @@ def results_sections(f: dict) -> dict:
              "ranges say where the separation is real: " + separate + ". The wording for the closest pair "
              "is fixed by both readings being true at once - the near-tie is against one of the three "
              "baselines, and against the baseline that wins that pair the single-split gap understates the "
-             "five-fold one."),
+             "five-fold one. Table {{Table:results}} holds every arm's selected configuration, its test score and its fold spread together."),
             ("body",
              "H2 splits in the same way the design stage anticipated, with the opposite sign from the paper. "
              "The mechanism holds: the growth curve rises past the cap on every pair, and the deflated "
              "directions keep positive monotone Fisher ratios in all four. The claim does not: the endpoint "
              "of that rising curve never reaches the baselines' cap value, on the test split or on the "
              "five-fold mean, and on the hold-out it falls short on all four pairs. H3 holds everywhere, as "
-             "reported above, and it is the only hypothesis that travels between regimes untouched."),
+             "reported above, and it is the only hypothesis that travels between regimes untouched. The curves behind the rising side of H2 are Figure {{Figure:growth}}."),
             ("h2", "Two controls: fixed corruption and reduced pixel dimension"),
             ("body",
              "The first control asked whether the ordering survives a distribution shift. One corruption - "
@@ -1061,7 +1075,7 @@ def results_sections(f: dict) -> dict:
              "an artefact of a clean test set. What it does not license is a robustness claim, because one "
              f"severity was run and the levels were deliberately not swept. The control cost {f['ood_s']:.0f} "
              "s, because the main run stored accuracies rather than bases and both pencils had to be solved "
-             "again."),
+             "again. Table {{Table:corruption}} is the control in full, and the two sources behind the severity level are Figure {{Figure:gaussian}} and Figure {{Figure:sigma_code}}."),
             ("body",
              "The second control attacked the confound the three regimes left open: rows per class and the "
              "cap's share of the space moved together, so nothing yet separated conditioning from geometry. "
@@ -1073,7 +1087,7 @@ def results_sections(f: dict) -> dict:
              "found a clean reversal tracking the cap share, and that run was withdrawn: the loader's height "
              "and width constants were transposed, so the box-average downsample had been slicing a sheared "
              "raster rather than a reduced one. The same constant had appeared to affect only the front-end "
-             "pictures, which is precisely why it went unsuspected for a stage."),
+             "pictures, which is precisely why it went unsuspected for a stage. Table {{Table:ladder}} gives the four rungs."),
             ("h2", "Interpretation, limits and the negative result"),
             ("body",
              "Read across the regimes, the properties that travel are the ones the construction guarantees: "

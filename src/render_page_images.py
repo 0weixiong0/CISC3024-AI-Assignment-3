@@ -88,42 +88,44 @@ def clip_caption(page: pymupdf.Page, label: str) -> pymupdf.Rect:
     return pymupdf.Rect(max(0, x0 - 6), max(0, y0 - 6), min(page.rect.x1, x1 + 6), min(page.rect.y1, y1 + 8))
 
 
-def pick_readme_table(lines: list[str]) -> tuple[int, list[str]]:
-    """The README's CIFAR-100 accuracy table: the block carrying the cells this study diffed."""
-    tables, i = [], 0
+def pick_readme_table(lines: list[str]) -> list[tuple[int, str]]:
+    """The README's CIFAR-100 accuracy table, with the heading above it kept attached.
+
+    The block is found by the cell this study diffed rather than by a hard-coded range, so a README edit that
+    moves the table moves the figure with it. Line numbers are carried per row rather than derived from an
+    offset: the heading and the table are separated by a blank line, and a derived offset would misstate both.
+    """
+    i = 0
     while i < len(lines):
-        if lines[i].lstrip().startswith("|"):
-            j = i
-            while j < len(lines) and lines[j].lstrip().startswith("|"):
-                j += 1
-            tables.append((i, lines[i:j]))
-            i = j
-        else:
+        if not lines[i].lstrip().startswith("|"):
             i += 1
-    if not tables:
-        raise SystemExit("no markdown table found in c4_README.md")
-    for start, block in tables:
-        if "65.07" in "\n".join(block):
-            heading = ""
-            for k in range(start - 1, max(-1, start - 8), -1):
+            continue
+        j = i
+        while j < len(lines) and lines[j].lstrip().startswith("|"):
+            j += 1
+        block = [(k + 1, lines[k]) for k in range(i, j)]
+        if any("65.07" in t for _n, t in block):
+            for k in range(i - 1, max(-1, i - 8), -1):
                 if lines[k].startswith("#"):
-                    heading = lines[k].lstrip("# ").strip()
-                    break
-            return start, ([heading] if heading else []) + block
+                    return [(k + 1, lines[k]), (None, ""), *block] if k + 2 < i else [(k + 1, lines[k]), *block]
+            return block
+        i = j
     raise SystemExit("c4_README.md has no CIFAR-100 accuracy table (no 65.07 cell)")
 
 
 def render_readme(out: Path) -> dict:
     """Render the README table as text on a page, with the raw file's own line numbers."""
-    lines = (CACHE / "c4_README.md").read_text(encoding="utf-8").split("\n")
-    start, block = pick_readme_table(lines)
+    lines = (CACHE / "c4_README.md").read_text(encoding="utf-8").split(chr(10))
+    block = pick_readme_table(lines)
+    shown = [n for n, _t in block if n]
     doc = pymupdf.open()
     page = doc.new_page(width=880, height=70 * len(block) + 90)
     page.insert_text((28, 40), "github.com/IndarKarhana/lda-image-classification - README.md, retrieved 2026-11-19",
                      fontsize=11, fontname="helv")
     y = 68
-    for offset, text in enumerate(block):
-        page.insert_text((28, y), f"{start + offset + 1:>4}  {text[:118]}", fontsize=9, fontname="cour")
+    for number, text in block:
+        label = f"{number:>4}" if number else "    "
+        page.insert_text((28, y), f"{label}  {text[:118]}", fontsize=9, fontname="cour")
         y += 14
     tmp = out.with_suffix(".tmp.pdf")
     tmp.write_bytes(doc.convert_to_pdf())
@@ -135,7 +137,7 @@ def render_readme(out: Path) -> dict:
     rendered[0].get_pixmap(dpi=DPI, clip=pymupdf.Rect(18, 26, 862, bottom)).save(str(out))
     rendered.close()
     tmp.unlink()
-    return {"first_line": start + 1, "last_line": start + len(block), "rows": len(block)}
+    return {"first_line": min(shown), "last_line": max(shown), "rows": len(block)}
 
 
 def render_code(out: Path) -> dict:
@@ -164,14 +166,17 @@ def render_code(out: Path) -> dict:
 
 def main() -> int:
     ASSETS.mkdir(exist_ok=True)
-    manifest = {}
+    # Merge, not overwrite: src/render_own_figures.py appends its own entries to this file, and a full rewrite
+    # here would silently delete them; entries are removed by deleting the PNG and its key, not by re-running.
+    manifest_path = ASSETS / "figure_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
     for name, source, page_number, region, caption in PAGES:
         out = ASSETS / f"{name}.png"
         if source is None:
             info = render_readme(out)
             manifest[name] = {"source": "research_records/retrieval_cache/c4_README.md",
-                              "page": f"rendered text, README lines {info['first_line']}-{info['last_line']}",
-                              "rows": info["rows"], "caption_line_1": name.replace("figure_", "Figure "),
+                              "page": f"rendered text, README lines {info['first_line']}-{info['last_line']} (the heading line and the table rows; the blank between them is not counted)",
+                              "rows": info["rows"], "report_label": "numbered by a SEQ field in the report, not here",
                               "caption_line_2": caption, "dpi": DPI}
             print(f"{name}: README lines {info['first_line']}-{info['last_line']} -> {out.name}")
             continue
@@ -181,7 +186,8 @@ def main() -> int:
             pix = page.get_pixmap(dpi=DPI, clip=clip)
             pix.save(str(out))
         manifest[name] = {"source": f"research_records/retrieval_cache/{source}", "page": page_number,
-                          "region": [round(v, 1) for v in clip], "caption_line_1": name.replace("figure_", "Figure "),
+                          "region": [round(v, 1) for v in clip],
+                          "report_label": "numbered by a SEQ field in the report, not here",
                           "caption_line_2": caption, "dpi": DPI}
         print(f"{name}: {source} p{page_number} clip {[round(v,1) for v in clip]} -> "
               f"{out.name} {pix.width}x{pix.height}px")
@@ -192,10 +198,10 @@ def main() -> int:
         "page": f"rendered text, lines {info['first_line']}-{info['last_line']}",
         "repository": CODE["repo"], "path": CODE["path"], "commit": CODE["commit"],
         "blob_sha": CODE["blob_sha"], "quoted": info["block"],
-        "caption_line_1": CODE["name"].replace("figure_", "Figure "), "caption_line_2": CODE["caption"],
+        "report_label": "numbered by a SEQ field in the report, not here", "caption_line_2": CODE["caption"],
         "dpi": DPI,
     }
-    (ASSETS / "figure_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1),
+    (ASSETS / "figure_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1, sort_keys=True),
                                                  encoding="utf-8")
     print(f"{CODE['name']}: {CODE['file']} lines {info['first_line']}-{info['last_line']} "
           f"@ {CODE['commit'][:8]} -> {code_out.name}")

@@ -33,6 +33,9 @@ from docx.table import Table
 from docx.text.paragraph import Paragraph
 
 import report_content as rc
+import report_sections67 as r67
+import report_exhibits as rex
+import report_fields as rf
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "Report Template.docx"
@@ -50,11 +53,8 @@ SECTIONS = [
     ("Algorithm Description and Task Adaptation", [], True),
     ("AI-Assisted Implementation and Verification", [], True),
     ("Experimental Settings, Results and Discussion", [], True),
-    ("Interactive Visualisation and Source-Code Availability",
-     ["The live demo and what the visitor does", "The repository and the Pages site",
-      "Citation block for brief item (6)"], False),
-    ("Lessons Learned and Conclusion",
-     ["What the study concluded", "What the AI collaboration taught us"], False),
+    ("Interactive Visualisation and Source-Code Availability", [], True),
+    ("Lessons Learned and Conclusion", [], True),
     ("References", [], False),
 ]
 
@@ -159,6 +159,27 @@ class Builder:
     def __init__(self, doc, protos):
         self.doc, self.protos = doc, protos
         self.h1 = {}
+        self.last: dict[tuple[str, str | None], object] = {}
+        self.numbers, self.refs = self._number_exhibits()
+
+    @staticmethod
+    def _number_exhibits() -> tuple[dict[str, int], dict[str, str]]:
+        """Assign Figure/Table numbers in the order PLACEMENT puts the exhibits on the page.
+
+        The caption carries a SEQ field, so Word renumbers these itself when fields update; the cached result
+        and the REF fields are written from this pass so the document is already correct before anything is
+        updated, and so the audit can read the numbers without Word.
+        """
+        numbers, refs, figure, table = {}, {}, 0, 0
+        for _anchor, keys in rex.PLACEMENT:
+            for key in keys:
+                if key in rex.TABLES:
+                    table += 1
+                    numbers[key], refs["_Ref_table_" + key] = table, str(table)
+                else:
+                    figure += 1
+                    numbers[key], refs["_Ref_figure_" + key] = figure, str(figure)
+        return numbers, refs
 
     # -- skeleton ------------------------------------------------------------
     @classmethod
@@ -238,10 +259,12 @@ class Builder:
             **rc.algorithm_sections(rc.facts()),
             **rc.implementation_sections(rc.facts()),
             **rc.results_sections(rc.results_facts()),
+            **r67.visualisation_sections(),
+            **r67.lessons_sections(rc.facts(), rc.results_facts()),
         }
 
     def insert_prose(self) -> list[str]:
-        """Insert drafted-section blocks under the heading, in report order."""
+        """Insert drafted-section blocks under the heading, in report order, tracking where each H2 ends."""
         content = self.blocks()
         written = []
         for i, (title, _, drafted) in enumerate(SECTIONS):
@@ -254,13 +277,56 @@ class Builder:
                     break
             if anchor is None:
                 raise SystemExit(f"anchor not found for section {title}")
+            current_h2 = None
             for kind, text in content[title]:
+                if kind == "h2":
+                    current_h2 = text
                 proto = self.protos["h2" if kind == "h2" else "body"]
-                el = copy.deepcopy(proto)
-                _set_text(el, text)
+                if kind == "h2":
+                    el = copy.deepcopy(proto)
+                    _set_text(el, text)
+                else:
+                    el = rf.rich_paragraph(proto, text, self.refs)
                 anchor.addprevious(el)
+                self.last[(title, current_h2)] = el
                 written.append(f"{title}: {text.splitlines()[0][:44]}")
         return written
+
+    def place_exhibits(self) -> list[str]:
+        """Emit each exhibit after the last paragraph of the heading whose prose cites it.
+
+        The anchor is the heading's final paragraph, recorded while the prose went in, so an exhibit can never
+        drift away from the claim it supports when the text around it is edited: if the heading disappears the
+        build stops instead of dropping the exhibit silently.
+        """
+        placed = []
+        self.caption_words = 0
+        for (h1, h2), keys in rex.PLACEMENT:
+            cursor = self.last.get((h1, h2))
+            if cursor is None:
+                raise SystemExit(f"exhibit anchor not found: {h1} / {h2}")
+            for key in keys:
+                if key in rex.TABLES:
+                    caption, builder = rex.TABLES[key]
+                    elements = rf.caption_paragraphs(
+                        self.doc, self.protos, "Table", r" SEQ Table \* ARABIC ",
+                        str(self.numbers[key]), "_Ref_table_" + key, caption)
+                    # A table that does not fit under its caption is stranded the same way a picture is, and
+                    # the caption pair is too short to hold a page for itself: tables start on a new page.
+                    pPr = elements[0].get_or_add_pPr()
+                    pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
+                    elements.append(rf.table_element(self.protos, *builder()))
+                else:
+                    elements = rf.caption_paragraphs(
+                        self.doc, self.protos, "Figure", r" SEQ Figure \* ARABIC ",
+                        str(self.numbers[key]), "_Ref_figure_" + key, rex.figure_caption(key))
+                    elements.append(rf.figure_paragraph(self.doc, rex.figure_asset(key))._p)
+                for el in elements:
+                    cursor.addnext(el)
+                    cursor = el
+                self.caption_words += sum(len(_para_text(el).split()) for el in elements[:2])
+                placed.append(f"{key} = {self.numbers[key]}")
+        return placed
 
     def fill_cover(self, cover: dict | None = None) -> list[str]:
         """Write the student's values onto the template's cover; a no-op until the JSON exists."""
@@ -314,6 +380,7 @@ class Builder:
             "prose_words": prose_words,
             "headings": len(heads),
             "tables": len(tables),
+            "figures": len(self.doc.inline_shapes),
             "h1": [t for s, t in heads if s.endswith("Heading 1")],
             "h2": [t for s, t in heads if s.endswith("Heading 2")],
         }
@@ -327,11 +394,16 @@ def main() -> int:
     builder = Builder.new()
     cover = builder.fill_cover()
     prose = builder.insert_prose()
+    exhibits = builder.place_exhibits()
     sized = builder.make_sizes_explicit()
     path = builder.save()
     stats = builder.summarize()
     print(f"built {path.name}: {stats['headings']} headings ({len(stats['h1'])} H1 / "
-          f"{len(stats['h2'])} H2), {stats['tables']} tables, {stats['prose_words']} prose words")
+          f"{len(stats['h2'])} H2), {stats['tables']} tables, {stats['figures']} figures, "
+          f"{stats['prose_words']} prose words")
+    print("exhibit numbering: " + ", ".join(exhibits))
+    print(f"prose without exhibit captions: {stats['prose_words'] - builder.caption_words}, "
+          f"caption words: {builder.caption_words}")
     print(f"cover fields filled: {len(cover)}"
           f"{'  (pending: report_assets/cover_values.json absent)' if not cover else ''}")
     print(f"prose blocks inserted: {len(prose)}, run sizes made explicit: {sized}")
