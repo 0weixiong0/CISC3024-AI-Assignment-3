@@ -147,6 +147,27 @@ def _keep_with_next(paras: list) -> list:
     return paras
 
 
+def styled_paragraph(proto_el, text: str) -> "object":
+    """A paragraph from the prototype, with `*asterisked*` spans rendered italic.
+
+    APA 7 italicises titles of reports, software and proceedings, and the audit reads run properties rather
+    than trusting that the style does it. The markers are stripped here, so the asterisks never reach the page.
+    """
+    import copy as _copy
+
+    el = _copy.deepcopy(proto_el)
+    runs = [r for r in el.findall(qn("w:r")) if r.find(qn("w:t")) is not None]
+    if not runs:
+        raise ValueError("paragraph prototype has no text run")
+    proto_run = runs[0]
+    for run in runs:
+        run.getparent().remove(run)
+    for i, piece in enumerate(text.split("*")):
+        if piece:
+            el.append(_text_run(proto_run, piece, italic=bool(i % 2)))
+    return el
+
+
 def caption_paragraphs(doc, protos, label: str, instr: str, cached: str, bookmark: str,
                        description: str) -> list:
     """The two lines above an exhibit: `Table N` as a labelled SEQ field, then the italic description."""

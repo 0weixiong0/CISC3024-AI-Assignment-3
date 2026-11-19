@@ -28,11 +28,10 @@ def visualisation_sections() -> dict:
             ("h2", "The live demo and what the visitor does"),
             ("body",
              "The front end is one static page with four tabs, and nothing on it is fitted in the browser. "
-             "What the visitor sees was computed by the code the study ran, then written into the page as data. The first tab is an instrument: pick a regime and a method, drag K, or click a row of "
+             "What the visitor sees was computed by the code the study ran and written into the page as data. The first tab is an instrument: pick a regime and a method, drag K, or click a row of "
              "faces, and the accuracy read-out moves with the growth curve, the per-direction Fisher ratios, "
              "the orthogonality corner of the accepted basis, the specimen scatter and the class ranks by K. "
-             "In the raw-pixel regime the discriminant directions themselves appear as pictures at the "
-             "raster's own size. The second tab replays the corruption control arm by arm, the third plots "
+             "In the raw-pixel regime the directions themselves appear as pictures at the raster's own size. The second tab replays the corruption control arm by arm, the third plots "
              "the pixel-dimension ladder, and the fourth lists the run tables beside the artefact each number "
              "came from. Every read-out names its split, because hold-out and test readings of one "
              "configuration differ by several points and a page that hides which is which invites the "
@@ -43,8 +42,8 @@ def visualisation_sections() -> dict:
              "scripts and the parity test, the front-end assets, the run tables and diagnostics as csv and "
              "json, the stage records and the requirements file. The Pages site is built from that same "
              "repository, so the demo an examiner opens is generated from the artefacts this report quotes "
-             "rather than from a copy of them. The dialogue record travels with the submission as a separate "
-             "attachment and is not linked from the public page."),
+             "rather than from a copy. The dialogue record travels with the submission as a separate "
+             "attachment, not on the public page."),
             ("h2", "Citation block for brief item (6)"),
             ("body",
              "The sentence the brief asks for, with each address on a line of "
@@ -98,7 +97,7 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "scored the literature, wrote every line of the implementation and the audits, ran "
              "the experiments, drafted the figures, the tables and this text, and built the page. The "
              "student set the constraints, ruled on every question the tool could not settle from the brief, "
-             "and approved each download and each release. Thirteen rulings and sixteen "
+             "and approved each download and release. Thirteen rulings and sixteen "
              "corrections are in the appendix ledger."),
             ("body",
              "What the collaboration got wrong is the more useful part of the record: every failure was caught "
@@ -122,7 +121,7 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "reporting. The two defects that kept coming back were invisible on the page, a heading the "
              "contents field listed although the document did not have it and runs carrying a font with no "
              "recorded size. The tool is fast at producing text and slow to doubt it, and almost every entry "
-             "in the corrections ledger began with someone asking what a number would have to be for the "
-             "sentence about it to be false."),
+             "in the corrections ledger began by asking what a number would have to be for the sentence "
+             "about it to be false."),
         ],
     }

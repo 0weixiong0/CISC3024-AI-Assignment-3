@@ -99,7 +99,7 @@ def reference_checks(pages) -> list[str]:
         form = ref.IN_TEXT[key]
         if " ".join(form.split()) not in text:
             problems.append("in-text citation never renders: " + form)
-        head = " ".join(entry.split())[:40]
+        head = " ".join(entry.replace("*", "").split())[:40]
         if head not in text:
             problems.append("reference entry never renders: " + entry[:40])
     return problems

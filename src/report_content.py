@@ -993,11 +993,13 @@ def results_sections(f: dict) -> dict:
             ("h2", "Datasets, features and the evaluation protocol"),
             ("body",
              "Two data regimes were run against one implementation. The raw-pixel regime is the ORL face "
-             f"database - 400 images, {f['orl_subjects']} subjects of ten images each, every image a "
+             f"database (AT&T Laboratories Cambridge, 2002) - 400 images, {f['orl_subjects']} subjects of ten "
+             f"images each, every image a "
              "112-row by 92-column "
              "greyscale raster flattened to 10,304 dimensions - with ten folds of nine training and one test "
              "image per subject and the paper's one-nearest-neighbour head. The frozen-feature regime is "
-             f"CIFAR-100 ({f['classes']['cifar100']} classes, {f['rows']['cifar100']:,} training rows) and "
+             f"CIFAR-100 (Krizhevsky, 2009), {f['classes']['cifar100']} classes and "
+             f"{f['rows']['cifar100']:,} training rows, and "
              f"Tiny ImageNet ({f['classes']['tiny_imagenet']} classes, {f['rows']['tiny_imagenet']:,}) scored through two backbones whose "
              "weights were never touched: ResNet-18 giving 512-dimensional vectors, and DINOv2 ViT-S/14 "
              "giving 384 at 224 by 224 input. Extraction was measured once before the matrix, at 18.2 "

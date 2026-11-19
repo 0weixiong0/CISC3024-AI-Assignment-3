@@ -22,27 +22,35 @@ from __future__ import annotations
 ENTRIES = [
     ("hendrycks-2019a",
      "Hendrycks and Dietterich (2019a)",
-     "Hendrycks, D., & Dietterich, T. (2019). Benchmarking neural network robustness to common corruptions "
-     "and perturbations. In International Conference on Learning Representations. "
+     "Hendrycks, D., & Dietterich, T. (2019a). Benchmarking neural network robustness to common corruptions "
+     "and perturbations. In *International Conference on Learning Representations*. "
      "https://arxiv.org/abs/1903.12261"),
     ("hendrycks-2019b",
      "Hendrycks and Dietterich (2019b)",
-     "Hendrycks, D., & Dietterich, T. (2019). Robustness (Commitment 712bfcd) [Computer software]. GitHub. "
+     "Hendrycks, D., & Dietterich, T. (2019b). *Robustness* (Version 712bfcd) [Computer software]. GitHub. "
      "https://github.com/hendrycks/robustness"),
     ("kumar-2026a",
      "Kumar et al. (2026a)",
-     "Kumar, I., Karhana, G., Jasti, S. K., & Lade, A. H. (2026). Supervised dimensionality reduction "
-     "revisited: Why LDA on frozen CNN features deserves a second look (Version 2; arXiv:2604.03928) "
+     "Kumar, I., Karhana, G., Jasti, S. K., & Lade, A. H. (2026a). *Supervised dimensionality reduction "
+     "revisited: Why LDA on frozen CNN features deserves a second look* (Version 2; arXiv:2604.03928) "
      "[Preprint]. arXiv. https://arxiv.org/abs/2604.03928"),
     ("kumar-2026b",
      "Kumar et al. (2026b)",
-     "Kumar, I., Karhana, G., Jasti, S. K., & Lade, A. H. (2026). lda-image-classification (MIT licence) "
+     "Kumar, I., Karhana, G., Jasti, S. K., & Lade, A. H. (2026b). *lda-image-classification* (MIT licence) "
      "[Computer software]. GitHub. Retrieved November 19, 2026, from "
      "https://github.com/IndarKarhana/lda-image-classification"),
     ("liu-2023",
      "Liu et al. (2023)",
-     "Liu, J., Cai, X., & Niranjan, M. (2023). GO-LDA: Generalised optimal linear discriminant analysis "
+     "Liu, J., Cai, X., & Niranjan, M. (2023). *GO-LDA: Generalised optimal linear discriminant analysis* "
      "(arXiv:2305.14568) [Preprint]. arXiv. https://arxiv.org/abs/2305.14568"),
+    ("krizhevsky-2009",
+     "Krizhevsky (2009)",
+     "Krizhevsky, A. (2009). *Learning multiple layers of features from tiny images* [Technical report]. "
+     "University of Toronto. https://www.cs.toronto.edu/~kriz/cifar.html"),
+    ("att-2002",
+     "AT&T Laboratories Cambridge (2002)",
+     "AT&T Laboratories Cambridge. (2002). *The database of faces* [Dataset]. "
+     "http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html"),
 ]
 
 
@@ -55,6 +63,8 @@ IN_TEXT = {
     "kumar-2026a": "(Kumar et al., 2026a)",
     "kumar-2026b": "(Kumar et al., 2026b)",
     "liu-2023": "(Liu et al., 2023)",
+    "krizhevsky-2009": "(Krizhevsky, 2009)",
+    "att-2002": "(AT&T Laboratories Cambridge, 2002)",
 }
 
 

@@ -330,20 +330,23 @@ class Builder:
         return placed
 
     def insert_references(self) -> int:
-        """Emit the APA 7 list under the References heading, and check it against the prose.
+        """Emit the APA 7 list after the References heading, and check it against the prose.
+
+        addnext, not addprevious: the first build put the list at the end of section 7 and left the heading
+        alone on its own page, which the page-count audit only noticed because the heading and its entries
+        landed two pages apart.
+        
 
         The check runs on the assembled text rather than on the source files, so a citation that was reworded
         away, or an entry that no longer answers anything, stops the build. Works whose bibliographic record is
         not on disk are absent from both sides of that pair, and plan section 12 records them as a release
         request instead of writing author initials from memory.
         """
-        anchor = self.h1["References"]
-        tail = anchor.getnext()
+        cursor = self.h1["References"]
         for text in ref.entries():
-            el = copy.deepcopy(self.protos["reference"])
-            _set_text(el, text)
-            anchor.addprevious(el)
-            anchor = el
+            el = rf.styled_paragraph(self.protos["reference"], text)
+            cursor.addnext(el)
+            cursor = el
         prose = " ".join(_para_text(el) for el in self.doc.element.body.findall(qn("w:p")))
         problems = ref.check(prose)
         if problems:
