@@ -25,6 +25,8 @@ PDF = ROOT / "CISC3024_AI_Assignment_3_Report.pdf"
 TOP_LIMIT = 200      # a first exhibit on a page must start above this y
 BOTTOM_LIMIT = 320   # a second exhibit on the same page must start below this y
 PAGE_BOTTOM = 700    # nothing may start below this and still be on the page
+BAND_LOW = 7800      # rendered body words, see word_band_checks
+BAND_HIGH = 9200     # the ceiling on the prose unit itself lives in src/build_report.py
 
 # The contents field is resolved by Word, so its length is not known when the document is written. If it
 # runs onto the next page the body starts under its last entry, which is a layout fault the exhibit checks
@@ -81,6 +83,59 @@ def labels_on(page) -> list[tuple[str, int]]:
     return found
 
 
+def reference_checks(pages) -> list[str]:
+    """Every APA entry and every in-text form must survive the round trip to the rendered page.
+
+    The build refuses to write a document whose list and prose disagree, but that check reads the docx element
+    tree. Word re-wraps text when it paginates, and a citation split across a line is invisible to a plain
+    search yet obvious to an examiner, so the same pair is asserted here on extracted text with whitespace
+    collapsed.
+    """
+    import report_references as ref
+
+    text = " ".join(" ".join(page.get_text().split()) for page in pages)
+    problems = []
+    for key, _narrative, entry in ref.ENTRIES:
+        form = ref.IN_TEXT[key]
+        if " ".join(form.split()) not in text:
+            problems.append("in-text citation never renders: " + form)
+        head = " ".join(entry.split())[:40]
+        if head not in text:
+            problems.append("reference entry never renders: " + entry[:40])
+    return problems
+
+
+def word_band_checks(pages) -> list[str]:
+    """A rendered sanity band around the prose figure the builder measures exactly.
+
+    The ceiling itself is 6,500 prose words, enforced in src/build_report.py, which knows which paragraphs are
+    headings, exhibit captions and reference entries. The audit cannot recompute that unit from a page: table
+    cells and caption descriptions are indistinguishable from prose once they are rendered. So this asserts the
+    weaker thing it can see - that the whole rendered body, contents page and section titles excluded, sits
+    inside a band around the current 8,472. The band is wide on purpose; it is a drift detector for a section
+    appearing or disappearing, not a second opinion on the ceiling.
+    """
+    from build_report import SECTIONS
+
+    titles = {t for t, _subs, _drafted in SECTIONS}
+    body = []
+    for page in pages:
+        for line in page.get_text().splitlines():
+            words = line.split()
+            if not words or (len(words) == 1 and words[0].isdigit()) or TOC_LINE.search(line):
+                continue
+            if " ".join(words) in titles:
+                continue
+            if words[0] in ("Figure", "Table") and len(words) == 2 and words[1].isdigit():
+                continue
+            body.append(" ".join(words))
+    count = len(" ".join(body).split())
+    if not BAND_LOW <= count <= BAND_HIGH:
+        return [f"rendered body words {count} outside the {BAND_LOW}-{BAND_HIGH} band"]
+    print(f"rendered body words (headings, contents and caption labels excluded): {count}")
+    return []
+
+
 def main(pdf: Path) -> int:
     with pymupdf.open(str(pdf)) as book:
         pages = [book[n] for n in range(book.page_count)]
@@ -116,6 +171,8 @@ def main(pdf: Path) -> int:
 
         # The contents field is resolved by Word, so this is checked on the rendered pages.
         problems += toc_checks(pages)
+        problems += reference_checks(pages)
+        problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.
         for number, page in enumerate(pages, start=1):

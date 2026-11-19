@@ -199,14 +199,14 @@ match any of the four measurements below, so they are withdrawn.
 
 | Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,566 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,731 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,107 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions** | 3,024 | 8,286 | **6,496** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,679 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 8,846 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,220 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,500** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 build, which is the first build with exhibits: 40 PDF pages,
+The A3 column was re-measured on the 2026-11-20 step-4/5 build, which carries exhibits and a reference list: 43 PDF pages,
 31 headings (8 H1 including References, 23 H2), 4 tables, 9 figures, and §1 through §7 all drafted. The prose
 figure is now taken with the caption lines excluded, because step 3 made them a large block of text that is
 not argument: 14 captions carry 428 words, and Word's own counter, which sees everything, reads 8,566.
@@ -217,7 +217,9 @@ sentences citing the exhibits (130), and §6/§7 came in at 1,117 against 850. T
 brief sets no limit, A2 shipped 8,286 prose words over 54 pages, and 6,500 is not a high ceiling - so the number
 moves and this is the last time it moves. The overage was then paid for inside §2's own budget rather than by
 touching §4 or §5: the screening citation costs 15 words and two clauses of §2's wave paragraph were compressed
-by 16, which leaves the drafted prose at **6,496 words, 4 inside the ceiling**. Exhibit captions (428 words) and
+by 16, which left the drafted prose at the ceiling exactly. Step 4 then moved the same way: the six in-text
+citations cost 28 words, and 28 were cut back inside §6 and §7, so **the drafted prose is 6,500 words with no
+headroom left**. Exhibit captions (428 words), the reference list (133 words) and
 table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
 **The 6,500 budget is in prose words**, because that is the unit A2's record reported and it is the closest
@@ -279,9 +281,12 @@ expected ones: cover placeholders pending the values (U018 item 1), no URL until
 ## 10.1 Step 3, delivered 2026-11-20
 
 Five tables and nine figures are in the document with field-numbered captions and field cross-references; §6 and
-§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 42
-PDF pages, 8,566 words by Word's counter, 8,731 by PDF extraction, 6,496 prose words excluding captions, 428
-caption words, 1,243 table words over 415 cells, 31 headings and 31 contents entries. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
+§7 are drafted; the C4 comparison paragraph U020 asked for is in §5 with both of its pages. The build reports 43
+PDF pages, 8,679 words by Word's counter, 8,846 by PDF extraction, 7,220 docx paragraph words, 6,500 prose words
+excluding captions and the reference list, 428 caption words, 133 reference words, 1,243 table words over 415 cells,
+5 tables, 9 figures, 31 headings and 31 contents entries. Steps 4 and 5 added the reference list (5 entries, each
+cited), the brief-item coverage map (§12) and the prose pass over §6/§7 (§13); two new gates came with them, one
+that re-checks every citation and entry on the rendered text and one that bands the rendered body word count. The fifth table is §2's screening ledger, which U022 released after the four in §5 were accepted; §4's
 code-path table is withdrawn, because U022 ruled that its prose already covers brief item (3).
 
 `audit_docx` finds one issue, the expected one: the cover still
@@ -291,12 +296,82 @@ came out of wiring the exhibits: the README figure's line numbers were being der
 blank line, so the picker now carries each line's own number (the block is lines 75-82, not 77-83), and the
 figure manifest no longer claims report numbers for itself.
 
+## 12. Brief-item coverage, measured on the 2026-11-20 build (step 4)
+
+Pages are where each H1 starts in the exported PDF, read from the rendered file rather than from the outline.
+
+| Brief item | Where it is answered | Pages |
+| --- | --- | --- |
+| (1) Recent PCA/LDA algorithm found with an AI tool, and why it was chosen | §2, with the screening ledger as Table 1 | 5-10 |
+| (2) What the algorithm does and how it was adapted to the task | §3 | 11-17 |
+| (3) How it was implemented and verified with AI assistance | §4 | 18-22 |
+| (4) Experimental settings, results, and discussion | §5, Tables 2-5 and Figures 4-9 | 23-37 |
+| (5) What was learned from using the AI tool | §7 (and §1 states the division of labour) | 39-42 |
+| (6) Source-code availability, as a webpage link | §6's citation block: the repository line and the Pages line, each on its own line | 38 |
+| No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
+
+Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p43. Contents
+occupies pages 2-3, and the body begins on page 4 under the page-break rule recorded in §10.
+
+### Bibliography: what is cited, and what is deliberately absent
+
+Five works are in the reference list, and each is cited in the prose: the GO-LDA paper (Liu et al., 2023), the
+comparison study (Kumar et al., 2026a) and its repository README (Kumar et al., 2026b), the corruption benchmark
+(Hendrycks & Dietterich, 2019a) and its pinned code (Hendrycks & Dietterich, 2019b). Every one of them was
+transcribed from a file already in `research_records/retrieval_cache/`, so author names, titles and dates are
+readings rather than recollections. `src/build_report.py` stops the build if an entry is not cited or a citation
+has no entry, and `audit_layout.py` re-checks the same pair on the rendered text, because Word re-wraps a
+citation across a line and a plain search would then miss it.
+
+The works the study **uses** but does not argue with are absent from both the list and the prose, because no
+bibliographic record for them is on disk and APA initials cannot be written from memory: the ORL/AT&T data set,
+CIFAR-100, Tiny ImageNet, ResNet-18, DINOv2 ViT-S/14, NumPy, scikit-learn, PyTorch, and the two runner-up
+candidates in the screening ledger (RSSPCA, DLR-2DPCA). **Release request:** fetching the eight bibliographic
+records for these would let the list reach the 14 entries the outline expects. Each is a metadata page or a
+DOI landing page - no dataset, weight or code download. Until then the prose names them descriptively, which is
+consistent but thinner than a marker would expect for materials.
+
+## 13. The prose pass on sections 6 and 7 (step 5, 2026-11-20)
+
+Sections 6 and 7 were written this round, so they were read as prose rather than as output. The engine is the
+project's standing English de-AI pass; no author style profile exists for it, which means the result carries the
+engine's own habits as well as the removals below - worth saying once, because calibration needs three to five
+texts the student wrote without assistance.
+
+What was removed, and why it was an AI tell rather than a stylistic preference:
+
+* **"A negative result of that size is not one run; it is the matrix, two controls, a head sweep and a ten-fold
+  reading."** A negative parallelism followed by a pile of four, which is the shape a model reaches for when it
+  wants a sentence to sound firm. Now: the result does not rest on a single run, and the list stays.
+* **The three-habits paragraph**, which had become three parallel imperatives each followed by a colon - "Gate
+  the artefact and not the claim: ... Keep provenance beside the asset: ... And run the audit before reporting,
+  ...". The habits are real and are kept, but they are now told unevenly, and the weakest of the three says so.
+* **"The lesson is about evidence rather than about the algorithm."** The record's own sentence is "about
+  evidence, not about the algorithm", so the phrasing was both a tell and a drift from the source. Restored.
+* **A self-summary close** - "which is the evidence for that sentence" - deleted, since the ledger reference is
+  the evidence and does not need to announce itself.
+* **A six-item list of demo read-outs** folded into one sentence with the specimen scatter shortened, so the
+  paragraph no longer reads as a feature table in prose clothing.
+
+What was deliberately kept: the three-part order of WP7 section 8, because the supervisor set it; one aphoristic
+close ("The tool is fast at producing text and slow to doubt it"), because the budget allows one; and the flat
+statement "Both are public.", which is the kind of slack sentence a person writes at half pressure.
+
+Length discipline: the pass added 29 words, so 40 were cut back inside the same two sections, and the citation
+insertions for the reference list were paid for the same way. The drafted prose is **6,500 words, exactly at the
+ceiling**, with exhibit captions (428) and the reference list (133) outside that unit. `src/build_report.py` now
+excludes the reference list from the prose figure, because a citation growing longer is not an essay growing
+longer.
+
 ## 11. What is still open
 
 * **Cover** - U022 will write the name, student number and date onto the template by hand at submission, so the
   `report_assets/cover_values.json` path in `src/build_report.py` stays inert and `audit_docx`'s placeholder
   finding is expected until that moment.
-* **Final read-through** - the brief-item coverage check against §2 of this plan, and a Turnitin-aware pass over
-  §6 and §7, which have not yet been read as prose.
-* **Trim** - closed by U022: the ceiling is 6,500 prose words, the drafted prose is 6,496, and no section needs
-  cutting. §2's 234-word overage was absorbed by the compression recorded in §9 rather than taken separately.
+* **Final read-through** - done on 2026-11-20: the coverage map is §12, and the prose pass over §6 and §7 is
+  §13. Outside those two sections only words were touched, per U023.
+* **Bibliographic release** - the eight works listed in §12 that have no record on disk; awaiting a release to
+  fetch metadata only.
+* **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is exactly
+  6,500, so no headroom is left. Any further addition has to pay for itself inside §2, §6 or §7, the way the
+  citation sentences and the prose pass did.

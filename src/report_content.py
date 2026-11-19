@@ -497,7 +497,8 @@ def search_sections(s: dict) -> dict:
 
             ("body",
 
-             f"The approved choice is Option A: generalised optimal discriminant analysis, recorded in the "
+             f"The approved choice is Option A: generalised optimal discriminant analysis (Liu et al., 2023), recorded "
+             "in the "
 
              f"ledger as candidate {s['primary_id']} at {s['primary_score']:.2f} of 5 ({s['venue_year']}), used "
 
@@ -898,7 +899,7 @@ def algorithm_sections(f: dict) -> dict:
              f"eigenvectors are the whole subspace: on the {f['dim']}-dimensional features used here the "
              f"largest off-diagonal element of that basis's Gram matrix is {f['classic_offdiag']:.4f}, which "
              "is the sense in which classical directions are conjugate in the pencil rather than orthogonal "
-             "in the ordinary sense. GO-LDA changes the constraint. Its equation (37) chooses each new "
+             "in the ordinary sense. GO-LDA (Liu et al., 2023) changes the constraint. Its equation (37) chooses each "
              "direction to maximise the Fisher ratio subject to Euclidean orthogonality to every direction "
              "already accepted, and equation (38) gives the direction that answers it: the leading "
              "eigenvector of the pencil after the accepted directions have been deflated out of it. The "
@@ -1012,10 +1013,12 @@ def results_sections(f: dict) -> dict:
              "test values are what the report concludes from, and the no-projection arm exists only as a "
              "hold-out number in the run tables. Table {{Table:settings}} puts the settings of both regimes in one place."),
             ("body",
-             "The benchmark this protocol follows is a published comparison study rather than one of the "
+             "The benchmark this protocol follows is a published comparison study (Kumar et al., 2026a) rather than one "
+             "of the "
              "candidate algorithms, and its two published versions disagree with each other. On the same "
              "six feature configurations for CIFAR-100, its paper's Table I reports a PCA accuracy of "
-             "65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60 while its repository README reports 65.07 / "
+             "65.07 / 69.28 / 64.62 / 69.77 / 76.66 / 80.60 while its repository README (Kumar et al., 2026b) reports "
+             "65.07 / "
              "69.14 / 64.65 / 69.77 / 78.05 / 81.55 - four of the six cells differ, by up to 1.45 points. "
              "The comparison ran both and quotes the README figure, so the disagreement is settled here in "
              "favour of the README: this report's protocol, its per-backbone comparison and the front-end "
@@ -1064,10 +1067,12 @@ def results_sections(f: dict) -> dict:
              "reported above, and it is the only hypothesis that travels between regimes untouched. The curves behind the rising side of H2 are Figure {{Figure:growth}}."),
             ("h2", "Two controls: fixed corruption and reduced pixel dimension"),
             ("body",
-             "The first control asked whether the ordering survives a distribution shift. One corruption - "
+             "The first control asked whether the ordering survives a distribution shift. One corruption from "
+             "ImageNet-C (Hendrycks & Dietterich, 2019a) - "
              f"additive white Gaussian noise at sigma = {f['ood_sigma']:g} on unit pixels - the first entry "
              "of the reference implementation's severity list, `c = [.08, .12, 0.18, 0.26, 0.38]"
-             "[severity - 1]` in `corruptions.py` at commit 712bfcd - was applied to the CIFAR-100 test "
+             "[severity - 1]` in `corruptions.py` at commit 712bfcd (Hendrycks & Dietterich, 2019b) - was applied to "
+             "the CIFAR-100 test "
              "images before the "
              "frozen backbone saw them, and the clean-fitted projections, scalers and heads were re-scored "
              f"without refitting. Both backbones degrade (mean absolute feature shift {shifts}), the deficit "

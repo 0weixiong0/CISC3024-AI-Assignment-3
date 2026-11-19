@@ -33,6 +33,7 @@ from docx.table import Table
 from docx.text.paragraph import Paragraph
 
 import report_content as rc
+import report_references as ref
 import report_sections67 as r67
 import report_exhibits as rex
 import report_fields as rf
@@ -328,6 +329,27 @@ class Builder:
                 placed.append(f"{key} = {self.numbers[key]}")
         return placed
 
+    def insert_references(self) -> int:
+        """Emit the APA 7 list under the References heading, and check it against the prose.
+
+        The check runs on the assembled text rather than on the source files, so a citation that was reworded
+        away, or an entry that no longer answers anything, stops the build. Works whose bibliographic record is
+        not on disk are absent from both sides of that pair, and plan section 12 records them as a release
+        request instead of writing author initials from memory.
+        """
+        anchor = self.h1["References"]
+        tail = anchor.getnext()
+        for text in ref.entries():
+            el = copy.deepcopy(self.protos["reference"])
+            _set_text(el, text)
+            anchor.addprevious(el)
+            anchor = el
+        prose = " ".join(_para_text(el) for el in self.doc.element.body.findall(qn("w:p")))
+        problems = ref.check(prose)
+        if problems:
+            raise SystemExit("reference list and prose disagree: " + "; ".join(problems))
+        return len(ref.entries())
+
     def fill_cover(self, cover: dict | None = None) -> list[str]:
         """Write the student's values onto the template's cover; a no-op until the JSON exists."""
         if cover is None and COVER_VALUES.exists():
@@ -369,8 +391,11 @@ class Builder:
 
     def summarize(self) -> dict:
         paras = [Paragraph(el, self.doc) for el in self.doc.element.body.findall(qn("w:p"))]
+        # The prose unit is the argument the reader reads: headings, exhibit captions and the reference list
+        # are counted apart, because a citation that grows longer must not read as an essay that grew longer.
+        excluded = ("Heading", "EndNote Bibliography")
         prose_words = sum(len(_para_text(p._p).split()) for p in paras
-                          if p.style is not None and not p.style.name.startswith("Heading"))
+                          if p.style is not None and not any(p.style.name.startswith(e) for e in excluded))
         heads = [(p.style.name, _para_text(p._p)) for p in paras
                  if p.style is not None and p.style.name.startswith("Heading")]
         tables = [Table(t, self.doc) for t in self.doc.element.body.findall(qn("w:tbl"))]
@@ -380,7 +405,7 @@ class Builder:
             "prose_words": prose_words,
             "headings": len(heads),
             "tables": len(tables),
-            "figures": len(self.doc.inline_shapes),
+            "figures": len(self.doc.inline_shapes) - 1,  # the template's cover logo is the tenth shape
             "h1": [t for s, t in heads if s.endswith("Heading 1")],
             "h2": [t for s, t in heads if s.endswith("Heading 2")],
         }
@@ -395,6 +420,7 @@ def main() -> int:
     cover = builder.fill_cover()
     prose = builder.insert_prose()
     exhibits = builder.place_exhibits()
+    entries = builder.insert_references()
     sized = builder.make_sizes_explicit()
     path = builder.save()
     stats = builder.summarize()
@@ -402,6 +428,7 @@ def main() -> int:
           f"{len(stats['h2'])} H2), {stats['tables']} tables, {stats['figures']} figures, "
           f"{stats['prose_words']} prose words")
     print("exhibit numbering: " + ", ".join(exhibits))
+    print(f"reference entries: {entries}, each one cited in the text")
     print(f"prose without exhibit captions: {stats['prose_words'] - builder.caption_words}, "
           f"caption words: {builder.caption_words}")
     print(f"cover fields filled: {len(cover)}"

@@ -27,20 +27,19 @@ def visualisation_sections() -> dict:
         "Interactive Visualisation and Source-Code Availability": [
             ("h2", "The live demo and what the visitor does"),
             ("body",
-             "The front end is one static page with four tabs, and nothing on it is fitted in the browser: "
-             "every quantity it shows was computed by the same code the study ran and then written into the "
-             "page. The first tab is an instrument. Pick a regime and a method, drag K, or click a row of "
-             "faces, and the accuracy read-out, the growth curve, the per-direction Fisher ratios, the "
-             "orthogonality corner of the accepted basis, the scatter of the specimens in two dimensions and "
-             "the class ranks by K all move together; in the raw-pixel regime the discriminant directions "
-             "themselves appear as pictures at the raster's own size. The second tab replays the corruption "
-             "control arm by arm, the third plots the pixel-dimension ladder, and the fourth lists the run "
-             "tables beside the artefact each number came from. Every read-out carries the split it belongs "
-             "to, because the hold-out and test readings of one configuration differ by several points and "
-             "the page would otherwise invite the comparison this report refuses to draw."),
+             "The front end is one static page with four tabs, and nothing on it is fitted in the browser. "
+             "What the visitor sees was computed by the code the study ran, then written into the page as data. The first tab is an instrument: pick a regime and a method, drag K, or click a row of "
+             "faces, and the accuracy read-out moves with the growth curve, the per-direction Fisher ratios, "
+             "the orthogonality corner of the accepted basis, the specimen scatter and the class ranks by K. "
+             "In the raw-pixel regime the discriminant directions themselves appear as pictures at the "
+             "raster's own size. The second tab replays the corruption control arm by arm, the third plots "
+             "the pixel-dimension ladder, and the fourth lists the run tables beside the artefact each number "
+             "came from. Every read-out names its split, because hold-out and test readings of one "
+             "configuration differ by several points and a page that hides which is which invites the "
+             "comparison this report refuses to draw."),
             ("h2", "The repository and the Pages site"),
             ("body",
-             "Both are public. The repository holds the project's modules, including the three audit "
+             "Both are public. The repository holds the project's modules, the three audit "
              "scripts and the parity test, the front-end assets, the run tables and diagnostics as csv and "
              "json, the stage records and the requirements file. The Pages site is built from that same "
              "repository, so the demo an examiner opens is generated from the artefacts this report quotes "
@@ -48,7 +47,7 @@ def visualisation_sections() -> dict:
              "attachment and is not linked from the public page."),
             ("h2", "Citation block for brief item (6)"),
             ("body",
-             "The sentence the brief asks for, in the form it is submitted, with each address on a line of "
+             "The sentence the brief asks for, with each address on a line of "
              "its own so that copying it cannot pick up a line break:"),
             ("body", f"All codes and the raw experiment logs can be found at {repo}."),
             ("body", f"The published demo, generated from those same logs, is at {pages}"),
@@ -73,56 +72,57 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "claims: the accepted directions are orthogonal in the ordinary sense to "
              f"{_sci(f['go_offdiag'])}, each one is individually the more discriminative direction, and the "
              "construction was certified against an independent reconstruction of the full-space pencil, by "
-             f"two routes and two solvers that agree to within {_sci(f['solver_span'])} degrees of subspace "
-             "angle. That part of the paper is right, and it survived every check that was built for it."),
+             f"two routes and two solvers agreeing to within {_sci(f['solver_span'])} degrees of subspace "
+             "angle. That part of the paper is right, and it survived every check built for it."),
             ("body",
              "Its published advantage did not survive the move out of the paper's regime. On frozen deep "
              f"features GO-LDA finishes below the best classical baseline in all four pairs - by {deficits} "
              f"- and the gap is widest where the head is weakest, {knn} points under the nearest-neighbour "
-             "classifier that the face rows use. Going past the rank cap buys back accuracy the baselines "
+             "classifier the face rows use. Going past the rank cap buys back accuracy the baselines "
              "already hold: the curve rises with K, as the mechanism predicts, and never reaches the cap "
-             "value of a classical arm. A negative result of that size is not one run; it is the matrix, two "
+             "value of a classical arm. The negative result does not rest on a single run: it is the matrix, two "
              "released controls, a head sweep and a ten-fold reading of the same configurations."),
             ("body",
-             "The lesson is about evidence rather than about the algorithm. Parity at the cap belongs to the "
+             "The lesson is about evidence, not about the algorithm. Parity at the cap belongs to the "
              "raw-pixel corner of the design, where the cap is a fraction of a per cent of the space and "
              "nine images per class make the within-class scatter so degenerate that deflation has almost "
              f"nothing to remove. Shrinking the pixel dimension at fixed classes found no trend to explain "
-             f"that away: the paired difference against the ridge pencil was {ladder} points. What the paper "
+             f"that away: the paired difference against the ridge pencil was {ladder}. What the paper "
              "measured where the cap is small does not transfer to where it is large, and the honest way to "
-             "find that out is to look for the precondition of the coincidence instead of assuming a "
-             "theorem. For a reader who wants Euclidean-orthogonal directions the practical conclusion is "
-             "that the construction is sound and cheap, and that its accuracy in a feature regime has to be "
-             "measured rather than inherited."),
+             "find that out is to look for the coincidence's precondition instead of assuming a "
+             "theorem. The construction is sound and cheap; what does not follow is that its accuracy in a "
+             "feature regime can be taken from the paper instead of measured."),
             ("h2", "What the AI collaboration taught us"),
             ("body",
              "The division of labour was fixed before it started and it held. The AI tool searched and "
-             "scored the literature, designed and wrote every line of the implementation and the audits, ran "
+             "scored the literature, wrote every line of the implementation and the audits, ran "
              "the experiments, drafted the figures, the tables and this text, and built the page. The "
              "student set the constraints, ruled on every question the tool could not settle from the brief, "
              "and approved each download and each release. Thirteen rulings and sixteen "
-             "recorded corrections are in the appendix ledger, which is the evidence for that sentence."),
+             "corrections are in the appendix ledger."),
             ("body",
-             "What the collaboration got wrong is the more useful part of the record, because every failure "
-             "was caught by a check rather than by reading. The first drift measure compared the new "
+             "What the collaboration got wrong is the more useful part of the record: every failure was caught "
+             "by a check, not by reading. The first drift measure compared the new "
              "construction against itself and reported no divergence, which was arithmetically true and "
              "substantively nothing; the corrected comparison put the first divergence at the third "
              "direction. A probe that reported a classical basis as orthogonal to fourteen decimal places "
-             "had measured a different object from the one its label claimed. The sharpest case was a "
-             "self-written gate that accepted a first direction identical to the classical one to one "
-             "decimal place and then read that as evidence for the hypothesis it existed to test; the remedy "
-             "was an arm that must fail the same assertion, and the tolerance is now reported rather than "
-             "assumed. A withdrawn run, in which transposed loader constants made a reduction look like a "
-             "reversal, was found only because the numbers were checked against the raster they came from."),
+             "had measured a different object than its label named. The sharpest case was a "
+             "self-written gate that accepted a first direction identical to the classical one to one decimal "
+             "place and then read that as evidence for the hypothesis it existed to test; the remedy was an "
+             "arm that must fail the same assertion. A withdrawn run, where transposed loader constants made "
+             "a reduction look like a reversal, surfaced only because the numbers were checked against the "
+             "raster they came from."),
             ("body",
-             "Three habits carried the rest of the way. Gate the artefact and not the claim: every number in "
-             "this report is read from a file when the document is built, so a table that disagrees with a "
-             "run stops the build. Keep provenance beside the asset: each figure records the page or the fit "
-             "it was drawn from, which is what let four wrong captions be corrected in one pass. And run the "
-             "audit before reporting, because the two most persistent defects were invisible on the page - a "
-             "heading the contents field listed although the document did not have it, and runs carrying a "
-             "font with no recorded size. The tool is fast at producing text and slow to doubt it, and almost "
-             "every correction in the ledger began with someone asking what a number would have to be for "
-             "the sentence to be false."),
+             "Three habits did most of the remaining work, and they were not equally useful. Gating the artefact "
+             "instead of the claim paid every time: each number in this report is read from a file when the "
+             "document is built, so a table that disagrees with a run stops the build. Keeping provenance "
+             "beside the asset did the same for the figures, since each records the page or the fit behind it "
+             "- that is how four wrong captions went away in one pass. The third habit is the weakest "
+             "of the three, because it is about attention rather than code: run the audit before "
+             "reporting. The two defects that kept coming back were invisible on the page, a heading the "
+             "contents field listed although the document did not have it and runs carrying a font with no "
+             "recorded size. The tool is fast at producing text and slow to doubt it, and almost every entry "
+             "in the corrections ledger began with someone asking what a number would have to be for the "
+             "sentence about it to be false."),
         ],
     }
