@@ -322,6 +322,11 @@ def table_element(protos, header: list[str], rows: list[list[str]], size_half_pt
             para = OxmlElement("w:p")
             pPr = OxmlElement("w:pPr")
             pPr.append(_el("w:spacing", before="20", after="20", line="240", lineRule="auto"))
+            # Flush left, because the paragraphs otherwise inherit the template's Normal style, which is
+            # justified. Justified suits a six-inch column; in a two-inch cell Word reaches the line end by
+            # widening spaces, and the delivered build measured word gaps of 10.7pt (90th percentile 31.6)
+            # inside tables against 3.0pt in the prose - the spread-out look that reads as centred text.
+            pPr.append(_el("w:jc", val="left"))
             para.append(pPr)
             para.append(_text_run(proto_run, text, bold=bold, size_half_pt=size_half_pt))
             tc.append(para)

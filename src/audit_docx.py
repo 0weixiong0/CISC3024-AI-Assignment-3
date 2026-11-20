@@ -311,6 +311,22 @@ def main() -> int:
     else:
         print("cover: report_assets/cover_values.json absent, nothing to check the cover against")
 
+    # U030: table cells are written flush left on purpose. The paragraphs inside a cell otherwise inherit the
+    # template's Normal style, which is justified, and Word reaches the line end by widening spaces - which is
+    # what reads as centred text with characters drifting down. The gate reads the property rather than the
+    # page, and `audit_layout.reference_render_checks`'s companion measures what actually rendered.
+    cell_paragraphs = [paragraph for table in doc.tables for row in table.rows for cell in row.cells
+                       for paragraph in cell.paragraphs if cell.text.strip()]
+    no_left = [paragraph.text.strip()[:24] for paragraph in cell_paragraphs
+               if (lambda el: el is None or el.find(qn("w:jc")) is None
+                   or el.find(qn("w:jc")).get(qn("w:val")) != "left")(paragraph._p.find(qn("w:pPr")))]
+    if no_left:
+        flag("tables", f"{len(no_left)} of {len(cell_paragraphs)} table cell paragraphs do not carry an "
+                       f"explicit left alignment, so they inherit the style's justification: "
+                       f"{', '.join(repr(t) for t in no_left[:3])}")
+    print(f"table cells: {len(cell_paragraphs)}, explicitly left: "
+          f"{len(cell_paragraphs) - len(no_left)}")
+
     print()
     if not FLAGS:
         print("no findings")

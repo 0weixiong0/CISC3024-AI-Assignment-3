@@ -74,6 +74,17 @@ contradicted the ruling it claimed to summarise.
   token at all. Run against the 11-20 build they report 14 of 14 bookmarks and 14 rendered places; on the
   rebuilt file both report nothing - and the cached results in the source hid the fault the whole time, because
   the cached side was always right and only the resolution was wrong.
+* **Text inside a table cell is flush left** (U030, 2026-11-21). Cell paragraphs were written with no alignment
+  of their own, so they inherited the template's Normal style, which is justified. Justification in a
+  two-inch column is reached by widening the spaces between words rather than by moving the text, which is why
+  it reads as centred: measured on the exported page, intra-cell word gaps had a median of 4.9pt and a maximum
+  of 33.6pt, with 171 of them above 8pt, while the same type set left gives 2.3pt everywhere. The cells now
+  carry `w:jc val="left"` explicitly and the rendered maximum is 2.4pt with none above 6. Columns, boundaries
+  and page breaks are unchanged - x from 90.3 to 521.9 as before, tables still on pages 8-9, 25, 31-32 and
+  36-37 - because the property affects only the space inside a line. Two gates hold it: `audit_docx` reads the
+  alignment on all 415 cell paragraphs, and `audit_layout.table_cell_checks` measures the gaps on the page,
+  comparing words only within one cell (an earlier draft of the check grouped words by page row, which counted
+  the gutter between two columns as a stretched space and reported 31pt on a file that was already fixed).
 * **Exhibits sit flush with the text block** (U027, 2026-11-20). The template's own caption lines carry no
   `w:ind` and its figure paragraph is left-aligned with no space above or below, while its body prose is indented
   half an inch. Cloning the body prototype for captions therefore pushed all fourteen exhibit labels half a column
@@ -259,7 +270,7 @@ match any of the four measurements below, so they are withdrawn.
 | Unit | How it is counted | A1 | A2 | A3, as delivered (2026-11-21, after U029) |
 | --- | --- | --- | --- | --- |
 | Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,984 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,138 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,129 |
 | docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,525 |
 | **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,459** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
@@ -269,7 +280,7 @@ The A3 column was re-measured on the delivered 2026-11-21 build, which carries e
 filed as one alphabet, and a cover filled with the student's own values: 45 PDF pages, 31 headings (8 H1
 including References, 23 H2), 5 tables, 9 figures, and §1 through §7 all drafted. The prose figure is taken with
 the caption lines excluded, because step 3 made them a large block of text that is not argument: 14 captions carry
-428 words, and Word's own counter, which sees everything, reads 8,984 against 9,138 from the PDF text layer.
+428 words, and Word's own counter, which sees everything, reads 8,984 against 9,129 from the PDF text layer. The two disagree by nine words, not nine words of prose: nine hyphenated compounds inside table cells (ViT-S/14 seven times, face-data twice) break at the hyphen while the cells are justified, so the PDF text layer counts them as two words and Word's counter, which counts the word, does not. Section 10.3 has the round that removed it.
 The prose unit also contains the 30 words of the cover block, which is where it has always been; filling the cover
 from U026's values moved the figure by four words, placeholders to values, and nothing in the sections changed.
 
@@ -394,7 +405,7 @@ identical to his edited file, 150 paragraphs and a similarity ratio of 1.0 on th
 typed by hand was lost on the way back through the builder; what changed is the mechanism underneath the same
 words, since his fix was a typed number where the source now emits a field.
 
-The delivered build: **45 pages**, 8,984 words by Word's counter, 9,138 in the PDF text layer, 7,525 docx
+The build delivered at this round: **45 pages**, 8,984 words by Word's counter, 9,138 in the PDF text layer (9,129 after U030's table alignment, for the reason given in section 10.3), 7,525 docx
 paragraph words, **6,459 prose words** against the 6,500 ceiling - 35 words came out of §6 with the lead-in
 sentence and the two longer link lines - 428 caption words, 456 reference words over 15 entries, 1,243 table
 words across 415 cells, 5 tables and 9 figures, 31 headings against 31 contents entries. Contents pages 2-3,
@@ -411,6 +422,26 @@ module defines, and `analysis/` had never existed, so the measurement had never 
 contents numbers in every build to date came from Word resolving the field at save time. It now reads the
 headings from the built docx, writes `analysis/toc_pages.json`, and the loop he asked for (build, measure,
 rebuild, export) is what produced the delivered pair of files.
+
+## 10.3 U030 round, delivered 2026-11-21: table cells set flush left
+
+The supervisor asked whether the centring inside the tables could become left alignment. It was not centring -
+the cells had no alignment of their own and inherited the template's justified Normal, which reaches the line
+end by stretching spaces. That is measurable rather than a matter of taste: intra-cell gaps had a median of
+4.9pt and a maximum of 33.6pt with 171 above 8pt against 3.0pt in the prose, and after the change the median is
+2.3pt with a maximum of 2.4pt and none above 6.
+
+One consequence deserves the record because it moves a reported number without changing a word of prose: nine
+hyphenated compounds inside cells - ViT-S/14 seven times, face-data twice - had been breaking at the hyphen
+under justification, and the PDF text layer counts such a break as two words. Word's own counter never did, so
+it still reads 8,984; the PDF figure goes 9,138 to 9,129 and the docx paragraph count and the prose unit are
+untouched at 7,525 and 6,459. Column boundaries measured identical before and after (90.3 to 521.9, same
+internal edges), and the document is still 45 pages with the tables on the same seven pages, so the change is
+line spacing inside cells and nothing else.
+
+`audit_docx` reports `table cells: 415, explicitly left: 415`, and run against the 11-21 package it reports 415
+of 415 cells inheriting the justification, with `audit_layout` reporting 206 stretched intra-cell gaps there.
+Both are silent on the rebuilt file.
 
 ## 12. Brief-item coverage, measured on the 2026-11-20 build (step 4)
 
@@ -504,7 +535,10 @@ a line and a plain string search would then miss it.
   allotted one-seventh of the line. Widening the narrow columns and shrinking the wide ones would fix the
   wrapping, but it re-lays all five tables, can move pages, and would need both audits and the package re-run -
   so it waits for a word from the supervisor rather than being done on the side of an instruction that asked
-  for something else.
+  for something else. U030 closed the other half of that instruction on 2026-11-21: the cells were not
+  centred but justified, and justifying a narrow column is what stretches the spaces and breaks a compound
+  like ViT-S/14 at the hyphen. That is now left alignment, measured in section 10.3. What remains open here
+  is only the even column widths themselves.
 * **Submission package** - assembled 2026-11-20 (U026). `submission/` holds the report docx, the report pdf and
   the dialogue record as markdown, each byte-identical to the file it was copied from;
   `CISC3024_AI_Assignment_3_submission.zip` carries those three and nothing else. Both are gitignored, along with

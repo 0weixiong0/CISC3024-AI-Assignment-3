@@ -380,6 +380,36 @@ def exhibit_gap_checks(pages) -> list[str]:
     return problems
 
 
+def table_cell_checks(pages) -> list[str]:
+    """Text inside a table cell must be flush left, measured as the space between its words.
+
+    Cell paragraphs inherit the template's Normal style, which is justified, and in a two-inch column Word
+    reaches the line end by widening the spaces rather than by moving the text. On the 2026-11-21 build that
+    measured 171 intra-cell gaps above 8pt, the widest 33.6pt, against 2.3pt for the same type set left -
+    which is the spread-out look that reads as centred text. Gaps are compared only between words of the same
+    line of the same cell: grouping by page row instead, as an earlier draft of this check did, counted the
+    space across a column gutter and reported 31pt on a build that was already correct.
+    """
+    problems = []
+    for number, page in enumerate(pages, start=1):
+        words = page.get_text("words")
+        for table in page.find_tables().tables:
+            for x0, y0, x1, y1 in table.cells:
+                rows: dict[float, list] = {}
+                for word in words:
+                    if x0 - 1 <= word[0] and word[2] <= x1 + 1 and y0 - 0.5 <= word[1] <= y1 - 0.5:
+                        rows.setdefault(round(word[1], 1), []).append(word)
+                for y in sorted(rows):
+                    line = sorted(rows[y], key=lambda w: w[0])
+                    for first, second in zip(line, line[1:]):
+                        gap = second[0] - first[2]
+                        if gap > 6.0:
+                            problems.append(f"page {number}: inside the cell at ({x0:.0f}, {y0:.0f}) the space "
+                                            f"between {first[4]!r} and {second[4]!r} is {gap:.1f}pt, which is "
+                                            f"justification stretching a narrow column rather than left alignment")
+    return problems
+
+
 def word_band_checks(pages) -> list[str]:
     """A rendered sanity band around the prose figure the builder measures exactly.
 
@@ -453,6 +483,7 @@ def main(pdf: Path) -> int:
         problems += geometry_checks(pages)
         problems += caption_typography_checks(pages)
         problems += exhibit_gap_checks(pages)
+        problems += table_cell_checks(pages)
         problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.
