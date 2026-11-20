@@ -47,6 +47,12 @@ PICTURE_UNDER_PT = 18.5           # image bottom to the next block's top, measur
 PAGE_SLACK_PT = 36.0              # Word keeps this much free below the last thing on a page. Measured, not
                                   # assumed: a 190pt strut ended Figure 5's picture at 723.4 and Word moved the
                                   # figure to the next page, while 150 ended it at 683.4 on the page.
+EXHIBIT_GAP_PT = 46.0             # the blank body line `place_exhibits` writes between two exhibits, which
+                                  # audit_layout measures as 44-48pt and U028 asked for.
+TABLE_FLOOR_PT = 20.0             # what Word left below a ruled table it had just fitted under a picture:
+                                  # Table 4's last row line ended at 700.0, and the text block ends at 720.
+                                  # A table has no slack of a picture's 36pt, because it reaches the bottom
+                                  # margin and splits by row before it would jump to the next page.
 
 
 _bookmark_id = [500]

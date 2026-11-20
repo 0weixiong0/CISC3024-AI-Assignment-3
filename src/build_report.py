@@ -358,10 +358,15 @@ class Builder:
         the blank would sit at the top of that page instead. Two figures sharing a page get a strut rather than a
         blank line: the first stays at the top, the second is pushed to the bottom, and the middle is deliberately
         empty, which is the arrangement U028 asked for and `audit_layout` now measures.
+
+        U031 removed the same kind of waste on the other side: a table whose caption follows a picture no longer
+        starts a page just because tables used to. The two block heights plus the gap are compared with the text
+        area, and Table 4's 423.9pt fits in what Figure 9 leaves, so page 35 now carries both.
         """
         placed = []
         self.caption_words = 0
         self.struts = []
+        self.fits = []
         for (h1, h2), keys in rex.PLACEMENT:
             cursor = self.last.get((h1, h2))
             if cursor is None:
@@ -373,10 +378,25 @@ class Builder:
                     elements = rf.caption_paragraphs(
                         self.doc, self.protos, "Table", r" SEQ Table \* ARABIC ",
                         str(self.numbers[key]), "_Ref_table_" + key, caption)
-                    # A table that does not fit under its caption is stranded the same way a picture is, and
-                    # the caption pair is too short to hold a page for itself: tables start on a new page.
-                    pPr = elements[0].get_or_add_pPr()
-                    pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
+                    # U022 gave every table caption a page break, because a table whose rows do not fit under its
+                    # caption is stranded the same way a picture is and the caption pair alone cannot hold a page.
+                    # U031 measured what that cost: Table 4 needs 423.9pt of the 444.4pt Figure 9 leaves on its
+                    # page, and the break spent the rest of the page. A table whose caption follows a picture in
+                    # the same block now breaks only when the measured blocks say it must; a table following a
+                    # table, or one whose own caption anchors the block, still starts a page.
+                    if index and keys[index - 1] not in rex.TABLES:
+                        previous = keys[index - 1]
+                        room = (rf.TEXT_AREA_PT - rf.EXHIBIT_GAP_PT - rf.TABLE_FLOOR_PT
+                                - rf.figure_block_pt(rex.figure_caption(previous), rex.figure_asset(previous))
+                                - rex.TABLE_BLOCK_PT[key])
+                        if room < 0:
+                            pPr = elements[0].get_or_add_pPr()
+                            pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
+                    else:
+                        room = None
+                        pPr = elements[0].get_or_add_pPr()
+                        pPr.append(pPr.makeelement(qn("w:pageBreakBefore"), {}))
+                    self.fits.append((key, keys[index - 1] if room is not None else "-", room))
                     elements.append(rf.table_element(self.protos, *builder()))
                     is_figure = False
                 else:
@@ -531,6 +551,9 @@ def main() -> int:
     print("exhibit numbering: " + ", ".join(exhibits))
     print("figure pairs held on one page, gap written: "
           + (", ".join(f"{a}+{b}={points}pt" for a, b, points in builder.struts) or "none"))
+    print("tables after a picture, room left in the text area (negative starts a new page): "
+          + (", ".join(f"{key} after {previous}: {room:+.1f}pt"
+                       for key, previous, room in builder.fits if room is not None) or "none"))
     print(f"reference entries: {entries}, each one cited in the text")
     print(f"prose without exhibit captions: {stats['prose_words'] - builder.caption_words}, "
           f"caption words: {builder.caption_words}")

@@ -496,7 +496,7 @@ def search_sections(s: dict) -> dict:
 
              "ledger row, a page of a PDF - said it independently of the sentence quoting it."),
 
-            ("h2", "The selection, and what it committed us to"),
+            ("h2", "The selection, and what it committed the study to"),
 
             ("body",
 
@@ -852,6 +852,9 @@ def results_facts() -> dict:
         "offdiag_classic": (min(p["classic_offdiag"] for p in dg["per_pair"]),
                             max(p["classic_offdiag"] for p in dg["per_pair"])),
         "rows": {p["dataset"]: p["rows"] for p in dg["per_pair"]},
+        # Section 7's lessons quote the pilot grid as the rows actually scored, which is U013's ruling about
+        # the nominal grid, so the count comes from the file the run wrote instead of from a typed number.
+        "mvp_rows": sum(1 for _ in (RUNS / "mvp_orl/accuracy_rows.csv").open(encoding="utf-8", errors="ignore")) - 1,
         "classes": {p["dataset"]: p["cap"] + 1 for p in dg["per_pair"]},
         "orl_subjects": mvp_diag["rank_cap"] + 1,
     }
@@ -1126,6 +1129,6 @@ def results_sections(f: dict) -> dict:
              "two routes, two solvers, an independent reconstruction of the classical pencil, and a residual "
              "bound derived from the pencil under test with a control arm expected to violate it. And the "
              "negative result is itself a result: the dimension control did not rescue the hypothesis, it "
-             "removed the last explanation that had any support in our own data."),
+             "removed the last explanation that had any support in the study's own data."),
         ],
     }

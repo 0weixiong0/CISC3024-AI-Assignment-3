@@ -205,8 +205,7 @@ FIGURES = {
 
 # (H1, H2) -> exhibit keys, in the order the reader meets them. Each anchor is the heading whose prose cites
 # the exhibit, and the exhibit is emitted after that heading's last paragraph.
-PLACEMENT: list[tuple[tuple[str, str], list[str]]] = [
-    (("AI-Assisted Literature Search and Algorithm Selection",
+PLACEMENT: list[tuple[tuple[str, str], list[str]]] = [    (("AI-Assisted Literature Search and Algorithm Selection",
       "What was searched, and how the candidates were screened"), ["screening"]),
     (("Algorithm Description and Task Adaptation", "GO-LDA's deflated eigensolve"), ["eq37"]),
     (("Algorithm Description and Task Adaptation", "Baselines and the protocol adapted to this study"),
@@ -229,3 +228,13 @@ def figure_asset(key: str) -> Path:
 
 def figure_caption(key: str) -> str:
     return _manifest()[FIGURES[key]]["caption_line_2"]
+
+
+# Table 4 shares Figure 9's page (U031), so the height each ruled table needs is measured rather than guessed:
+# the distance from the top of its caption label to the bottom of its last row, read off the exported pages of
+# the 2026-11-21 build. Table 1 spans pages 8-9 and Table 3 spans 31-32, and their totals are kept whole, which
+# is what makes them too tall to sit under a picture on any page. `audit_layout.table_body_checks` is the
+# backstop: it says a caption never reaches a page without a ruled body under it, so a height left stale here
+# fails the build's audit rather than printing a stranded caption.
+TABLE_BLOCK_PT = {"screening": 1072.2, "settings": 473.5, "results": 803.4,
+                  "corruption": 423.9, "ladder": 170.8}

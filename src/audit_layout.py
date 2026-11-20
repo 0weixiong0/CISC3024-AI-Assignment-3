@@ -24,7 +24,10 @@ import pymupdf
 ROOT = Path(__file__).resolve().parent.parent
 PDF = ROOT / "CISC3024_AI_Assignment_3_Report.pdf"
 TOP_LIMIT = 200      # a first exhibit on a page must start above this y
-BOTTOM_LIMIT = 320   # a second exhibit on the same page must start below this y
+BOTTOM_LIMIT = 320   # the second of two figures sharing a page must start below this y (U028). A picture
+                    # followed by a ruled table is not that arrangement: U031 put Table 4 directly under
+                    # Figure 9, where the table's own height decides the y, so the rule is scoped to pages
+                    # whose two exhibits are both figures.
 PAGE_BOTTOM = 700    # nothing may start below this and still be on the page
 # The caption pair as the template itself renders it: "Table 1" at y=72.5 over "Table text" at y=105.1, and
 # wrapped description lines 20.7pt apart, which is 1.5 spacing on 12pt Times. Read from the template exported
@@ -410,6 +413,28 @@ def table_cell_checks(pages) -> list[str]:
     return problems
 
 
+def table_body_checks(pages) -> list[str]:
+    """Every table caption must have its ruled body below it, on the same page.
+
+    U031 let Table 4 follow Figure 9 instead of opening a page, so the break that used to guarantee this is gone.
+    A block height left stale in `report_exhibits.TABLE_BLOCK_PT` would then strand the caption pair at the foot
+    of a page and drop the rows to the next one, which is invisible in the source and obvious on the page. Tables
+    1 and 3 span two pages legitimately, so what is asserted is that the grid begins on the caption's page, not
+    that it ends there.
+    """
+    problems = []
+    checked = 0
+    for number, page in enumerate(pages, start=1):
+        for y, _bottom, text, _fonts in _rows(page):
+            if not re.fullmatch(r"Table \d+", text):
+                continue
+            checked += 1
+            if not [t for t in page.find_tables().tables if t.bbox[1] > y]:
+                problems.append(f"page {number}: {text}'s caption is on the page and its ruled body is not")
+    print(f"table captions checked for the grid under them: {checked}")
+    return problems
+
+
 def word_band_checks(pages) -> list[str]:
     """A rendered sanity band around the prose figure the builder measures exactly.
 
@@ -469,7 +494,7 @@ def main(pdf: Path) -> int:
                     problems.append(
                         f"{label} is the first exhibit on page {number} but starts at y={y}"
                     )
-                if index == 1 and y < BOTTOM_LIMIT:
+                if index == 1 and y < BOTTOM_LIMIT and all(l.startswith("Figure") for l, _ in found):
                     problems.append(
                         f"{label} is the second exhibit on page {number} at y={y}, not bottomed"
                     )
@@ -484,6 +509,7 @@ def main(pdf: Path) -> int:
         problems += caption_typography_checks(pages)
         problems += exhibit_gap_checks(pages)
         problems += table_cell_checks(pages)
+        problems += table_body_checks(pages)
         problems += word_band_checks(pages)
 
         # A figure must be on the page that carries its caption.

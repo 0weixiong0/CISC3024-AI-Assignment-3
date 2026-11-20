@@ -85,6 +85,19 @@ contradicted the ruling it claimed to summarise.
   alignment on all 415 cell paragraphs, and `audit_layout.table_cell_checks` measures the gaps on the page,
   comparing words only within one cell (an earlier draft of the check grouped words by page row, which counted
   the gutter between two columns as a stretched space and reported 31pt on a file that was already fixed).
+* **A ruled table follows a picture when the measured blocks say it fits** (U031, 2026-11-21). Every table
+  caption used to carry `w:pageBreakBefore`, which is what left page 35 holding Figure 9's 157.2pt block and
+  490pt of nothing. The break is now a fit test against the two block heights plus the 46pt exhibit gap and a
+  20pt floor - Table 4 measures 423.9pt against the 444.4pt Figure 9 leaves, so it follows the picture to
+  y=276 on the same page and the document lost a page (45 to 44). A table after another table, or one whose
+  caption opens its block, still breaks, which keeps Tables 1, 2, 3 and 5 where the arithmetic puts them; the
+  predicted y=275.2 and grid bottom 699.1 render at 276.0 and 700.0. The heights are measured, in
+  `report_exhibits.TABLE_BLOCK_PT`, from the exported pages rather than modelled, and the backstop is
+  `audit_layout.table_body_checks`: a caption must have its grid under it on the same page, so a height left
+  stale after a table grows fails the audit instead of printing a stranded caption. Two of the three
+  "exhibit" rules in `audit_layout` were narrowed to what they were written for: the second-exhibit-bottomed
+  rule now applies only when a page holds two figures, because a picture with a table under it is the
+  arrangement U031 asked for, not the arrangement U028 was guarding.
 * **Exhibits sit flush with the text block** (U027, 2026-11-20). The template's own caption lines carry no
   `w:ind` and its figure paragraph is left-aligned with no space above or below, while its body prose is indented
   half an inch. Cloning the body prototype for captions therefore pushed all fourteen exhibit labels half a column
@@ -267,20 +280,20 @@ Measured from the two delivered documents, not from memory:
 figures this file first carried — ~2,906 for A1 and ~8,011 for A2 — were labelled "body words" but did not
 match any of the four measurements below, so they are withdrawn.
 
-| Unit | How it is counted | A1 | A2 | A3, as delivered (2026-11-21, after U029) |
+| Unit | How it is counted | A1 | A2 | A3, as delivered (2026-11-21, after U031) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,984 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,129 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,525 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,459** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 9,025 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,170 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,565 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,498** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
 The A3 column was re-measured on the delivered 2026-11-21 build, which carries exhibits, a 15-entry reference list
-filed as one alphabet, and a cover filled with the student's own values: 45 PDF pages, 31 headings (8 H1
+filed as one alphabet, and a cover filled with the student's own values: 44 PDF pages, 31 headings (8 H1
 including References, 23 H2), 5 tables, 9 figures, and §1 through §7 all drafted. The prose figure is taken with
 the caption lines excluded, because step 3 made them a large block of text that is not argument: 14 captions carry
-428 words, and Word's own counter, which sees everything, reads 8,984 against 9,129 from the PDF text layer. The two disagree by nine words, not nine words of prose: nine hyphenated compounds inside table cells (ViT-S/14 seven times, face-data twice) break at the hyphen while the cells are justified, so the PDF text layer counts them as two words and Word's counter, which counts the word, does not. Section 10.3 has the round that removed it.
+428 words, and Word's own counter, which sees everything, reads 9,025 against 9,170 from the PDF text layer. The two disagree by nine words, not nine words of prose: nine hyphenated compounds inside table cells (ViT-S/14 seven times, face-data twice) break at the hyphen while the cells are justified, so the PDF text layer counts them as two words and Word's counter, which counts the word, does not. Section 10.3 has the round that removed it.
 The prose unit also contains the 30 words of the cover block, which is where it has always been; filling the cover
 from U026's values moved the figure by four words, placeholders to values, and nothing in the sections changed.
 
@@ -294,8 +307,8 @@ by 16, which left the drafted prose at the ceiling exactly. Step 4 then moved th
 citations cost 28 words, and 28 were cut back inside §6 and §7, so **the drafted prose is 6,500 words with no
 headroom**. The U025 round spent seven words on the Tiny ImageNet citation and took nine back
 in §6 and §7; U026 filled the cover, which moved the figure by four more words because the cover sits inside this
-unit, so the drafted prose is **6,459** against 6,500 - forty-one words of headroom, U029's shorter link block having
- taken 35 words out of §6, with the caption, reference and
+unit, so the drafted prose is **6,498** against 6,500 - two words of headroom: U029's shorter link block took 35 words
+ out of §6, and U031's rewritten lessons subsection spent 38 of the 41 that were left, with the caption, reference and
 cell counts recorded below. Exhibit captions (428 words), the reference list (456 words over 15 entries) and
 table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
@@ -443,7 +456,60 @@ line spacing inside cells and nothing else.
 of 415 cells inheriting the justification, with `audit_layout` reporting 206 stretched intra-cell gaps there.
 Both are silent on the rebuilt file.
 
-## 12. Brief-item coverage, measured on the 2026-11-20 build (step 4)
+## 10.4 U031 round, delivered 2026-11-21: Figure 9's page, and who the lessons are written as
+
+Two items, one about a page and one about a subject.
+
+**Figure 9 and Table 4 on one page.** Page 35 measured 157.2pt of exhibit (Figure 9's caption pair and its
+431.7 x 71.8pt picture, the shortest of the nine) with 490pt below it, because `place_exhibits` gave *every*
+table caption a `w:pageBreakBefore` under the U022 rule that a table must not be stranded below its caption.
+Table 4's own block is 423.9pt, so the break cost a page for nothing. The rule now asks the arithmetic first:
+Figure's block plus the 46pt exhibit gap plus the table's block, against the 648pt text area with a 20pt floor -
+`+0.9pt` for Table 4, `-607.5pt` for Table 3 after Figure 7, which keeps its break. It was tried on the page
+before it was written into the builder: with the break simply removed, Word put Table 4's caption at y=276.0
+(the model said 275.2) and its last row at 700.0 (the model said 699.1), all twelve rows on Figure 9's page,
+and the document fell from 45 pages to 44. Table 5 stayed on its own page because the table-after-table case is
+unchanged.
+
+The heights are measured, not modelled, and two gates make that safe. `audit_layout.table_body_checks` requires a
+ruled grid below every table caption on the caption's own page, which is what catches a height left stale in
+`report_exhibits.TABLE_BLOCK_PT` if a table later grows; it fires on a copy of page 35 with Table 4's grid
+redacted ("page 35: Table 4 has no description line under the label" and "its caption is on the page and its
+ruled body is not"), and it is silent on both the new file and the 11-21 package, where all five captions have
+their grids. The second-exhibit-must-be-bottomed rule was narrowed to the case U028 wrote it for - a page whose
+two exhibits are both figures - because Figure 9 with Table 4 under it is the arrangement U031 asked for; on a
+copy where that caption is relabelled a figure, the rule fires again ("second exhibit on page 35 at y=273, not
+bottomed"), so the narrowing did not switch the guard off.
+
+**The subject of brief item (5).** The subsection was headed "What the AI collaboration taught us" and ended
+"The tool is fast at producing text and slow to doubt it", which answers the brief's *you have learnt* as the
+tool rather than as the student. Measured across the three reports: A1 has one `I` in the entire document,
+inside a quotation of the supervisor's own question; A2 has none; both put the learning on the person directing
+the work. So the subsection is now "Lessons in Directing and Checking AI" - A1's and A2's own subsection title -
+in the third person, matching §1's "The student acted as supervisor and the AI agent as researcher", with four
+paragraphs built only from rulings in the dialogue log: U013 (the assertion that could not fail, and the gate
+that moved into `_read_pgm`), U012 and U013 (the control's measured 915 s against "about three minutes", the
+nominal grid against the 2,880 rows on disk), U011 (the front end's form, objected to in Assignment 2 as well),
+U022 (the 6,500 ceiling with the trim order named in advance), and U028-U031 (three page-level defects that
+became gates only after he looked at the page). Two candidates for the same list were checked and left out
+because the record does not attribute them to him: the control arm was added by the assistant in A007, and the
+transposed loader constants were found while rebuilding the front end in A011 - the text says those were caught
+inside the pipeline, one of them after it had moved a conclusion.
+
+Words: 398 to 435 in the subsection, so the prose unit went 6,459 to **6,498** with **two** words of headroom,
+after one more word spent on §5's "the explanation that had any support in the study's own data" and the §2
+heading's "committed the study to". Headings do not enter that unit. Word's counter reads 9,025, the PDF text
+layer 9,170, the docx paragraphs 7,565; caption, reference and cell counts are unchanged at 428, 456 over 15
+entries, and 1,243 words in 415 cells. `audit_docx` has no findings, `audit_layout` passes, and the 31 contents
+entries print the pages their headings render on after the one-page shift, with §6's subsection on 38 and §7's on
+39.
+
+One thing the rewrite caught on its own: the sentence describing U029's defect quoted the doubled label as the
+rendered string "Figure Figure 4", which `reference_render_checks` is there to fail. The gate was right and the
+sentence moved to "a caption field that printed its label word twice" - the check stays as it is, because
+loosening the guard to let a description of the defect through would let the defect through too.
+
+## 12. Brief-item coverage, measured on the 2026-11-21 build (step 4, re-measured after U031)
 
 Pages are where each H1 starts in the exported PDF, read from the rendered file rather than from the outline.
 
@@ -452,14 +518,16 @@ Pages are where each H1 starts in the exported PDF, read from the rendered file 
 | (1) Recent PCA/LDA algorithm found with an AI tool, and why it was chosen | §2, with the screening ledger as Table 1 | 5-10 |
 | (2) What the algorithm does and how it was adapted to the task | §3 | 11-17 |
 | (3) How it was implemented and verified with AI assistance | §4 | 18-22 |
-| (4) Experimental settings, results, and discussion | §5, Tables 2-5 and Figures 4-9 | 23-37 |
-| (5) What was learned from using the AI tool | §7 (and §1 states the division of labour) | 39-41 |
-| (6) Source-code availability, as a webpage link | §6's **Source Code and Live Demo** subsection (U029): the repository line and the Pages line, each on its own line | 38, subsection on 39 |
+| (4) Experimental settings, results, and discussion | §5, Tables 2-5 and Figures 4-9, with Figure 9 and Table 4 sharing page 35 (U031) | 23-36 |
+| (5) What was learned from using the AI tool | §7's **Lessons in Directing and Checking AI** subsection, in the student's voice per U031 (and §1 states the division of labour) | 38-41, subsection on 39 |
+| (6) Source-code availability, as a webpage link | §6's **Source Code and Live Demo** subsection (U029): the repository line and the Pages line, each on its own line | 37-38, subsection on 38 |
 | No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
 
-Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p43 to p45
-(the bibliography opens its own page from U027; the break moved it one page later and the entries run to p45). Contents
-occupies pages 2-3, and the body begins on page 4 under the page-break rule recorded in §10.
+Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p37, §7 p38, References p42 and the
+entries to p44. The 44th page is what U031's fit test bought: Table 4 came up to Figure 9's page and everything
+after it moved one page earlier. The bibliography still opens its own page (U027), contents occupies pages 2-3,
+and the body begins on page 4 under the rule recorded in §10. All 31 contents entries print the page their
+heading renders on, which `audit_layout.toc_page_checks` measures.
 
 ### Bibliography: 15 entries, filed as one alphabet, each one traced to a record
 
@@ -523,10 +591,11 @@ a line and a plain string search would then miss it.
   [Data set], addressed to the archive rather than to the 404 landing page, and its seven words are paid for
   inside §6 and §7, which gave up nine.
 * **Trim** - closed by U022 and paid by U023: the ceiling is 6,500 prose words and the drafted prose is
-  6,494 after the U025 round spent seven words on the Tiny ImageNet citation, took nine back out of §6 and §7,
-  and U026 replaced the cover's 34 words of placeholder text with the 30 words of real values. Six words of
-  headroom. Any further addition has to pay for itself inside §2, §6 or §7, the way the citation sentences and
-  the prose pass did.
+  6,498 after the U025 round spent seven words on the Tiny ImageNet citation, took nine back out of §6 and §7,
+  and U026 replaced the cover's 34 words of placeholder text with the 30 words of real values. U031 rewrote
+  §7's lessons subsection and spent 37 of the 41 words it had, plus one on the §5 wording, which leaves
+  **two words of headroom** - the tightest the document has been, and enough for nothing. Any further
+  addition has to pay for itself inside §2, §6 or §7, the way the citation sentences and the prose pass did.
 * **Table column widths** - open, and deliberately not acted on (U028, 2026-11-20). The instruction was
   "tables could go left-aligned, because centring pushes some characters down to the next line". The first half
   is already true and measured: all five tables run from x=90.3 to x=521.9 inside a text column of 90.0 to 522.0,
@@ -539,6 +608,24 @@ a line and a plain string search would then miss it.
   centred but justified, and justifying a narrow column is what stretches the spaces and breaks a compound
   like ViT-S/14 at the hyphen. That is now left alignment, measured in section 10.3. What remains open here
   is only the even column widths themselves.
+* **Who the lessons section speaks as** - closed by U031 (2026-11-21). The brief's item (5) asks what *you*
+  have learnt, and the drafted subsection answered as the tool: "What the AI collaboration taught us", with
+  the last sentence reading "The tool is fast at producing text and slow to doubt it". He ruled that the
+  subject is the student, in the third person, as §1 already sets it out ("The student acted as supervisor and
+  the AI agent as researcher"), and that A1 and A2 are the register to match. The subsection is now **Lessons
+  in Directing and Checking AI** - the same subsection title A1 and A2 use - and its four paragraphs are made
+  of his rulings, each traced to the log message that recorded it: U013 on the assertion that could not fail,
+  U012 on quoting the measured 915 s instead of "about 3 minutes", U022 on the 6,500-word ceiling with the
+  sections named in advance, U011 on the front end's form having been objected to in Assignment 2 as well, and
+  U028-U031 on the three page-level defects that reached a gate only after he looked at the page. Two things
+  were left out for being untrue to the record: the control arm was the assistant's own addition (A007), and
+  the transposed loader constants were found while rebuilding the front end (A011), so neither is written as a
+  lesson he learned. The same subject slip remained in two other places and is fixed: §2's heading now reads
+  "The selection, and what it committed the study to" and §5's "the explanation that had any support in the
+  study's own data". A1 and A2 were measured for this, not assumed - A1 has one `I` in the whole document,
+  inside a quotation of the supervisor's own question, and A2 has none.
+* **Figure 9's page** - closed by U031, and it was the same defect class as U028's: see section 2's ruled-table
+  fit rule and section 10.4. Table 4 and Figure 9 now share page 35 and the document is 44 pages.
 * **Submission package** - assembled 2026-11-20 (U026). `submission/` holds the report docx, the report pdf and
   the dialogue record as markdown, each byte-identical to the file it was copied from;
   `CISC3024_AI_Assignment_3_submission.zip` carries those three and nothing else. Both are gitignored, along with

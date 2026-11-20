@@ -55,7 +55,7 @@ def visualisation_sections() -> dict:
 
 
 def lessons_sections(f: dict, r: dict) -> dict:
-    """Section 7: what the study concluded and what the collaboration taught us. About 600 prose words."""
+    """Section 7: what the study concluded, and what directing the work taught the student. About 750 prose words."""
     deficits = ", ".join(f"{_pt(-v)} points" for v in r["deficit"].values())
     ladder = ", ".join(f"M = {m} at {_pt(d)}" for m, _share, d in r["ladder"])
     knn = _pt(r["head_gap"]["knn1_raw"])
@@ -88,36 +88,36 @@ def lessons_sections(f: dict, r: dict) -> dict:
              "find that out is to look for the coincidence's precondition instead of assuming a "
              "theorem. The construction is sound and cheap; its accuracy in a "
              "feature regime still has to be measured, not taken from the paper."),
-            ("h2", "What the AI collaboration taught us"),
+            ("h2", "Lessons in Directing and Checking AI"),
             ("body",
-             "The division of labour was fixed before it started and it held. The AI tool searched and "
-             "scored the literature, wrote every line of the implementation and the audits, ran "
-             "the experiments, drafted the figures, the tables and this text, and built the page. The "
-             "student set the constraints, ruled on what the tool could not settle from the brief, "
-             "and approved each download and release. Every ruling and correction is in the attached dialogue record."),
+             "The lessons are best read in the order the rulings were made. The first is that an instruction "
+             "earns its place only if someone else can check it afterwards: the constraints that held were "
+             "written that way before the search - a recency floor for the candidates, the classifier used in "
+             f"each regime, the δ convention the parity gate is judged under, the K grid a hypothesis about "
+             "going past the rank cap needs. What came back for correction was the looser form of the same "
+             f"intention: a control cost quoted as about three minutes when the run took {r['ood_s']:.0f} s, "
+             f"and a grid described by its nominal size when the file on disk holds {r['mvp_rows']:,} rows."),
             ("body",
-             "What the collaboration got wrong is the more useful part of the record: every failure was caught "
-             "by a check, not by reading. The first drift measure compared the new "
-             "construction against itself and reported no divergence, which was arithmetically true and "
-             "substantively nothing; the corrected comparison put the first divergence at the third "
-             "direction. A probe that reported a classical basis as orthogonal to fourteen decimal places "
-             "had measured a different object than its label named. The sharpest case was a "
-             "self-written gate that accepted a first direction identical to the classical one to one decimal "
-             "place and read it as evidence for the hypothesis it existed to test; the remedy was an "
-             "arm that must fail the same assertion. A withdrawn run, where transposed loader constants made "
-             "a reduction look like a reversal, surfaced only because the numbers were checked against the "
-             "raster they came from."),
+             "The second lesson is that a check which cannot fail is not evidence. The geometry assertion in "
+             "the parity harness compared a reshaped array with the shape it had just been reshaped to, which "
+             "is true whenever the reshape does not raise. The ruling named it tautological and moved the real "
+             "gate into the PGM reader, where the parsed header is compared with the constants the loader uses, "
+             "adding that the report must not call the old print a geometry check. With those constants set "
+             "back to the superseded pair the reader refuses the file, which is what the assertion lacked."),
             ("body",
-             "Three habits did most of the remaining work, and they were not equally useful. Gating the artefact "
-             "instead of the claim paid every time: each number in this report is read from a file when the "
-             "document is built, so a table that disagrees with a run stops the build. Keeping provenance "
-             "beside the asset did the same for the figures, since each records the page or the fit behind it "
-             "- that is how four wrong captions went away in one pass. The third habit is the weakest "
-             "because it is about attention rather than code: run the audit before "
-             "reporting. The two defects that kept coming back were invisible on the page, a heading the "
-             "contents field listed although the document did not have it and runs carrying a font with no "
-             "recorded size. The tool is fast at producing text and slow to doubt it, and almost every entry "
-             "in the corrections ledger began by asking what a number would have to be for the sentence "
-             "about it to be false."),
+             "The third lesson is that reading still does work the machinery does not. Three defects in the "
+             "report's own week reached the tooling by eye first: a caption field that printed its label word "
+             "twice, table cells that looked centred because they had inherited the template's justification "
+             "without saying so, an exhibit that took a fifth of its page and left the rest empty. Each became "
+             "a gate afterwards, so the audit now measures what was only noticed. The arithmetic defects went "
+             "the other way - a drift measure comparing a construction against itself, a probe measuring a "
+             "different object than its label named, a run whose pictures were sheared by two transposed loader "
+             "constants - caught inside the pipeline, one of them after it had moved a conclusion."),
+            ("body",
+             "What carries forward is a shape of working rather than a technique. The form of the deliverable "
+             "was paid for twice: the front end came out as a second report, which is what he had objected to "
+             "in Assignment 2, in his words it only got fixed late. The prose ceiling is 6,500 words, set once, "
+             "with the sections taking the first cut named in advance. And the dialogue record is kept as the "
+             "work happens, which is why a ruling from early November can still be quoted here."),
         ],
     }
