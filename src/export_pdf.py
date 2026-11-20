@@ -7,6 +7,9 @@ Word, not python-docx, has to do this work: the table of contents is a field ins
 content control, and only the application that paginates the document can resolve the page numbers.
 
 Two details learned the hard way:
+* the contents page numbers are recorded in ``analysis/toc_pages.json`` from the exported PDF; the
+  file is evidence of where each heading landed, and nothing bakes it back in, because Word resolves the
+  contents field itself when it saves.
 * the document is opened with ``UpdateFields=False``, because Word's "update fields that refer to
   other files?" prompt is modal and it blocks automation silently;
 * the field is updated twice around a re-pagination, because the first update changes the page count
@@ -130,10 +133,16 @@ def main() -> int:
     parser.add_argument("--measure", action="store_true")
     arguments = parser.parse_args(sys.argv[1:])
     if arguments.measure:
-        sys.path.insert(0, str(ROOT / "src"))
-        from report_content import CONTENT  # noqa: E402
+        # The headings are read from the built document, not from a source list: the contents field, the
+        # headings Word paginates and the audit all see the assembled file, and only this file can say what
+        # the contents has to agree with. An earlier version imported a `CONTENT` symbol that no module
+        # defines, which is why this path had never run.
+        from docx import Document
 
-        headings = [payload for kind, payload in CONTENT if kind in ("h1", "h2", "h3")]
+        document = Document(str(arguments.docx))
+        headings = [paragraph.text.strip() for paragraph in document.paragraphs
+                    if paragraph.style is not None and paragraph.style.name in ("Heading 1", "Heading 2", "Heading 3")
+                    and paragraph.text.strip()]
         pages = measure(arguments.pdf, headings)
         TOC_PAGES.parent.mkdir(exist_ok=True)
         TOC_PAGES.write_text(json.dumps(pages, ensure_ascii=False, indent=1), encoding="utf-8")

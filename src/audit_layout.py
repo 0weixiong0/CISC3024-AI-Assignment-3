@@ -275,6 +275,61 @@ def caption_typography_checks(pages) -> list[str]:
     return problems
 
 
+def reference_render_checks(pages) -> list[str]:
+    """Nothing in the U029 shape of the defect may reach the rendered text.
+
+    Two failures produced the doubled labels the supervisor saw. A REF whose bookmark covers the label word
+    resolves to "Figure 4" inside a sentence that already says "Figure". A citation token written inside an
+    f-string collapses to single braces, never reaches the REF builder, and prints literally as
+    "{Figure:eq37}". The first was in twelve places of the delivered build and the second in two, and neither
+    was visible in the source document, where both forms look correct - so the check belongs on the page.
+    """
+    text = "\n".join(page.get_text() for page in pages)
+    problems = []
+    for doubled in re.finditer(r"\b(Figure|Table)\s+\1\b", text):
+        problems.append(f"rendered text repeats an exhibit label: {text[doubled.start():doubled.start() + 24]!r}")
+    for stray in re.finditer(r"\{+(?:Figure|Table):[a-z0-9_]+\}+", text):
+        problems.append(f"an unresolved cross-reference token reached the page: {stray.group(0)!r}")
+    return problems
+
+
+def toc_page_checks(pages) -> list[str]:
+    """Every page number the contents prints must be the page the heading is actually on.
+
+    Word resolves the contents field when it saves, so a stale entry is a property of the file rather than of
+    the build. Renaming a heading moves nothing on its own, but it re-flows the document, and the U029 round
+    changed a section title: this is what says the contents kept up.
+    """
+    contents = [n for n, page in enumerate(pages, start=1)
+                if sum(1 for line in page.get_text().splitlines() if TOC_LINE.search(line.strip())) >= 3]
+    if not contents:
+        return ["no contents page found, so the printed page numbers cannot be checked"]
+    entries = []
+    for number in contents:
+        for line in pages[number - 1].get_text().splitlines():
+            match = re.match(r"^(.{4,}?)\s*\.{3,}\s*(\d+)\s*$", line.strip())
+            if match:
+                entries.append((" ".join(match.group(1).split()), int(match.group(2)), number))
+    problems = []
+    rendered = []
+    for number, page in enumerate(pages, start=1):
+        if number in contents:
+            continue
+        lines = {" ".join(span["text"] for span in line["spans"]).strip()
+                 for block in page.get_text("dict")["blocks"] if block["type"] == 0
+                 for line in block["lines"]}
+        rendered.append((number, lines))
+    for title, printed, _on_page in entries:
+        actual = next((number for number, lines in rendered if title in lines), None)
+        if actual is None:
+            problems.append(f"contents entry {title[:44]!r} (printed page {printed}) has no heading "
+                            f"on any body page")
+        elif actual != printed:
+            problems.append(f"contents says {title[:44]!r} is on page {printed}, it renders on page {actual}")
+    print(f"contents entries checked against their headings: {len(entries)}")
+    return problems
+
+
 def exhibit_gap_checks(pages) -> list[str]:
     """A blank line after an exhibit when the page continues, and none when it does not (U028).
 
@@ -391,7 +446,9 @@ def main(pdf: Path) -> int:
 
         # The contents field is resolved by Word, so this is checked on the rendered pages.
         problems += toc_checks(pages)
+        problems += toc_page_checks(pages)
         problems += reference_checks(pages)
+        problems += reference_render_checks(pages)
         problems += cover_checks(pages)
         problems += geometry_checks(pages)
         problems += caption_typography_checks(pages)

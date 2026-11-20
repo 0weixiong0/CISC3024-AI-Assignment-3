@@ -229,8 +229,13 @@ def caption_paragraphs(doc, protos, label: str, instr: str, cached: str, bookmar
         r.getparent().remove(r)
     _bookmark_id[0] += 1
     marker = _bookmark_id[0]
-    label_para.append(_el("w:bookmarkStart", id=marker, name=bookmark))
     label_para.append(_text_run(proto_run, f"{label} ", bold=True))
+    # The bookmark opens after the label word, not before it, because the prose writes the word itself and
+    # then cites: "Table {{Table:screening}}" is a REF whose result has to be the number. Opening the range on
+    # the word made the resolved reference "Table 1" inside a sentence that already said "Table", and Word
+    # rendered twelve of them as "Table Table 1" - the cached results in the source, which said only the
+    # number, hid it until the file was opened and the fields resolved.
+    label_para.append(_el("w:bookmarkStart", id=marker, name=bookmark))
     for node in _field(proto_run, instr, cached, bold=True):
         label_para.append(node)
     label_para.append(_el("w:bookmarkEnd", id=marker))

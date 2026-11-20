@@ -44,12 +44,9 @@ def visualisation_sections() -> dict:
              "repository, so the demo an examiner opens is generated from the artefacts this report quotes "
              "rather than from a copy. The dialogue record travels with the submission as a separate "
              "attachment, not on the public page."),
-            ("h2", "Citation block for brief item (6)"),
-            ("body",
-             "The sentence the brief asks for, with each address on its own line so copying it cannot pick "
-             "up a line break:"),
-            ("body", f"All codes and the raw experiment logs can be found at {repo}."),
-            ("body", f"The published demo, generated from those same logs, is at {pages}"),
+            ("h2", "Source Code and Live Demo"),
+            ("body", f"The source page is {repo}."),
+            ("body", f"The live page is {pages}"),
             ("body",
              "The algorithm's own implementation by its authors, and the two comparison sources this study "
              "follows, are listed in the references with their repository addresses."),

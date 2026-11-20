@@ -919,7 +919,7 @@ def algorithm_sections(f: dict) -> dict:
              f"still different, with a median principal angle of {f['span_median']:.1f} degrees and only "
              f"{f['span_under_1deg']:.1f} per cent of the angles below one degree. The divergence begins at "
              f"the third direction: the second differs by {f['drift2']:.3f} degrees, the third by "
-             f"{f['drift3']:.1f}. Its equation (37) and the deflated pencil of equation (38) are the lines the implementation was written from, and the page that carries them is Figure {{Figure:eq37}}."),
+             f"{f['drift3']:.1f}. Its equation (37) and the deflated pencil of equation (38) are the lines the implementation was written from, and the page that carries them is Figure {{{{Figure:eq37}}}}."),
             ("h2", "Baselines and the protocol adapted to this study"),
             ("body",
              "Three classical comparators run on the same pencil and the same folds: the ridge-regularised "
@@ -933,7 +933,7 @@ def algorithm_sections(f: dict) -> dict:
              f"{100 * f['val']:.0f} per cent stratified hold-out of the training split under seed "
              f"{f['seed']}, and the official test split is scored exactly once per method after refitting on "
              f"all of training. The regularisation grid is delta = {', '.join(f'{d:g}' for d in f['deltas'])} "
-             f"and the dimension grid crosses the rank cap C - 1 = {f['rank_cap']} in both directions. The head for those rows is the paper's own, and the table it is taken from is Figure {{Figure:table2}}."),
+             f"and the dimension grid crosses the rank cap C - 1 = {f['rank_cap']} in both directions. The head for those rows is the paper's own, and the table it is taken from is Figure {{{{Figure:table2}}}}."),
             ("body",
              "Two adaptations were forced by arithmetic rather than chosen. The pencil is singular whenever "
              "the feature dimension exceeds the rows available per class, which is the everyday case in raw "

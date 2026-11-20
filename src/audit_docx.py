@@ -259,6 +259,32 @@ def main() -> int:
     print(f"reference entries: {len(reference_paragraphs)}; filing "
           f"{'alphabetical' if keys == sorted(keys) else 'NOT alphabetical'}")
 
+    # U029, second item: a cross-reference bookmark must hold the exhibit's number and nothing else. The
+    # prose writes the label word itself ("... is Figure {{Figure:eq37}}") and the REF supplies the number,
+    # so a bookmark that also covers the word "Figure" makes Word render "Figure Figure 4" the moment it
+    # resolves a field - twelve times over in the delivered build, and invisible in the source because the
+    # REF fields there carry only the number as their cached result.
+    body = doc.element.body
+    starts = {int(node.get(qn("w:id"))): node.get(qn("w:name"))
+              for node in body.iter(qn("w:bookmarkStart")) if (node.get(qn("w:name")) or "").startswith("_Ref_")}
+    covered: dict[int, str] = {marker: "" for marker in starts}
+    open_markers: set[int] = set()
+    for node in body.iter():
+        if node.tag == qn("w:bookmarkStart") and int(node.get(qn("w:id"))) in starts:
+            open_markers.add(int(node.get(qn("w:id"))))
+        elif node.tag == qn("w:bookmarkEnd") and int(node.get(qn("w:id"))) in starts:
+            open_markers.discard(int(node.get(qn("w:id"))))
+        elif node.tag == qn("w:t") and open_markers:
+            for marker in open_markers:
+                covered[marker] += node.text or ""
+    bad = {starts[m]: text for m, text in covered.items() if not re.fullmatch(r"\d+", text)}
+    if bad:
+        sample = ", ".join(f"{name} holds {text!r}" for name, text in sorted(bad.items())[:3])
+        flag("cross-references", f"{len(bad)} of {len(starts)} cross-reference bookmarks do not contain "
+                                 f"a bare number, so Word renders the label word twice: {sample}")
+    print(f"cross-reference bookmarks: {len(starts)}, each holding "
+          f"{'only the number' if not bad else 'MORE THAN the number'}")
+
     # ---- 9. the cover ---------------------------------------------------------------------------
     # The template's name line is four ASK fields and its date is a real example date, so a fill can fail in
     # three different ways and look finished each time: text written into the field runs disappears the next

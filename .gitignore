@@ -32,6 +32,9 @@ research_records/retrieval_cache/
 # The report itself is a UMMoodle submission, not repository content - same as A1 and A2
 CISC3024_AI_Assignment_3_Report.docx
 CISC3024_AI_Assignment_3_Report.pdf
+# Where each heading landed in the exported PDF, read back by `export_pdf.py --measure`; it
+# describes a gitignored deliverable, so it stays with it rather than in the repository.
+/analysis/
 # The submission package: the two report files above plus the dialogue record, assembled for upload.
 submission/
 CISC3024_AI_Assignment_3_submission.zip

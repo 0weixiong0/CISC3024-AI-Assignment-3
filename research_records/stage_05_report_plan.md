@@ -62,6 +62,18 @@ contradicted the ruling it claimed to summarise.
   Figure 4 and Figure 5 share page 26 with a written gap of 151.4pt - the pair measures 442.4pt against the
   593pt available - while Figure 8 and Figure 9, whose blocks come to 703.7pt, get no gap at all and Word breaks
   between them. Writing the gap anyway was what left Figure 9's caption 162pt down an otherwise empty page 35.
+* **A cross-reference names the number, never the label word** (U029, 2026-11-21). The prose writes the word
+  itself - "... is Figure {{Figure:claim}}" - and the REF field is expected to supply only the number. The
+  bookmark opened before the label run, so its content was "Figure 3" and the sentence the field resolved to
+  read "Figure Figure 3": twelve of the fourteen references in the delivered build, plus two that printed
+  literally as `{Figure:eq37}` because the token sat inside an f-string, where a doubled brace pair collapses
+  to one and never reaches the field builder. `caption_paragraphs` now opens the bookmark after the label run,
+  so the range holds the SEQ field alone, and a token inside an f-string is written with four braces. Two
+  gates hold both halves: `audit_docx` reads every `_Ref_*` bookmark's `w:t` and requires `^\d+$`, and
+  `audit_layout` requires the rendered text to contain no `Figure Figure`/`Table Table` and no brace-delimited
+  token at all. Run against the 11-20 build they report 14 of 14 bookmarks and 14 rendered places; on the
+  rebuilt file both report nothing - and the cached results in the source hid the fault the whole time, because
+  the cached side was always right and only the resolution was wrong.
 * **Exhibits sit flush with the text block** (U027, 2026-11-20). The template's own caption lines carry no
   `w:ind` and its figure paragraph is left-aligned with no space above or below, while its body prose is indented
   half an inch. Cloning the body prototype for captions therefore pushed all fourteen exhibit labels half a column
@@ -100,6 +112,7 @@ contradicted the ruling it claimed to summarise.
 | `main` HEAD | **read with `git rev-parse main` at submission time** and written in then — a record cannot name the commit carrying it |
 | Published set | 132 files / 154 tree entries at `60260f3` (the two units are the same tree; 22 entries are directories) |
 | Dialogue record | attached to the submission as a separate file; the public repository deliberately does not contain `research_records/conversation_log.md` |
+| Wording in the report | U029 replaced the drafted block with the delivered two lines, under the section's own heading **Source Code and Live Demo**: `The source page is https://github.com/0weixiong0/CISC3024-AI-Assignment-3.` and `The live page is https://0weixiong0.github.io/CISC3024-AI-Assignment-3/` - A2's wording, one address per line, no lead-in sentence |
 
 ## 4. The two lessons §5 carries, stated as evidence rather than as morals
 
@@ -243,20 +256,20 @@ Measured from the two delivered documents, not from memory:
 figures this file first carried — ~2,906 for A1 and ~8,011 for A2 — were labelled "body words" but did not
 match any of the four measurements below, so they are withdrawn.
 
-| Unit | How it is counted | A1 | A2 | A3, after step 3 (2026-11-20) |
+| Unit | How it is counted | A1 | A2 | A3, as delivered (2026-11-21, after U029) |
 | --- | --- | --- | --- | --- |
-| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 9,021 |
-| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,187 |
-| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,561 |
-| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,494** |
+| Word's own count | COM `ComputeStatistics(wdStatisticWords)` on the docx | 3,474 | 9,593 | 8,984 |
+| PDF full-text words | pymupdf over the exported PDF - includes tables, the contents page and the cover | 3,528 | 9,792 | 9,138 |
+| docx paragraph words | `python-docx`, every paragraph in `doc.paragraphs`, tables excluded | 3,088 | 8,221 | 7,525 |
+| **prose words** | the unit A2's own record used (`stage_05_report_feasibility.md` §4), **excluding exhibit captions and the reference list** | 3,024 | 8,286 | **6,459** |
 | exhibit caption words | the two or three lines above each table and figure, counted apart because they are labels, not argument | - | - | 428 |
 | table words alone | `python-docx` over table cells (5 tables, 415 cells; the 817 figure U022 corrected was words, not cells) | 187 | 1,107 | 1,243 |
 
-The A3 column was re-measured on the 2026-11-20 U027 build, which carries exhibits, a 15-entry reference list
+The A3 column was re-measured on the delivered 2026-11-21 build, which carries exhibits, a 15-entry reference list
 filed as one alphabet, and a cover filled with the student's own values: 45 PDF pages, 31 headings (8 H1
 including References, 23 H2), 5 tables, 9 figures, and §1 through §7 all drafted. The prose figure is taken with
 the caption lines excluded, because step 3 made them a large block of text that is not argument: 14 captions carry
-428 words, and Word's own counter, which sees everything, reads 9,021 against 9,187 from the PDF text layer.
+428 words, and Word's own counter, which sees everything, reads 8,984 against 9,138 from the PDF text layer.
 The prose unit also contains the 30 words of the cover block, which is where it has always been; filling the cover
 from U026's values moved the figure by four words, placeholders to values, and nothing in the sections changed.
 
@@ -270,7 +283,8 @@ by 16, which left the drafted prose at the ceiling exactly. Step 4 then moved th
 citations cost 28 words, and 28 were cut back inside §6 and §7, so **the drafted prose is 6,500 words with no
 headroom**. The U025 round spent seven words on the Tiny ImageNet citation and took nine back
 in §6 and §7; U026 filled the cover, which moved the figure by four more words because the cover sits inside this
-unit, so the drafted prose is now **6,494** against 6,500 - six words of headroom, with the caption, reference and
+unit, so the drafted prose is **6,459** against 6,500 - forty-one words of headroom, U029's shorter link block having
+ taken 35 words out of §6, with the caption, reference and
 cell counts recorded below. Exhibit captions (428 words), the reference list (456 words over 15 entries) and
 table cells (1,243 words) stay outside the unit, because they are labels and read-outs rather than argument.
 
@@ -371,6 +385,33 @@ the changes is the same 45 pages, 9,021 words by Word's counter, 9,187 from the 
 words, 6,494 prose words, 428 caption words, 456 reference words over 15 entries and 1,243 table words over 415
 cells, because a gap, a line-spacing value and a bold flag carry no words.
 
+## 10.2 U029 round, delivered 2026-11-21: the supervisor's hand edits moved into the source
+
+He edited the built docx itself - the §6 heading and its two link lines, and the two citations that printed as
+`Figure {Figure:eq37}` and `Figure {Figure:table2}` - and released the diff as three source changes plus a
+rebuild, which is what §2's cross-reference rule now records. The rebuilt document's paragraph text is
+identical to his edited file, 150 paragraphs and a similarity ratio of 1.0 on the sequence match, so nothing he
+typed by hand was lost on the way back through the builder; what changed is the mechanism underneath the same
+words, since his fix was a typed number where the source now emits a field.
+
+The delivered build: **45 pages**, 8,984 words by Word's counter, 9,138 in the PDF text layer, 7,525 docx
+paragraph words, **6,459 prose words** against the 6,500 ceiling - 35 words came out of §6 with the lead-in
+sentence and the two longer link lines - 428 caption words, 456 reference words over 15 entries, 1,243 table
+words across 415 cells, 5 tables and 9 figures, 31 headings against 31 contents entries. Contents pages 2-3,
+body from page 4, and the new subsection prints on page 39 in both the contents and the document, which
+`toc_page_checks` now asserts for all 31 entries rather than trusting Word's field resolution alone.
+
+Two gates came with the round and both were run against the 11-20 package, which is the fixture they describe:
+`audit_docx` reports 14 of 14 bookmarks holding more than a number and names them
+(`_Ref_figure_c4_paper holds 'Figure 4'`), `audit_layout` reports twelve doubled labels and the two unresolved
+tokens. On the rebuilt file both report nothing, and the rendered counts go from 7 + 5 + 2 to 0.
+
+One dead path was found while doing this: `src/export_pdf.py --measure` imported a `CONTENT` symbol that no
+module defines, and `analysis/` had never existed, so the measurement had never run in this project - the
+contents numbers in every build to date came from Word resolving the field at save time. It now reads the
+headings from the built docx, writes `analysis/toc_pages.json`, and the loop he asked for (build, measure,
+rebuild, export) is what produced the delivered pair of files.
+
 ## 12. Brief-item coverage, measured on the 2026-11-20 build (step 4)
 
 Pages are where each H1 starts in the exported PDF, read from the rendered file rather than from the outline.
@@ -382,7 +423,7 @@ Pages are where each H1 starts in the exported PDF, read from the rendered file 
 | (3) How it was implemented and verified with AI assistance | §4 | 18-22 |
 | (4) Experimental settings, results, and discussion | §5, Tables 2-5 and Figures 4-9 | 23-37 |
 | (5) What was learned from using the AI tool | §7 (and §1 states the division of labour) | 39-41 |
-| (6) Source-code availability, as a webpage link | §6's citation block: the repository line and the Pages line, each on its own line | 38 |
+| (6) Source-code availability, as a webpage link | §6's **Source Code and Live Demo** subsection (U029): the repository line and the Pages line, each on its own line | 38, subsection on 39 |
 | No-code and AI-use statement (the brief's prohibition, and the outline's disclosure) | §1, "AI use and responsibility" | 4 |
 
 Section starts, for reference: §1 p4, §2 p5, §3 p11, §4 p18, §5 p23, §6 p38, §7 p39, References p43 to p45
