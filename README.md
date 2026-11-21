@@ -10,9 +10,10 @@ assignment brief requires; no line of code here was hand-written by the student.
 
 What the replication found: the geometry reproduces exactly (the directions are orthogonal to ~1e-14 and
 each is more Fisher-efficient than the classic pencil's), but the published accuracy advantage does not
-travel. On frozen deep features at the rank cap `K = C − 1`, GO-LDA sits 0.1–2.3 points below the best
-LDA baseline on all four dataset × backbone pairs, while in raw-pixel ORL it ties classic LDA because the
-two span the same subspace to 2e-6°.
+travel. On frozen deep features, with every arm scored at its own selection, GO-LDA sits 0.14–2.3 points
+below the best classical baseline on all four dataset × backbone pairs: the baselines land at the rank cap
+`K = C − 1` and GO-LDA's selection goes past it. In raw-pixel ORL it ties classic LDA, both 0.985 at the cap,
+because the two span the same subspace to 2e-6°.
 
 ## Layout
 
@@ -35,7 +36,8 @@ two span the same subspace to 2e-6°.
 ```bash
 python tests/test_parity.py                  # the gate; prints GATE OPEN when 11/11 pass
 python src/run_mvp_orl.py                    # ORL raw pixels, the paper's ten-fold 1-NN protocol
-python src/run_m2_matrix.py                  # the frozen-feature matrix (needs the datasets, ~2.7 h)
+python src/run_m2_matrix.py                  # the frozen-feature matrix (needs the datasets; the two sweeps
+                                             # ran 2.7 h and the CV pass against the stored selection 44 min)
 python src/export_results.py                 # regenerate webapp/data.js
 python src/export_demo.py                    # regenerate webapp/demo.js (refits every arm, ~34 min)
 ```
@@ -48,8 +50,12 @@ locally, `cd webapp && python -m http.server 8000`.
 * **Datasets and cached features** (`data/`, 986 MB) — downloaded under the supervisor's released list from
   the URLs recorded in `research_records/stage_02_design_and_plan.md` §7.
 * **Course material** — the assignment PDF, the lecture deck and the Word report template.
-* **The dialogue record** — `research_records/conversation_log.md` is a report deliverable submitted
-  separately, not public repository content.
+* **The report itself** — the exported PDF was what went to UMMoodle on 2026-11-21, so neither
+  `CISC3024_AI_Assignment_3_Report.pdf` nor the docx it came from is repository content, as in Assignments 1
+  and 2. The two addresses the report cites in its §6 are this repository and the live front end linked at the
+  top of this file.
+* **The dialogue record** — `research_records/conversation_log.md` travels with the submission paperwork and
+  is deliberately not published here.
 * **Superseded parity logs** — `runs/parity/README.md` lists which runs predate the geometry fix and why
   the current citation is `runs/parity/parity_after_readpgm_stdout.txt`.
 * **A third-party accepted manuscript** kept locally as a retrieval cache; cite the paper instead.

@@ -2,7 +2,9 @@
 
 Issued 2026-11-19. Deliverable: a Word report on `Report Template.docx`, submitted via UMMoodle by
 **2026-11-23**, Turnitin-checked. This file fixes the skeleton, the evidence behind each section, the
-formatting traps and the citation block; the prose is written only after it is approved.
+formatting traps and the citation block; the prose is written only after it is approved. The submission was
+made on 2026-11-21 as the exported PDF alone, on the supervisor's instruction that only the report PDF is
+required (§12).
 
 ## 1. What the brief requires, and which section answers it
 
@@ -131,11 +133,12 @@ contradicted the ruling it claimed to summarise.
 | --- | --- |
 | Live front end | `https://0weixiong0.github.io/CISC3024-AI-Assignment-3/` |
 | Public repository | `https://github.com/0weixiong0/CISC3024-AI-Assignment-3` |
-| Site tree | `gh-pages` `a48a97b` |
+| Site tree | `gh-pages` `a48a97b` — still what is deployed, re-checked 2026-11-21: the four live files hash equal to that tree's blobs |
 | Code commit | `e43edfa` (131 files: every solver, driver, probe and gate) |
-| `main` HEAD | **read with `git rev-parse main` at submission time** and written in then — a record cannot name the commit carrying it |
-| Published set | 132 files / 154 tree entries at `60260f3` (the two units are the same tree; 22 entries are directories) |
-| Dialogue record | attached to the submission as a separate file; the public repository deliberately does not contain `research_records/conversation_log.md` |
+| `main` HEAD | `033595c` — the commit the submitted PDF was built from, and the HEAD the repository was at when the upload was made. The line is written in its child commit: a record cannot carry its own hash, which is what the original instruction meant |
+| Published set | 143 files / 164 tree entries at `033595c` (132 / 154 at `60260f3`; the 22-entry gap in both is directories. The delta is the probes, audits and stage records added since) |
+| Demo data, checked 2026-11-21 | `python src/export_results.py` re-derives `webapp/data.js` from `runs/` and passes 34/34 checks. Against the deployed copy the regenerated file differs in one leaf, `.meta.generated_utc`: the live figures are the ones this report quotes, not an older build |
+| Dialogue record | not submitted: the supervisor uploaded the report PDF alone on 2026-11-21. `research_records/conversation_log.md` stays out of the public repository either way, and `submission/` keeps the assembled package locally |
 | Wording in the report | U029 replaced the drafted block with the delivered two lines, under the section's own heading **Source Code and Live Demo**: `The source page is https://github.com/0weixiong0/CISC3024-AI-Assignment-3.` and `The live page is https://0weixiong0.github.io/CISC3024-AI-Assignment-3/` - A2's wording, one address per line, no lead-in sentence |
 
 ## 4. The two lessons §5 carries, stated as evidence rather than as morals
@@ -629,7 +632,8 @@ a line and a plain string search would then miss it.
 * **Submission package** - assembled 2026-11-20 (U026). `submission/` holds the report docx, the report pdf and
   the dialogue record as markdown, each byte-identical to the file it was copied from;
   `CISC3024_AI_Assignment_3_submission.zip` carries those three and nothing else. Both are gitignored, along with
-  the report files themselves, because the submission is not repository content. Uploading it is the supervisor's
-  act, and `git rev-parse main` is still to be written into §3 at that moment.
+  the report files themselves, because the submission is not repository content. Uploading is the supervisor's
+  act, and it happened on 2026-11-21: what he submitted was the report PDF alone, since only the report PDF is
+  required, and §3's `main` HEAD row now carries `033595c`, the commit that build came from.
 * **Cover** - closed by U026: `report_assets/cover_values.json` exists, the cover fills from it, and the two
   cover gates (one on the docx, one on page 1 of the rendered PDF) are what say so.
